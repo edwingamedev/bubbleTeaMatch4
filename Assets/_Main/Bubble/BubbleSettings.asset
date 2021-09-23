@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b3e0b1b51ce3b2458957b8536b832e2, type: 3}
+  m_Name: BubbleSettings
+  m_EditorClassIdentifier: 
+  prefab: {fileID: 1000705664523115254, guid: ff5e6fa33c4fdeb46876fe7424c4ba5f, type: 3}
+  shader: {fileID: -6465566751694194690, guid: 67f8aa9e5811c444087e7b19882b4eeb, type: 3}
+  bubblePresets:
+  - {fileID: 11400000, guid: 21a7fb2c8c11c6b4ab68bbee44296d51, type: 2}
+  - {fileID: 11400000, guid: 11be1a4a1810dd84e82762b1022e44d5, type: 2}
+  - {fileID: 11400000, guid: 83c640e478e793b47a70f9e47c191d66, type: 2}
+  - {fileID: 11400000, guid: e25c1e04279f2844690cc04a7742064b, type: 2}
+  evilBubble: {fileID: 11400000, guid: d422fd107eddcd1469404e43d9b2dcc7, type: 2}
