@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
 
-public interface IBubbleBuilder
+namespace EdwinGameDev.BubbleTeaMatch4
 {
-    void Generate(Vector2Int position);
+    public interface IBubbleBuilder
+    {
+        Bubble Generate(Vector2Int position);
+    }
 }

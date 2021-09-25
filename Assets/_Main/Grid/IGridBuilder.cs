@@ -1,5 +1,8 @@
-﻿public interface IGridBuilder
+﻿namespace EdwinGameDev.BubbleTeaMatch4
 {
-    void Build();
-    Grid Grid { get; }
+    public interface IGridBuilder
+    {
+        void Build();
+        Grid Grid { get; }
+    }
 }
