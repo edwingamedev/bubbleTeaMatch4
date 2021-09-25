@@ -9,10 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e059174ccce1fcf4baebc45ddce9acfc, type: 3}
-  m_Name: Settings
+  m_Script: {fileID: 11500000, guid: 0772cb4f5aaca8844bb57471379010b4, type: 3}
+  m_Name: GameSettings
   m_EditorClassIdentifier: 
   cellSize: 8
   gridSize: {x: 8, y: 16}
   bubbleSettings: {fileID: 11400000, guid: c8753b45b911def48b9978fbe21f5ca1, type: 2}
-  spawnPosition: {x: 4, y: 16}
+  spawnPosition: {x: 3, y: 16}

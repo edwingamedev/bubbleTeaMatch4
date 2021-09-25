@@ -1,4 +1,6 @@
-﻿public interface IBubbleBuilder
+﻿using UnityEngine;
+
+public interface IBubbleBuilder
 {
-    void Generate(int x, int y);
+    void Generate(Vector2Int position);
 }

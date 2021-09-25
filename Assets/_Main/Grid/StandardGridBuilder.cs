@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class StandardGridBuilder : IGridBuilder
 {
-    private Settings settings;
+    private GameSettings settings;
     private Grid grid;
     public Grid Grid  => grid;
 
 
-    public StandardGridBuilder(Settings settings)
+    public StandardGridBuilder(GameSettings settings)
     {
         this.settings = settings;
     }

@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class StandardBubbleBuilder : IBubbleBuilder
 {
-    private Settings settings;
+    private GameSettings settings;
     private int bubbleAmount;
 
-    public StandardBubbleBuilder(Settings settings)
+    public StandardBubbleBuilder(GameSettings settings)
     {
         this.settings = settings;
         bubbleAmount = settings.BubbleSettings.BubblePresets.Count;
@@ -15,11 +15,11 @@ public class StandardBubbleBuilder : IBubbleBuilder
 
 
 
-    public void Generate(int x, int y)
+    public void Generate(Vector2Int position)
     {
         int bubbleIndex = Random.Range(0, bubbleAmount);
 
-        var go = Object.Instantiate(settings.BubbleSettings.Prefab, new Vector2(x, y), Quaternion.identity);
+        var go = Object.Instantiate(settings.BubbleSettings.Prefab, (Vector2)position, Quaternion.identity);
         var spriteRenderer = go.GetComponentInChildren<SpriteRenderer>();
         spriteRenderer.material = new Material(settings.BubbleSettings.Shader);
         spriteRenderer.material.SetColor("_MainColor", settings.BubbleSettings.BubblePresets[bubbleIndex].mainColor);

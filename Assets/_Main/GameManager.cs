@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    [SerializeField] private Settings settings;
+    [SerializeField] private GameSettings gameSettings;
     private IGridBuilder gridBuilder;
     private IBubbleBuilder bubbleBuilder;
 
@@ -16,13 +16,13 @@ public class GameManager : MonoBehaviour
 
     private void Initialize()
     {
-        bubbleBuilder = new StandardBubbleBuilder(settings);
-        gridBuilder = new StandardGridBuilder(settings);
+        bubbleBuilder = new StandardBubbleBuilder(gameSettings);
+        gridBuilder = new StandardGridBuilder(gameSettings);
 
         gridBuilder.Build();
 
-        bubbleBuilder.Generate(settings.SpawnPosition.x, settings.SpawnPosition.y);
-        bubbleBuilder.Generate(settings.SpawnPosition.x, settings.SpawnPosition.y + 1);
+        bubbleBuilder.Generate(gameSettings.MainBubbleSpawnPosition);
+        bubbleBuilder.Generate(gameSettings.SecondaryBubbleSpawnPosition);
     }
 
     // Update is called once per frame
