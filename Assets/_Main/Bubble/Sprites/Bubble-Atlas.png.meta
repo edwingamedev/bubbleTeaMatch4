@@ -50,6 +50,18 @@ TextureImporter:
   - first:
       213: 5782277161948852795
     second: Bubble-Atlas_15
+  - first:
+      213: -3721334381873175346
+    second: Bubble-Atlas_16
+  - first:
+      213: -4589286310435444888
+    second: Bubble-Atlas_17
+  - first:
+      213: -6853414765867460178
+    second: Bubble-Atlas_18
+  - first:
+      213: 4732757728350645767
+    second: Bubble-Atlas_19
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -154,8 +166,8 @@ TextureImporter:
       name: Bubble-Atlas_0
       rect:
         serializedVersion: 2
-        x: 2
-        y: 35
+        x: 1
+        y: 41
         width: 8
         height: 8
       alignment: 0
@@ -175,8 +187,8 @@ TextureImporter:
       name: Bubble-Atlas_1
       rect:
         serializedVersion: 2
-        x: 13
-        y: 35
+        x: 11
+        y: 41
         width: 8
         height: 8
       alignment: 0
@@ -196,8 +208,8 @@ TextureImporter:
       name: Bubble-Atlas_2
       rect:
         serializedVersion: 2
-        x: 24
-        y: 35
+        x: 21
+        y: 41
         width: 8
         height: 8
       alignment: 0
@@ -217,8 +229,8 @@ TextureImporter:
       name: Bubble-Atlas_3
       rect:
         serializedVersion: 2
-        x: 35
-        y: 35
+        x: 31
+        y: 41
         width: 8
         height: 8
       alignment: 0
@@ -238,8 +250,8 @@ TextureImporter:
       name: Bubble-Atlas_4
       rect:
         serializedVersion: 2
-        x: 2
-        y: 24
+        x: 1
+        y: 31
         width: 8
         height: 8
       alignment: 0
@@ -259,8 +271,8 @@ TextureImporter:
       name: Bubble-Atlas_5
       rect:
         serializedVersion: 2
-        x: 13
-        y: 24
+        x: 11
+        y: 31
         width: 8
         height: 8
       alignment: 0
@@ -280,8 +292,8 @@ TextureImporter:
       name: Bubble-Atlas_6
       rect:
         serializedVersion: 2
-        x: 24
-        y: 24
+        x: 21
+        y: 31
         width: 8
         height: 8
       alignment: 0
@@ -301,8 +313,8 @@ TextureImporter:
       name: Bubble-Atlas_7
       rect:
         serializedVersion: 2
-        x: 35
-        y: 24
+        x: 31
+        y: 31
         width: 8
         height: 8
       alignment: 0
@@ -322,8 +334,8 @@ TextureImporter:
       name: Bubble-Atlas_8
       rect:
         serializedVersion: 2
-        x: 2
-        y: 13
+        x: 1
+        y: 21
         width: 8
         height: 8
       alignment: 0
@@ -343,8 +355,8 @@ TextureImporter:
       name: Bubble-Atlas_9
       rect:
         serializedVersion: 2
-        x: 13
-        y: 13
+        x: 11
+        y: 21
         width: 8
         height: 8
       alignment: 0
@@ -364,8 +376,8 @@ TextureImporter:
       name: Bubble-Atlas_10
       rect:
         serializedVersion: 2
-        x: 24
-        y: 13
+        x: 21
+        y: 21
         width: 8
         height: 8
       alignment: 0
@@ -385,8 +397,8 @@ TextureImporter:
       name: Bubble-Atlas_11
       rect:
         serializedVersion: 2
-        x: 35
-        y: 13
+        x: 31
+        y: 21
         width: 8
         height: 8
       alignment: 0
@@ -406,8 +418,8 @@ TextureImporter:
       name: Bubble-Atlas_12
       rect:
         serializedVersion: 2
-        x: 2
-        y: 2
+        x: 1
+        y: 11
         width: 8
         height: 8
       alignment: 0
@@ -427,8 +439,8 @@ TextureImporter:
       name: Bubble-Atlas_13
       rect:
         serializedVersion: 2
-        x: 13
-        y: 2
+        x: 11
+        y: 11
         width: 8
         height: 8
       alignment: 0
@@ -448,8 +460,8 @@ TextureImporter:
       name: Bubble-Atlas_14
       rect:
         serializedVersion: 2
-        x: 24
-        y: 2
+        x: 21
+        y: 11
         width: 8
         height: 8
       alignment: 0
@@ -469,8 +481,8 @@ TextureImporter:
       name: Bubble-Atlas_15
       rect:
         serializedVersion: 2
-        x: 35
-        y: 2
+        x: 31
+        y: 11
         width: 8
         height: 8
       alignment: 0
@@ -482,6 +494,90 @@ TextureImporter:
       bones: []
       spriteID: b32b0d66176ce3050800000000000000
       internalID: 5782277161948852795
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bubble-Atlas_16
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 1
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ec4600e981a2b5cc0800000000000000
+      internalID: -3721334381873175346
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bubble-Atlas_17
+      rect:
+        serializedVersion: 2
+        x: 11
+        y: 1
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 867aeed6a649f40c0800000000000000
+      internalID: -4589286310435444888
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bubble-Atlas_18
+      rect:
+        serializedVersion: 2
+        x: 21
+        y: 1
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ea99d06d497c3e0a0800000000000000
+      internalID: -6853414765867460178
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bubble-Atlas_19
+      rect:
+        serializedVersion: 2
+        x: 31
+        y: 1
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 70e235624122ea140800000000000000
+      internalID: 4732757728350645767
       vertices: []
       indices: 
       edges: []

@@ -14,13 +14,16 @@ namespace EdwinGameDev.BubbleTeaMatch4
 
         public bool ReachedBottom(Vector2 position)
         {
-            return position.y <= 0 || cells[Mathf.CeilToInt(position.x), Mathf.CeilToInt(position.y - 1)] != null;
+            return (position.y == 0 || cells[Mathf.CeilToInt(position.x), Mathf.CeilToInt(position.y - 1)] != null);
         }
 
         public void AssignBubble(Bubble bubble)
         {
             if (bubble.GetPosition().y < cells.GetLength(1))
+            {
                 cells[bubble.GetPosition().x, bubble.GetPosition().y] = bubble;
+                bubble.DisableHighlight();
+            }
         }
 
         public void UnnassignBubble(Vector2Int position)

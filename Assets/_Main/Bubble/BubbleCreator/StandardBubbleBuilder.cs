@@ -15,17 +15,21 @@ namespace EdwinGameDev.BubbleTeaMatch4
             bubbleAmount = settings.BubbleSettings.BubblePresets.Count;
         }
 
-        public Bubble Generate(Vector2Int position)
+        public Bubble Generate(Vector2Int position, bool highlight)
         {
             int bubbleIndex = Random.Range(0, bubbleAmount);
 
             var go = Object.Instantiate(settings.BubbleSettings.Prefab, (Vector2)position, Quaternion.identity);
-            var spriteRenderer = go.GetComponentInChildren<SpriteRenderer>();
-            spriteRenderer.material = new Material(settings.BubbleSettings.Shader);
-            spriteRenderer.material.SetColor("_MainColor", settings.BubbleSettings.BubblePresets[bubbleIndex].mainColor);
-            spriteRenderer.material.SetColor("_EyeColor", settings.BubbleSettings.BubblePresets[bubbleIndex].eyeColor);
-
             var bubble = go.GetComponent<Bubble>();
+
+            Material material = new Material(settings.BubbleSettings.Shader);
+            material.SetColor("_MainColor", settings.BubbleSettings.BubblePresets[bubbleIndex].mainColor);
+            material.SetColor("_EyeColor", settings.BubbleSettings.BubblePresets[bubbleIndex].eyeColor);
+
+            bubble.SetMaterial(material);
+
+            if (highlight)
+                bubble.EnableHighlight();            
 
             return bubble;
         }
