@@ -21,47 +21,200 @@ namespace EdwinGameDev.BubbleTeaMatch4
             this.subBubble = subBubble;
         }
 
-        public void MoveLeft()
+        public bool MoveLeft()
         {
             var moveDirection = Vector2Int.left;
 
             if (IsValidHorizontalMovement(moveDirection))
             {
-                mainBubble.MoveDirection(moveDirection);
-                subBubble.MoveDirection(moveDirection);
+                mainBubble?.MoveDirection(moveDirection);
+                subBubble?.MoveDirection(moveDirection);
+                return true;
             }
+
+            return false;
         }
 
-        public void MoveRight()
+        public bool MoveRight()
         {
             var moveDirection = Vector2Int.right;
 
             if (IsValidHorizontalMovement(moveDirection))
             {
-                mainBubble.MoveDirection(moveDirection);
-                subBubble.MoveDirection(moveDirection);
+                mainBubble?.MoveDirection(moveDirection);
+                subBubble?.MoveDirection(moveDirection);
+
+                return true;
             }
+
+            return false;
         }
 
-        public void MoveDown()
+        public bool MoveDown()
         {
             var moveDirection = Vector2Int.down;
 
             if (isValidDownMovement())
             {
-                mainBubble.MoveDirection(moveDirection);
-                subBubble.MoveDirection(moveDirection);
+                mainBubble?.MoveDirection(moveDirection);
+                subBubble?.MoveDirection(moveDirection);
+                return true;
             }
+
+            return false;
+        }
+
+        private void SetLeftOrientation()
+        {
+            subBubble.SetPosition(new Vector2Int(mainBubble.GetPosition().x - 1, mainBubble.GetPosition().y));
+
+            // Set New Orientation
+            subBubble.BubbleOrientation = BubbleOrientation.Left;
+        }
+
+        private void SetRightOrientation()
+        {
+            subBubble.SetPosition(new Vector2Int(mainBubble.GetPosition().x + 1, mainBubble.GetPosition().y));
+
+            // Set New Orientation
+            subBubble.BubbleOrientation = BubbleOrientation.Right;
+        }
+
+        private void SetTopOrientation()
+        {
+            subBubble.SetPosition(new Vector2Int(mainBubble.GetPosition().x, mainBubble.GetPosition().y + 1));
+
+            // Set New Orientation
+            subBubble.BubbleOrientation = BubbleOrientation.Top;
+        }
+
+        private void SetBottomOrientation()
+        {
+            subBubble.SetPosition(new Vector2Int(mainBubble.GetPosition().x, mainBubble.GetPosition().y - 1));
+
+            // Set New Orientation
+            subBubble.BubbleOrientation = BubbleOrientation.Bottom;
         }
 
         public void TurnClockwise()
         {
+            if (subBubble == null)
+                return;
 
+            BubbleOrientation subPos = subBubble.BubbleOrientation;
+
+            int x = mainBubble.GetPosition().x;
+            int y = mainBubble.GetPosition().y;
+
+            switch (subPos)
+            {
+                case BubbleOrientation.Bottom:
+                    if (x - 1 >= 0 && grid.cells[x - 1, y] != null)
+                        break;
+
+                    if (x == 0)
+                    {
+                        if (MoveRight())
+                        {
+                            SetLeftOrientation();
+                        }
+                    }
+                    else
+                    {
+                        SetLeftOrientation();
+                    }
+                    break;
+                case BubbleOrientation.Top:
+                    if (x + 1 < gameSettings.GridSize.x && grid.cells[x + 1, y] != null)
+                        break;
+
+                    if (x >= gameSettings.GridSize.x - 1)
+                    {
+                        if (MoveLeft())
+                        {
+                            SetRightOrientation();
+                        }
+                    }
+                    else
+                    {
+                        SetRightOrientation();
+                    }
+                    break;
+                case BubbleOrientation.Left:
+                    if (y + 1 < gameSettings.GridSize.y && grid.cells[x, y + 1] != null)
+                        break;
+
+                    SetTopOrientation();
+                    break;
+                case BubbleOrientation.Right:
+                    if (y - 1 >= 0 && grid.cells[x, y - 1] != null)
+                        break;
+
+                    SetBottomOrientation();
+                    break;
+                default:
+                    break;
+            }
         }
 
         public void TurnCounterClockwise()
         {
+            if (subBubble == null)
+                return;
 
+            BubbleOrientation subPos = subBubble.BubbleOrientation;
+            int x = mainBubble.GetPosition().x;
+            int y = mainBubble.GetPosition().y;
+
+            switch (subPos)
+            {
+                case BubbleOrientation.Bottom:
+                    if (x + 1 < gameSettings.GridSize.x && grid.cells[x + 1, y] != null)
+                        break;
+
+                    if (x >= gameSettings.GridSize.x - 1)
+                    {
+                        if (MoveLeft())
+                        {
+                            SetRightOrientation();
+                        }
+                    }
+                    else
+                    {
+                        SetRightOrientation();
+                    }
+                    break;
+                case BubbleOrientation.Top:
+                    if (x - 1 >= 0 && grid.cells[x - 1, y] != null)
+                        break;
+
+                    if (x == 0)
+                    {
+                        if (MoveRight())
+                        {
+                            SetLeftOrientation();
+                        }
+                    }
+                    else
+                    {
+                        SetLeftOrientation();
+                    }
+                    break;
+                case BubbleOrientation.Left:
+                    if (y - 1 >= 0 && grid.cells[x, y - 1] != null)
+                        break;
+
+                    SetBottomOrientation();
+                    break;
+                case BubbleOrientation.Right:
+                    if (y + 1 < gameSettings.GridSize.y && grid.cells[x, y + 1] != null)
+                        break;
+
+                    SetTopOrientation();
+                    break;
+                default:
+                    break;
+            }
         }
 
         private bool IsValidHorizontalMovement(Vector2Int direction)
