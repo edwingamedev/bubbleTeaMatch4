@@ -4,6 +4,6 @@ namespace EdwinGameDev.BubbleTeaMatch4
 {
     public interface IBubbleBuilder
     {
-        Bubble Generate(Vector2Int position, bool highlight);
+        Bubble Generate(Vector2Int position);
     }
 }

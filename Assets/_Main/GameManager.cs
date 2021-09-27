@@ -81,9 +81,9 @@ namespace EdwinGameDev.BubbleTeaMatch4
             if (nextMainBubble == null)
             {
                 // Spawn main
-                mainBubble = bubbleBuilder.Generate(gameSettings.MainBubbleSpawnPosition, true);
+                mainBubble = bubbleBuilder.Generate(gameSettings.MainBubbleSpawnPosition);
                 // Spawn sub
-                subBubble = bubbleBuilder.Generate(gameSettings.SubBubbleSpawnPosition, false);
+                subBubble = bubbleBuilder.Generate(gameSettings.SubBubbleSpawnPosition);
             }
             else
             {
@@ -93,6 +93,9 @@ namespace EdwinGameDev.BubbleTeaMatch4
                 subBubble = nextSubBubble;
             }
 
+            // Enable main bubble highlight
+            mainBubble.EnableHighlight();
+
             // Set Initial Position
             mainBubble.SetPosition(gameSettings.MainBubbleSpawnPosition + Vector2Int.down);
             subBubble.SetPosition(gameSettings.SubBubbleSpawnPosition + Vector2Int.down);
@@ -100,8 +103,8 @@ namespace EdwinGameDev.BubbleTeaMatch4
             bubbleMovementController.SetBubbles(mainBubble, subBubble);
 
             // Next
-            nextMainBubble = bubbleBuilder.Generate(gameSettings.NextMainBubblePosition, true);
-            nextSubBubble = bubbleBuilder.Generate(gameSettings.NextSubBubblePosition, false);
+            nextMainBubble = bubbleBuilder.Generate(gameSettings.NextMainBubblePosition);
+            nextSubBubble = bubbleBuilder.Generate(gameSettings.NextSubBubblePosition);
 
 
             // Start Game

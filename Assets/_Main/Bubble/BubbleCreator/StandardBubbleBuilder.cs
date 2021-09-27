@@ -15,7 +15,7 @@ namespace EdwinGameDev.BubbleTeaMatch4
             bubbleAmount = settings.BubbleSettings.BubblePresets.Count;
         }
 
-        public Bubble Generate(Vector2Int position, bool highlight)
+        public Bubble Generate(Vector2Int position)
         {
             int bubbleIndex = Random.Range(0, bubbleAmount);
 
@@ -26,10 +26,7 @@ namespace EdwinGameDev.BubbleTeaMatch4
             material.SetColor("_MainColor", settings.BubbleSettings.BubblePresets[bubbleIndex].mainColor);
             material.SetColor("_EyeColor", settings.BubbleSettings.BubblePresets[bubbleIndex].eyeColor);
 
-            bubble.SetMaterial(material);
-
-            if (highlight)
-                bubble.EnableHighlight();            
+            bubble.SetMaterial(material);      
 
             return bubble;
         }
