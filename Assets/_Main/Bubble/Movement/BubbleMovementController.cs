@@ -232,10 +232,11 @@ namespace EdwinGameDev.BubbleTeaMatch4
 
         private bool isValidDownMovement()
         {
-            Vector2Int mainBubblePos = mainBubble.GetPosition() + Vector2Int.down;
-            Vector2Int subBubblePos = subBubble.GetPosition() + Vector2Int.down;
+            Vector2Int mainBubblePos = mainBubble.GetPosition();
+            Vector2Int subBubblePos = subBubble.GetPosition();
 
-            return !grid.ReachedBottom(mainBubblePos) || !grid.ReachedBottom(subBubblePos);
+            return !grid.ReachedBottom(mainBubblePos) ||
+                !grid.ReachedBottom(subBubblePos);
         }
     }
 }
