@@ -69,7 +69,7 @@ namespace EdwinGameDev.BubbleTeaMatch4
             subBubble.SetPosition(new Vector2Int(mainBubble.GetPosition().x - 1, mainBubble.GetPosition().y));
 
             // Set New Orientation
-            subBubble.BubbleOrientation = BubbleOrientation.Left;
+            subBubble.Orientation = Orientation.Left;
         }
 
         private void SetRightOrientation()
@@ -77,7 +77,7 @@ namespace EdwinGameDev.BubbleTeaMatch4
             subBubble.SetPosition(new Vector2Int(mainBubble.GetPosition().x + 1, mainBubble.GetPosition().y));
 
             // Set New Orientation
-            subBubble.BubbleOrientation = BubbleOrientation.Right;
+            subBubble.Orientation = Orientation.Right;
         }
 
         private void SetTopOrientation()
@@ -85,7 +85,7 @@ namespace EdwinGameDev.BubbleTeaMatch4
             subBubble.SetPosition(new Vector2Int(mainBubble.GetPosition().x, mainBubble.GetPosition().y + 1));
 
             // Set New Orientation
-            subBubble.BubbleOrientation = BubbleOrientation.Top;
+            subBubble.Orientation = Orientation.Top;
         }
 
         private void SetBottomOrientation()
@@ -93,7 +93,7 @@ namespace EdwinGameDev.BubbleTeaMatch4
             subBubble.SetPosition(new Vector2Int(mainBubble.GetPosition().x, mainBubble.GetPosition().y - 1));
 
             // Set New Orientation
-            subBubble.BubbleOrientation = BubbleOrientation.Bottom;
+            subBubble.Orientation = Orientation.Bottom;
         }
 
         public void TurnClockwise()
@@ -101,56 +101,42 @@ namespace EdwinGameDev.BubbleTeaMatch4
             if (subBubble == null)
                 return;
 
-            BubbleOrientation subPos = subBubble.BubbleOrientation;
+            Orientation subPos = subBubble.Orientation;
 
             int x = mainBubble.GetPosition().x;
             int y = mainBubble.GetPosition().y;
 
             switch (subPos)
             {
-                case BubbleOrientation.Bottom:
+                case Orientation.Bottom:
                     if (x - 1 >= 0 && grid.cells[x - 1, y] != null)
                         break;
 
-                    if (x == 0)
-                    {
-                        if (MoveRight())
-                        {
-                            SetLeftOrientation();
-                        }
-                    }
-                    else
-                    {
+                    if (x != 0 || MoveRight())
                         SetLeftOrientation();
-                    }
+
                     break;
-                case BubbleOrientation.Top:
+                case Orientation.Top:
                     if (x + 1 < gameSettings.GridSize.x && grid.cells[x + 1, y] != null)
                         break;
 
-                    if (x >= gameSettings.GridSize.x - 1)
-                    {
-                        if (MoveLeft())
-                        {
-                            SetRightOrientation();
-                        }
-                    }
-                    else
-                    {
-                        SetRightOrientation();
-                    }
+                    if (x < gameSettings.GridSize.x - 1 || MoveLeft())
+                        SetRightOrientation();    
+                    
                     break;
-                case BubbleOrientation.Left:
+                case Orientation.Left:
                     if (y + 1 < gameSettings.GridSize.y && grid.cells[x, y + 1] != null)
                         break;
 
                     SetTopOrientation();
+
                     break;
-                case BubbleOrientation.Right:
+                case Orientation.Right:
                     if (y - 1 >= 0 && grid.cells[x, y - 1] != null)
                         break;
 
                     SetBottomOrientation();
+
                     break;
                 default:
                     break;
@@ -162,55 +148,40 @@ namespace EdwinGameDev.BubbleTeaMatch4
             if (subBubble == null)
                 return;
 
-            BubbleOrientation subPos = subBubble.BubbleOrientation;
+            Orientation subPos = subBubble.Orientation;
             int x = mainBubble.GetPosition().x;
             int y = mainBubble.GetPosition().y;
 
             switch (subPos)
             {
-                case BubbleOrientation.Bottom:
+                case Orientation.Bottom:
                     if (x + 1 < gameSettings.GridSize.x && grid.cells[x + 1, y] != null)
                         break;
 
-                    if (x >= gameSettings.GridSize.x - 1)
-                    {
-                        if (MoveLeft())
-                        {
-                            SetRightOrientation();
-                        }
-                    }
-                    else
-                    {
+                    if (x < gameSettings.GridSize.x - 1 || MoveLeft())
                         SetRightOrientation();
-                    }
+
                     break;
-                case BubbleOrientation.Top:
+                case Orientation.Top:
                     if (x - 1 >= 0 && grid.cells[x - 1, y] != null)
                         break;
 
-                    if (x == 0)
-                    {
-                        if (MoveRight())
-                        {
-                            SetLeftOrientation();
-                        }
-                    }
-                    else
-                    {
+                    if (x != 0 || MoveRight())
                         SetLeftOrientation();
-                    }
+
                     break;
-                case BubbleOrientation.Left:
+                case Orientation.Left:
                     if (y - 1 >= 0 && grid.cells[x, y - 1] != null)
                         break;
 
                     SetBottomOrientation();
                     break;
-                case BubbleOrientation.Right:
+                case Orientation.Right:
                     if (y + 1 < gameSettings.GridSize.y && grid.cells[x, y + 1] != null)
                         break;
 
                     SetTopOrientation();
+
                     break;
                 default:
                     break;
