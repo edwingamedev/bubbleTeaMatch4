@@ -51,6 +51,7 @@ namespace EdwinGameDev.BubbleTeaMatch4
                     break;
                 case GameState.Linking:
                     gameState = GameState.Creating;
+                    LinkBubbles();
                     break;
                 case GameState.Combo:
                     break;
@@ -59,6 +60,134 @@ namespace EdwinGameDev.BubbleTeaMatch4
                 default:
                     break;
             }
+        }
+
+        public void UpdateImage()
+        {
+            bool emptyRow;
+            for (int y = 0; y < gameSettings.GridSize.y; y++)
+            {
+                emptyRow = true;
+
+                for (int x = 0; x < gameSettings.GridSize.x; x++)
+                {
+                    if (gridBuilder.Grid.cells[x, y] != null)
+                    {
+                        //print("("+x+", "+y+")===>"+gridBuilder.Grid.cells[x, y].getLinkPuyoList().Count);
+                        emptyRow = false;
+                        gridBuilder.Grid.cells[x, y].UpdateGraphics();
+                    }
+                }
+                if (emptyRow)
+                    break;
+            }
+        }
+
+        public void LinkBubbles()
+        {
+            bool emptyRow;
+
+            for (int y = 0; y < gameSettings.GridSize.y; y++)
+            {
+                emptyRow = true;
+
+                for (int x = 0; x < gameSettings.GridSize.x; x++)
+                {
+                    if (gridBuilder.Grid.cells[x, y] != null)
+                    {
+                        emptyRow = false;
+
+                        // Horizontal
+                        if (gridBuilder.Grid.cells[x + 1, y] != null && gridBuilder.Grid.cells[x, y].BubbleGroup == gridBuilder.Grid.cells[x + 1, y].BubbleGroup)
+                        {
+                            if (gridBuilder.Grid.cells[x, y].Connection == ConnectionOrientation.left)
+                                gridBuilder.Grid.cells[x, y].Connect(ConnectionOrientation.left_right);
+                            else
+                                gridBuilder.Grid.cells[x, y].Connect(ConnectionOrientation.right);
+
+
+                            gridBuilder.Grid.cells[x + 1, y].Connect(ConnectionOrientation.left);
+                        }
+                    }
+                }
+
+                if (emptyRow)
+                    break;
+            }
+
+            for (int y = 0; y < gameSettings.GridSize.y; y++)
+            {
+                emptyRow = true;
+
+                for (int x = 0; x < gameSettings.GridSize.x; x++)
+                {
+                    if (gridBuilder.Grid.cells[x, y] != null)
+                    {
+                        emptyRow = false;
+                        // Vertical
+                        if (gridBuilder.Grid.cells[x, y + 1] != null && gridBuilder.Grid.cells[x, y].BubbleGroup == gridBuilder.Grid.cells[x, y + 1].BubbleGroup)
+                        {
+                            switch (gridBuilder.Grid.cells[x, y + 1].Connection)
+                            {
+                                case ConnectionOrientation.none:
+                                    gridBuilder.Grid.cells[x, y + 1].Connect(ConnectionOrientation.bottom);
+                                    break;
+                                case ConnectionOrientation.top:
+                                    gridBuilder.Grid.cells[x, y + 1].Connect(ConnectionOrientation.top_bottom);
+                                    break;
+                                case ConnectionOrientation.left:
+                                    gridBuilder.Grid.cells[x, y + 1].Connect(ConnectionOrientation.bottom_left);
+                                    break;
+                                case ConnectionOrientation.right:
+                                    gridBuilder.Grid.cells[x, y + 1].Connect(ConnectionOrientation.bottom_right);
+                                    break;
+                                case ConnectionOrientation.left_right:
+                                    gridBuilder.Grid.cells[x, y + 1].Connect(ConnectionOrientation.bottom_left_right);
+                                    break;
+                                case ConnectionOrientation.top_left:
+                                    gridBuilder.Grid.cells[x, y + 1].Connect(ConnectionOrientation.top_bottom_left);
+                                    break;
+                                case ConnectionOrientation.top_right:
+                                    gridBuilder.Grid.cells[x, y + 1].Connect(ConnectionOrientation.top_bottom_right);
+                                    break;
+                                case ConnectionOrientation.top_left_right:
+                                    gridBuilder.Grid.cells[x, y + 1].Connect(ConnectionOrientation.full);
+                                    break;
+                            }
+
+                            switch (gridBuilder.Grid.cells[x, y].Connection)
+                            {
+                                case ConnectionOrientation.none:
+                                    gridBuilder.Grid.cells[x, y].Connect(ConnectionOrientation.top);
+                                    break;
+                                case ConnectionOrientation.bottom:
+                                    gridBuilder.Grid.cells[x, y].Connect(ConnectionOrientation.top_bottom);
+                                    break;
+                                case ConnectionOrientation.left:
+                                    gridBuilder.Grid.cells[x, y].Connect(ConnectionOrientation.top_left);
+                                    break;
+                                case ConnectionOrientation.right:
+                                    gridBuilder.Grid.cells[x, y].Connect(ConnectionOrientation.top_right);
+                                    break;
+                                case ConnectionOrientation.left_right:
+                                    gridBuilder.Grid.cells[x, y].Connect(ConnectionOrientation.top_left_right);
+                                    break;
+                                case ConnectionOrientation.bottom_left:
+                                    gridBuilder.Grid.cells[x, y].Connect(ConnectionOrientation.top_bottom_left);
+                                    break;
+                                case ConnectionOrientation.bottom_right:
+                                    gridBuilder.Grid.cells[x, y].Connect(ConnectionOrientation.top_bottom_right);
+                                    break;
+                                case ConnectionOrientation.bottom_left_right:
+                                    gridBuilder.Grid.cells[x, y].Connect(ConnectionOrientation.full);
+                                    break;
+                            }
+                        }
+                    }
+                }
+            }
+
+            UpdateImage();
         }
 
         private void Initialize()
