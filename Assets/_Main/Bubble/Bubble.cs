@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,8 +8,24 @@ namespace EdwinGameDev.BubbleTeaMatch4
     public class Bubble : MonoBehaviour
     {
         [SerializeField] private SpriteRenderer spriteRenderer;
+        public BubbleSettings bubbleSettings { get; set; }
         private Vector2Int position;
-        private BubbleOrientation bubblePosition = BubbleOrientation.Top;
+        private Orientation bubblePosition = Orientation.Top;
+        private ConnectionOrientation connection = ConnectionOrientation.none;
+        public ConnectionOrientation Connection { get => connection; }
+        public Orientation Orientation { get => bubblePosition; set => bubblePosition = value; }
+
+        public int BubbleGroup { get; set; }
+
+        public void Disconnect()
+        {
+            connection = ConnectionOrientation.none;
+        }
+
+        public void Connect(ConnectionOrientation newConnection)
+        {
+            connection = newConnection;
+        }
 
         public void DisableHighlight()
         {
@@ -25,8 +42,6 @@ namespace EdwinGameDev.BubbleTeaMatch4
             spriteRenderer.material = material;
         }
 
-        public BubbleOrientation BubbleOrientation { get => bubblePosition; set => bubblePosition = value; }
-
         public void SetPosition(Vector2Int position)
         {
             this.position = position;
@@ -42,6 +57,11 @@ namespace EdwinGameDev.BubbleTeaMatch4
         public Vector2Int GetPosition()
         {
             return position;
+        }
+
+        public void UpdateGraphics()
+        {
+            spriteRenderer.sprite = bubbleSettings.SpriteConnections.GetSprite(connection);
         }
     }
 }
