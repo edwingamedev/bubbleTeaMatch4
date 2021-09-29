@@ -20,3 +20,4 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 83c640e478e793b47a70f9e47c191d66, type: 2}
   - {fileID: 11400000, guid: e25c1e04279f2844690cc04a7742064b, type: 2}
   evilBubble: {fileID: 11400000, guid: d422fd107eddcd1469404e43d9b2dcc7, type: 2}
+  spriteConnections: {fileID: 11400000, guid: d4e43b9f6c9fcbb4ea580582c5e82dd7, type: 2}

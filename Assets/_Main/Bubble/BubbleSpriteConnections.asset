@@ -1,0 +1,47 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ae6fbe0dcbe455540b655b94cc57cf08, type: 3}
+  m_Name: BubbleSpriteConnections
+  m_EditorClassIdentifier: 
+  connectionOrientationsMapping:
+  - connectionOrientations: 0
+    sprite: {fileID: 8950495384752552875, guid: fb7875f4ebebf814eb6cc0602f431688, type: 3}
+  - connectionOrientations: 1
+    sprite: {fileID: -5465562894803168647, guid: fb7875f4ebebf814eb6cc0602f431688, type: 3}
+  - connectionOrientations: 2
+    sprite: {fileID: 5049514169224428460, guid: fb7875f4ebebf814eb6cc0602f431688, type: 3}
+  - connectionOrientations: 3
+    sprite: {fileID: 1508964917457083938, guid: fb7875f4ebebf814eb6cc0602f431688, type: 3}
+  - connectionOrientations: 4
+    sprite: {fileID: 6904347842818226636, guid: fb7875f4ebebf814eb6cc0602f431688, type: 3}
+  - connectionOrientations: 5
+    sprite: {fileID: -3997559260042310886, guid: fb7875f4ebebf814eb6cc0602f431688, type: 3}
+  - connectionOrientations: 6
+    sprite: {fileID: -1507396202348833598, guid: fb7875f4ebebf814eb6cc0602f431688, type: 3}
+  - connectionOrientations: 7
+    sprite: {fileID: 5837121690336817397, guid: fb7875f4ebebf814eb6cc0602f431688, type: 3}
+  - connectionOrientations: 8
+    sprite: {fileID: 7941187218561479872, guid: fb7875f4ebebf814eb6cc0602f431688, type: 3}
+  - connectionOrientations: 9
+    sprite: {fileID: 2744761229409807459, guid: fb7875f4ebebf814eb6cc0602f431688, type: 3}
+  - connectionOrientations: 10
+    sprite: {fileID: 412586670132871153, guid: fb7875f4ebebf814eb6cc0602f431688, type: 3}
+  - connectionOrientations: 11
+    sprite: {fileID: 7940642430765703637, guid: fb7875f4ebebf814eb6cc0602f431688, type: 3}
+  - connectionOrientations: 12
+    sprite: {fileID: 4606440331134439656, guid: fb7875f4ebebf814eb6cc0602f431688, type: 3}
+  - connectionOrientations: 13
+    sprite: {fileID: 8843013381702343124, guid: fb7875f4ebebf814eb6cc0602f431688, type: 3}
+  - connectionOrientations: 14
+    sprite: {fileID: -259139723819193867, guid: fb7875f4ebebf814eb6cc0602f431688, type: 3}
+  - connectionOrientations: 15
+    sprite: {fileID: 5782277161948852795, guid: fb7875f4ebebf814eb6cc0602f431688, type: 3}
