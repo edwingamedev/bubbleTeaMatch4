@@ -1,9 +1,9 @@
 ﻿namespace EdwinGameDev.BubbleTeaMatch4
 {
-    public enum BubbleOrientation
+    public enum Orientation
     {
-        Bottom,
         Top,
+        Bottom,
         Left,
         Right
     }
