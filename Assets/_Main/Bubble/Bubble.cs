@@ -16,6 +16,7 @@ namespace EdwinGameDev.BubbleTeaMatch4
         public Orientation Orientation { get => bubblePosition; set => bubblePosition = value; }
         private List<Bubble> connectionList = new List<Bubble>();
         public bool Matched { get; set; }
+        [SerializeField] private Animator animator;
 
         public int BubbleGroup { get; set; }
 
@@ -64,6 +65,16 @@ namespace EdwinGameDev.BubbleTeaMatch4
         {
             SetPosition(new Vector2Int(Mathf.CeilToInt(transform.position.x) + direction.x,
                                         Mathf.CeilToInt(transform.position.y) + direction.y));
+        }
+
+        public void PopAnimation()
+        {
+            animator.SetBool("Pop", true);
+        }
+
+        public void ResetAnimation()
+        {
+            animator.SetBool("Pop", false);
         }
 
         public Vector2Int GetPosition()

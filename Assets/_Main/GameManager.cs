@@ -62,7 +62,7 @@ namespace EdwinGameDev.BubbleTeaMatch4
                     isPoping = true;
 
                     if (PrepareBubblePop())
-                    {                        
+                    {
                         StartCoroutine(PopAndFillGap());
                     }
                     else
@@ -80,7 +80,7 @@ namespace EdwinGameDev.BubbleTeaMatch4
 
         private IEnumerator PopAndFillGap()
         {
-            yield return new WaitForSeconds(dropRate);
+            yield return new WaitForSeconds(dropRate / 2);
 
             PopBubbles();
             gameState = GameState.Arrange;
@@ -151,6 +151,7 @@ namespace EdwinGameDev.BubbleTeaMatch4
                         {
                             hasConnection = true;
                             gridBuilder.Grid.cells[x, y].Matched = true;
+                            gridBuilder.Grid.cells[x, y].PopAnimation();
                         }
                     }
                 }
@@ -402,6 +403,7 @@ namespace EdwinGameDev.BubbleTeaMatch4
                 {
                     bubbleMovementController.TurnCounterClockwise();
                 }
+
             }
         }
 
