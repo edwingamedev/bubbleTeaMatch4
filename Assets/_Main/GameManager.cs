@@ -26,6 +26,9 @@ namespace EdwinGameDev.BubbleTeaMatch4
         bool isArranging = false;
         bool isPoping = false;
 
+        private float inputDelay = .1f;
+        private float nextInput;
+
         // Start is called before the first frame update
         void Start()
         {
@@ -379,19 +382,26 @@ namespace EdwinGameDev.BubbleTeaMatch4
         {
             if (!ReachedBottom())
             {
-                if (Input.GetKeyDown(KeyCode.LeftArrow))
+                if (Time.time > nextInput)
                 {
-                    bubbleMovementController.MoveLeft();
-                }
+                    nextInput = Time.time + inputDelay;
+                    if (Input.GetKey(KeyCode.LeftArrow))
+                    {
+                        bubbleMovementController.MoveLeft();
+                    }
 
-                if (Input.GetKeyDown(KeyCode.RightArrow))
-                {
-                    bubbleMovementController.MoveRight();
-                }
+                    if (Input.GetKey(KeyCode.RightArrow))
+                    {
+                        bubbleMovementController.MoveRight();
+                    }
 
-                if (Input.GetKeyDown(KeyCode.DownArrow))
-                {
-                    bubbleMovementController.MoveDown();
+                    if (Input.GetKey(KeyCode.DownArrow))
+                    {
+
+
+                        bubbleMovementController.MoveDown();
+
+                    }
                 }
 
                 if (Input.GetKeyDown(KeyCode.Z))
