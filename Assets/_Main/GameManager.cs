@@ -11,7 +11,7 @@ namespace EdwinGameDev.BubbleTeaMatch4
         private IGridBuilder gridBuilder;
         private IBubbleBuilder bubbleBuilder;
         private BubbleMovementController bubbleMovementController;
-
+        [SerializeField] private ScoreController scoreController;
         private float dropRate = 1f;
         private float nextDrop;
 
@@ -178,6 +178,8 @@ namespace EdwinGameDev.BubbleTeaMatch4
                         {
                             Destroy(gridBuilder.Grid.cells[x, y].gameObject);
                             gridBuilder.Grid.cells[x, y] = null;
+
+                            scoreController.AddPoints(10);
                         }
 
                         emptyRow = false;
@@ -397,10 +399,8 @@ namespace EdwinGameDev.BubbleTeaMatch4
 
                     if (Input.GetKey(KeyCode.DownArrow))
                     {
-
-
                         bubbleMovementController.MoveDown();
-
+                        scoreController.AddPoints(10);
                     }
                 }
 
