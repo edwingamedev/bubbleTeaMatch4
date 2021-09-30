@@ -19,10 +19,10 @@ namespace EdwinGameDev.BubbleTeaMatch4
 
         public void AssignBubble(Bubble bubble)
         {
-            if (bubble.GetPosition().y < cells.GetLength(1))
+            if (bubble.MovementController.GetPosition().y < cells.GetLength(1))
             {
-                cells[bubble.GetPosition().x, bubble.GetPosition().y] = bubble;
-                bubble.DisableHighlight();
+                cells[bubble.MovementController.GetPosition().x, bubble.MovementController.GetPosition().y] = bubble;
+                bubble.GraphicsController.DisableHighlight();
             }
         }
 

@@ -2,14 +2,43 @@
 
 namespace EdwinGameDev.BubbleTeaMatch4
 {
-    public class BubbleMovementController
+    public class KeyboardInputProcessor : IInputProcessor
     {
+        public bool MoveDown()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public bool MoveLeft()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public bool MoveRight()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void TurnClockwise()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void TurnCounterClockwise()
+        {
+            throw new System.NotImplementedException();
+        }
+    }
+
+    public class InputController : MonoBehaviour
+    {
+        public IInputProcessor inputProcessor;
         private GameSettings gameSettings;
         private Grid grid;
         private Bubble mainBubble;
         private Bubble subBubble;
 
-        public BubbleMovementController(GameSettings gameSettings, Grid grid)
+        public InputController(GameSettings gameSettings, Grid grid)
         {
             this.gameSettings = gameSettings;
             this.grid = grid;
@@ -27,8 +56,8 @@ namespace EdwinGameDev.BubbleTeaMatch4
 
             if (IsValidHorizontalMovement(moveDirection))
             {
-                mainBubble?.MoveDirection(moveDirection);
-                subBubble?.MoveDirection(moveDirection);
+                mainBubble?.MovementController.MoveDirection(moveDirection);
+                subBubble?.MovementController.MoveDirection(moveDirection);
                 return true;
             }
 
@@ -41,8 +70,8 @@ namespace EdwinGameDev.BubbleTeaMatch4
 
             if (IsValidHorizontalMovement(moveDirection))
             {
-                mainBubble?.MoveDirection(moveDirection);
-                subBubble?.MoveDirection(moveDirection);
+                mainBubble?.MovementController.MoveDirection(moveDirection);
+                subBubble?.MovementController.MoveDirection(moveDirection);
 
                 return true;
             }
@@ -56,44 +85,12 @@ namespace EdwinGameDev.BubbleTeaMatch4
 
             if (isValidDownMovement())
             {
-                mainBubble?.MoveDirection(moveDirection);
-                subBubble?.MoveDirection(moveDirection);
+                mainBubble?.MovementController.MoveDirection(moveDirection);
+                subBubble?.MovementController.MoveDirection(moveDirection);
                 return true;
             }
 
             return false;
-        }
-
-        private void SetLeftOrientation()
-        {
-            subBubble.SetPosition(new Vector2Int(mainBubble.GetPosition().x - 1, mainBubble.GetPosition().y));
-
-            // Set New Orientation
-            subBubble.Orientation = Orientation.Left;
-        }
-
-        private void SetRightOrientation()
-        {
-            subBubble.SetPosition(new Vector2Int(mainBubble.GetPosition().x + 1, mainBubble.GetPosition().y));
-
-            // Set New Orientation
-            subBubble.Orientation = Orientation.Right;
-        }
-
-        private void SetTopOrientation()
-        {
-            subBubble.SetPosition(new Vector2Int(mainBubble.GetPosition().x, mainBubble.GetPosition().y + 1));
-
-            // Set New Orientation
-            subBubble.Orientation = Orientation.Top;
-        }
-
-        private void SetBottomOrientation()
-        {
-            subBubble.SetPosition(new Vector2Int(mainBubble.GetPosition().x, mainBubble.GetPosition().y - 1));
-
-            // Set New Orientation
-            subBubble.Orientation = Orientation.Bottom;
         }
 
         public void TurnClockwise()
@@ -101,10 +98,10 @@ namespace EdwinGameDev.BubbleTeaMatch4
             if (subBubble == null)
                 return;
 
-            Orientation subPos = subBubble.Orientation;
+            Orientation subPos = subBubble.MovementController.Orientation;
 
-            int x = mainBubble.GetPosition().x;
-            int y = mainBubble.GetPosition().y;
+            int x = mainBubble.MovementController.GetPosition().x;
+            int y = mainBubble.MovementController.GetPosition().y;
 
             switch (subPos)
             {
@@ -121,8 +118,8 @@ namespace EdwinGameDev.BubbleTeaMatch4
                         break;
 
                     if (x < gameSettings.GridSize.x - 1 || MoveLeft())
-                        SetRightOrientation();    
-                    
+                        SetRightOrientation();
+
                     break;
                 case Orientation.Left:
                     if (y + 1 < gameSettings.GridSize.y && grid.cells[x, y + 1] != null)
@@ -148,9 +145,9 @@ namespace EdwinGameDev.BubbleTeaMatch4
             if (subBubble == null)
                 return;
 
-            Orientation subPos = subBubble.Orientation;
-            int x = mainBubble.GetPosition().x;
-            int y = mainBubble.GetPosition().y;
+            Orientation subPos = subBubble.MovementController.Orientation;
+            int x = mainBubble.MovementController.GetPosition().x;
+            int y = mainBubble.MovementController.GetPosition().y;
 
             switch (subPos)
             {
@@ -188,10 +185,43 @@ namespace EdwinGameDev.BubbleTeaMatch4
             }
         }
 
+        private void SetLeftOrientation()
+        {
+            subBubble.MovementController.SetPosition(new Vector2Int(mainBubble.MovementController.GetPosition().x - 1, mainBubble.MovementController.GetPosition().y));
+
+            // Set New Orientation
+            subBubble.MovementController.Orientation = Orientation.Left;
+        }
+
+        private void SetRightOrientation()
+        {
+            subBubble.MovementController.SetPosition(new Vector2Int(mainBubble.MovementController.GetPosition().x + 1, mainBubble.MovementController.GetPosition().y));
+
+            // Set New Orientation
+            subBubble.MovementController.Orientation = Orientation.Right;
+        }
+
+        private void SetTopOrientation()
+        {
+            subBubble.MovementController.SetPosition(new Vector2Int(mainBubble.MovementController.GetPosition().x, mainBubble.MovementController.GetPosition().y + 1));
+
+            // Set New Orientation
+            subBubble.MovementController.Orientation = Orientation.Top;
+        }
+
+        private void SetBottomOrientation()
+        {
+            subBubble.MovementController.SetPosition(new Vector2Int(mainBubble.MovementController.GetPosition().x, mainBubble.MovementController.GetPosition().y - 1));
+
+            // Set New Orientation
+            subBubble.MovementController.Orientation = Orientation.Bottom;
+        }
+
+
         private bool IsValidHorizontalMovement(Vector2Int direction)
         {
-            Vector2Int mainBubblePos = mainBubble.GetPosition() + direction;
-            Vector2Int subBubblePos = subBubble.GetPosition() + direction;
+            Vector2Int mainBubblePos = mainBubble.MovementController.GetPosition() + direction;
+            Vector2Int subBubblePos = subBubble.MovementController.GetPosition() + direction;
 
             return mainBubblePos.x < gameSettings.GridSize.x &&
                    mainBubblePos.x >= 0 &&
@@ -203,8 +233,8 @@ namespace EdwinGameDev.BubbleTeaMatch4
 
         private bool isValidDownMovement()
         {
-            Vector2Int mainBubblePos = mainBubble.GetPosition();
-            Vector2Int subBubblePos = subBubble.GetPosition();
+            Vector2Int mainBubblePos = mainBubble.MovementController.GetPosition();
+            Vector2Int subBubblePos = subBubble.MovementController.GetPosition();
 
             return !grid.ReachedBottom(mainBubblePos) ||
                 !grid.ReachedBottom(subBubblePos);

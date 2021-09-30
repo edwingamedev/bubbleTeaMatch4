@@ -22,13 +22,12 @@ namespace EdwinGameDev.BubbleTeaMatch4
             var go = Object.Instantiate(settings.BubbleSettings.Prefab, (Vector2)position, Quaternion.identity);
             var bubble = go.GetComponent<Bubble>();
             bubble.BubbleGroup = bubbleIndex;
-            bubble.bubbleSettings = settings.BubbleSettings;
 
             Material material = new Material(settings.BubbleSettings.Shader);
             material.SetColor("_MainColor", settings.BubbleSettings.BubblePresets[bubbleIndex].mainColor);
             material.SetColor("_EyeColor", settings.BubbleSettings.BubblePresets[bubbleIndex].eyeColor);
 
-            bubble.SetMaterial(material);      
+            bubble.GraphicsController.SetMaterial(material);      
 
             return bubble;
         }
