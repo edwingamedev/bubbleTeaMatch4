@@ -413,7 +413,6 @@ namespace EdwinGameDev.BubbleTeaMatch4
                 {
                     bubbleMovementController.TurnCounterClockwise();
                 }
-
             }
         }
 
