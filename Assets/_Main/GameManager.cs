@@ -29,6 +29,8 @@ namespace EdwinGameDev.BubbleTeaMatch4
         private float inputDelay = .1f;
         private float nextInput;
 
+        private GameState previousGameState;
+
         // Start is called before the first frame update
         void Start()
         {
@@ -38,6 +40,16 @@ namespace EdwinGameDev.BubbleTeaMatch4
         // Update is called once per frame
         void Update()
         {
+            if (Input.GetKeyDown(KeyCode.P))
+            {
+                previousGameState = gameState;
+
+                if (gameState != GameState.Pause)
+                    gameState = GameState.Pause;
+                else
+                    gameState = previousGameState;
+            }
+
             switch (gameState)
             {
                 case GameState.Initialize:
