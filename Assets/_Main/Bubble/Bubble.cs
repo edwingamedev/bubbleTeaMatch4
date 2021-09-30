@@ -14,8 +14,20 @@ namespace EdwinGameDev.BubbleTeaMatch4
         private ConnectionOrientation connection = ConnectionOrientation.none;
         public ConnectionOrientation Connection { get => connection; }
         public Orientation Orientation { get => bubblePosition; set => bubblePosition = value; }
+        private List<Bubble> connectionList = new List<Bubble>();
+        public bool Matched { get; set; }
 
         public int BubbleGroup { get; set; }
+
+        public List<Bubble> GetConnectionList()
+        {
+            return connectionList;
+        }
+
+        public void SetConnectionList(List<Bubble> newConnections)
+        {
+            this.connectionList = newConnections;
+        }
 
         public void Disconnect()
         {

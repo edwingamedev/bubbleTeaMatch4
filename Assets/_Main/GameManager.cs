@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace EdwinGameDev.BubbleTeaMatch4
@@ -23,6 +24,7 @@ namespace EdwinGameDev.BubbleTeaMatch4
         private GameState gameState = GameState.Initialize;
 
         bool isArranging = false;
+        bool isPoping = false;
 
         // Start is called before the first frame update
         void Start()
@@ -50,10 +52,24 @@ namespace EdwinGameDev.BubbleTeaMatch4
                         StartCoroutine(ArrangeBubbles());
                     break;
                 case GameState.Linking:
-                    gameState = GameState.Creating;
+                    gameState = GameState.Combo;
                     LinkBubbles();
                     break;
                 case GameState.Combo:
+                    if (isPoping)
+                        return;
+
+                    isPoping = true;
+
+                    if (PrepareBubblePop())
+                    {                        
+                        StartCoroutine(PopAndFillGap());
+                    }
+                    else
+                    {
+                        isPoping = false;
+                        gameState = GameState.Creating;
+                    }
                     break;
                 case GameState.Pause:
                     break;
@@ -62,7 +78,17 @@ namespace EdwinGameDev.BubbleTeaMatch4
             }
         }
 
-        public void UpdateImage()
+        private IEnumerator PopAndFillGap()
+        {
+            yield return new WaitForSeconds(dropRate);
+
+            PopBubbles();
+            gameState = GameState.Arrange;
+
+            isPoping = false;
+        }
+
+        private void UpdateImage()
         {
             bool emptyRow;
             for (int y = 0; y < gameSettings.GridSize.y; y++)
@@ -73,7 +99,6 @@ namespace EdwinGameDev.BubbleTeaMatch4
                 {
                     if (gridBuilder.Grid.cells[x, y] != null)
                     {
-                        //print("("+x+", "+y+")===>"+gridBuilder.Grid.cells[x, y].getLinkPuyoList().Count);
                         emptyRow = false;
                         gridBuilder.Grid.cells[x, y].UpdateGraphics();
                     }
@@ -83,7 +108,83 @@ namespace EdwinGameDev.BubbleTeaMatch4
             }
         }
 
-        public void LinkBubbles()
+        private void UpdateBubbleConnectionList(Bubble bubbleA, Bubble bubbleB)
+        {
+            List<Bubble> bubbleAList = bubbleA.GetConnectionList();
+            if (!bubbleAList.Contains(bubbleB))
+            {
+                bubbleAList.Add(bubbleB);
+            }
+
+            List<Bubble> bubbleBList = bubbleB.GetConnectionList();
+            if (!bubbleBList.Contains(bubbleA))
+            {
+                bubbleBList.Add(bubbleA);
+            }
+
+            List<Bubble> bubbleCList = bubbleAList.Union(bubbleBList).ToList();
+
+            for (int i = 0; i < bubbleAList.Count; i++)
+            {
+                bubbleAList[i].SetConnectionList(bubbleCList);
+            }
+            for (int i = 0; i < bubbleBList.Count; i++)
+            {
+                bubbleBList[i].SetConnectionList(bubbleCList);
+            }
+        }
+
+        private bool PrepareBubblePop()
+        {
+            bool hasConnection = false;
+
+            for (int y = 0; y < gameSettings.GridSize.y; y++)
+            {
+                bool emptyRow = true;
+                for (int x = 0; x < gameSettings.GridSize.x; x++)
+                {
+                    if (gridBuilder.Grid.cells[x, y] != null)
+                    {
+                        emptyRow = false;
+
+                        if (gridBuilder.Grid.cells[x, y].GetConnectionList().Count >= 4)
+                        {
+                            hasConnection = true;
+                            gridBuilder.Grid.cells[x, y].Matched = true;
+                        }
+                    }
+                }
+                if (emptyRow)
+                    break;
+            }
+            //UpdateImage();
+            return hasConnection;
+        }
+
+        private void PopBubbles()
+        {
+            for (int y = 0; y < gameSettings.GridSize.y; y++)
+            {
+                bool emptyRow = true;
+                for (int x = 0; x < gameSettings.GridSize.x; x++)
+                {
+                    if (gridBuilder.Grid.cells[x, y] != null)
+                    {
+                        if (gridBuilder.Grid.cells[x, y].Matched)
+                        {
+                            Destroy(gridBuilder.Grid.cells[x, y].gameObject);
+                            gridBuilder.Grid.cells[x, y] = null;
+                        }
+
+                        emptyRow = false;
+                    }
+                }
+                if (emptyRow)
+                    break;
+            }
+        }
+
+        private void LinkBubbles()
         {
             bool emptyRow;
 
@@ -98,7 +199,7 @@ namespace EdwinGameDev.BubbleTeaMatch4
                         emptyRow = false;
 
                         // Horizontal
-                        if (gridBuilder.Grid.cells[x + 1, y] != null && gridBuilder.Grid.cells[x, y].BubbleGroup == gridBuilder.Grid.cells[x + 1, y].BubbleGroup)
+                        if (x + 1 < gridBuilder.Grid.cells.GetLength(0) && gridBuilder.Grid.cells[x + 1, y] != null && gridBuilder.Grid.cells[x, y].BubbleGroup == gridBuilder.Grid.cells[x + 1, y].BubbleGroup)
                         {
                             if (gridBuilder.Grid.cells[x, y].Connection == ConnectionOrientation.left)
                                 gridBuilder.Grid.cells[x, y].Connect(ConnectionOrientation.left_right);
@@ -107,6 +208,8 @@ namespace EdwinGameDev.BubbleTeaMatch4
 
 
                             gridBuilder.Grid.cells[x + 1, y].Connect(ConnectionOrientation.left);
+
+                            UpdateBubbleConnectionList(gridBuilder.Grid.cells[x, y], gridBuilder.Grid.cells[x + 1, y]);
                         }
                     }
                 }
@@ -125,7 +228,7 @@ namespace EdwinGameDev.BubbleTeaMatch4
                     {
                         emptyRow = false;
                         // Vertical
-                        if (gridBuilder.Grid.cells[x, y + 1] != null && gridBuilder.Grid.cells[x, y].BubbleGroup == gridBuilder.Grid.cells[x, y + 1].BubbleGroup)
+                        if (y + 1 < gridBuilder.Grid.cells.GetLength(1) && gridBuilder.Grid.cells[x, y + 1] != null && gridBuilder.Grid.cells[x, y].BubbleGroup == gridBuilder.Grid.cells[x, y + 1].BubbleGroup)
                         {
                             switch (gridBuilder.Grid.cells[x, y + 1].Connection)
                             {
@@ -182,6 +285,8 @@ namespace EdwinGameDev.BubbleTeaMatch4
                                     gridBuilder.Grid.cells[x, y].Connect(ConnectionOrientation.full);
                                     break;
                             }
+
+                            UpdateBubbleConnectionList(gridBuilder.Grid.cells[x, y], gridBuilder.Grid.cells[x, y + 1]);
                         }
                     }
                 }
