@@ -2,14 +2,14 @@
 {
     public interface IInputProcessor
     {
-        bool MoveLeft();
+        bool Left();
 
-        bool MoveRight();
+        bool Right();
 
-        bool MoveDown();
+        bool Down();
 
-        void TurnClockwise();
+        bool TurnClockwise();
 
-        void TurnCounterClockwise();
+        bool TurnCounterClockwise();
     }
 }

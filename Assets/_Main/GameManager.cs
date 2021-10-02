@@ -5,13 +5,11 @@ using UnityEngine;
 
 namespace EdwinGameDev.BubbleTeaMatch4
 {
-
     public class GameManager : MonoBehaviour
     {
         [SerializeField] private GameSettings gameSettings;
         private IGridBuilder gridBuilder;
         private IBubbleBuilder bubbleBuilder;
-        private InputController bubbleMovementController;
         [SerializeField] private ScoreController scoreController;
 
         private float dropRate = 1f;
@@ -28,10 +26,10 @@ namespace EdwinGameDev.BubbleTeaMatch4
         bool isArranging = false;
         bool isPoping = false;
 
-        private float inputDelay = .1f;
-        private float nextInput;
-
         private GameState previousGameState;
+
+        // Refactor
+        private IInputController inputController;
 
         // Start is called before the first frame update
         void Start()
@@ -95,9 +93,26 @@ namespace EdwinGameDev.BubbleTeaMatch4
             }
         }
 
+        private void Initialize()
+        {
+            gameState = GameState.Initialize;
+
+            bubbleBuilder = new StandardBubbleBuilder(gameSettings);
+            gridBuilder = new StandardGridBuilder(gameSettings);
+            gridBuilder.Build();
+
+            inputController = new BubbleInputController(gridBuilder.Grid,
+                                                        new KeyboardInputProcessor(),
+                                                        () => scoreController.AddPoints(10)
+                                                        );
+
+            // Start Game
+            gameState = GameState.Creating;
+        }
+
         private IEnumerator PopAndFillGap()
         {
-            yield return new WaitForSeconds(dropRate / 2);
+            yield return new WaitForSeconds(.5f);
 
             PopBubbles();
             gameState = GameState.Arrange;
@@ -226,7 +241,6 @@ namespace EdwinGameDev.BubbleTeaMatch4
                             else
                                 gridBuilder.Grid.cells[x, y].ConnectionController.Connect(ConnectionOrientation.right);
 
-
                             gridBuilder.Grid.cells[x + 1, y].ConnectionController.Connect(ConnectionOrientation.left);
 
                             UpdateBubbleConnectionList(gridBuilder.Grid.cells[x, y], gridBuilder.Grid.cells[x + 1, y]);
@@ -315,20 +329,6 @@ namespace EdwinGameDev.BubbleTeaMatch4
             UpdateImage();
         }
 
-        private void Initialize()
-        {
-            gameState = GameState.Initialize;
-
-            bubbleBuilder = new StandardBubbleBuilder(gameSettings);
-            gridBuilder = new StandardGridBuilder(gameSettings);
-            gridBuilder.Build();
-
-            bubbleMovementController = new InputController(gameSettings, gridBuilder.Grid);
-
-            // Start Game
-            gameState = GameState.Creating;
-        }
-
         private void SpawnNewBubbleSet()
         {
             // Spawn new Set
@@ -354,7 +354,7 @@ namespace EdwinGameDev.BubbleTeaMatch4
             mainBubble.MovementController.SetPosition(gameSettings.MainBubbleSpawnPosition + Vector2Int.down);
             subBubble.MovementController.SetPosition(gameSettings.SubBubbleSpawnPosition + Vector2Int.down);
 
-            bubbleMovementController.SetBubbles(mainBubble, subBubble);
+            inputController.SetBubbles(mainBubble, subBubble);
 
             // Next
             nextMainBubble = bubbleBuilder.Generate(gameSettings.NextMainBubblePosition);
@@ -377,7 +377,7 @@ namespace EdwinGameDev.BubbleTeaMatch4
 
                 if (!ReachedBottom())
                 {
-                    bubbleMovementController.MoveDown();
+                    inputController.ValidateAndMoveDown();
                 }
             }
         }
@@ -397,35 +397,7 @@ namespace EdwinGameDev.BubbleTeaMatch4
         {
             if (!ReachedBottom())
             {
-                if (Time.time > nextInput)
-                {
-                    nextInput = Time.time + inputDelay;
-                    if (Input.GetKey(KeyCode.LeftArrow))
-                    {
-                        bubbleMovementController.MoveLeft();
-                    }
-
-                    if (Input.GetKey(KeyCode.RightArrow))
-                    {
-                        bubbleMovementController.MoveRight();
-                    }
-
-                    if (Input.GetKey(KeyCode.DownArrow))
-                    {
-                        bubbleMovementController.MoveDown();
-                        scoreController.AddPoints(10);
-                    }
-                }
-
-                if (Input.GetKeyDown(KeyCode.Z))
-                {
-                    bubbleMovementController.TurnClockwise();
-                }
-
-                if (Input.GetKeyDown(KeyCode.X))
-                {
-                    bubbleMovementController.TurnCounterClockwise();
-                }
+                inputController.CheckInputs();
             }
         }
 
