@@ -3,7 +3,7 @@
     public interface IInputController
     {
         void CheckInputs();
-        void SetBubbles(Bubble mainBubble, Bubble subBubble);
+        void SetBubbles(BubbleSet bubbleSet);
         bool ValidateAndMoveDown();
     }
 }

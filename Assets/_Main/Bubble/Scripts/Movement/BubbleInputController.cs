@@ -12,8 +12,7 @@ namespace EdwinGameDev.BubbleTeaMatch4
         private Grid grid;
         private Vector2Int gridSize;
 
-        private Bubble mainBubble;
-        private Bubble subBubble;
+        private BubbleSet bubbleSet;
 
         private float inputDelay = .1f;
         private float nextInput;
@@ -32,10 +31,9 @@ namespace EdwinGameDev.BubbleTeaMatch4
             orientationController = new BubbleOrientationController();
         }
 
-        public void SetBubbles(Bubble mainBubble, Bubble subBubble)
+        public void SetBubbles(BubbleSet bubbleSet)
         {
-            this.mainBubble = mainBubble;
-            this.subBubble = subBubble;
+            this.bubbleSet = bubbleSet;
         }
 
         public void CheckInputs()
@@ -66,16 +64,16 @@ namespace EdwinGameDev.BubbleTeaMatch4
 
             if (inputProcessor.TurnClockwise())
             {
-                TurnClockwise(mainBubble.MovementController.GetPosition().x,
-                              mainBubble.MovementController.GetPosition().y,
-                              subBubble.MovementController.Orientation);
+                TurnClockwise(bubbleSet.Main.MovementController.GetPosition().x,
+                              bubbleSet.Main.MovementController.GetPosition().y,
+                              bubbleSet.Sub.MovementController.Orientation);
             }
 
             if (inputProcessor.TurnCounterClockwise())
             {
-                TurnCounterClockwise(mainBubble.MovementController.GetPosition().x,
-                                    mainBubble.MovementController.GetPosition().y,
-                                    subBubble.MovementController.Orientation);
+                TurnCounterClockwise(bubbleSet.Main.MovementController.GetPosition().x,
+                                    bubbleSet.Main.MovementController.GetPosition().y,
+                                    bubbleSet.Sub.MovementController.Orientation);
             }
         }
 
@@ -83,7 +81,7 @@ namespace EdwinGameDev.BubbleTeaMatch4
         {
             var moveDirection = Vector2Int.left;
 
-            if (movementValidator.IsValidHorizontalMovement(mainBubble.MovementController.GetPosition(), subBubble.MovementController.GetPosition(), moveDirection))
+            if (movementValidator.IsValidHorizontalMovement(bubbleSet.Main.MovementController.GetPosition(), bubbleSet.Sub.MovementController.GetPosition(), moveDirection))
             {
                 MoveBubbles(moveDirection);
 
@@ -97,7 +95,7 @@ namespace EdwinGameDev.BubbleTeaMatch4
         {
             var moveDirection = Vector2Int.right;
 
-            if (movementValidator.IsValidHorizontalMovement(mainBubble.MovementController.GetPosition(), subBubble.MovementController.GetPosition(), moveDirection))
+            if (movementValidator.IsValidHorizontalMovement(bubbleSet.Main.MovementController.GetPosition(), bubbleSet.Sub.MovementController.GetPosition(), moveDirection))
             {
                 MoveBubbles(moveDirection);
 
@@ -111,7 +109,7 @@ namespace EdwinGameDev.BubbleTeaMatch4
         {
             var moveDirection = Vector2Int.down;
 
-            if (movementValidator.isValidDownMovement(mainBubble.MovementController.GetPosition(), subBubble.MovementController.GetPosition()))
+            if (movementValidator.isValidDownMovement(bubbleSet.Main.MovementController.GetPosition(), bubbleSet.Sub.MovementController.GetPosition()))
             {
                 MoveBubbles(moveDirection);
 
@@ -123,13 +121,13 @@ namespace EdwinGameDev.BubbleTeaMatch4
 
         private void MoveBubbles(Vector2Int moveDirection)
         {
-            mainBubble?.MovementController.MoveDirection(moveDirection);
-            subBubble?.MovementController.MoveDirection(moveDirection);
+            bubbleSet.Main?.MovementController.MoveDirection(moveDirection);
+            bubbleSet.Sub?.MovementController.MoveDirection(moveDirection);
         }
 
         private void TurnClockwise(int x, int y, Orientation subPos)
         {
-            if (subBubble == null)
+            if (bubbleSet.Sub == null)
                 return;
 
             switch (subPos)
@@ -139,7 +137,7 @@ namespace EdwinGameDev.BubbleTeaMatch4
                         break;
 
                     if (x != 0 || ValidateAndMoveRight())
-                        orientationController.SetLeftOrientation(mainBubble, subBubble);
+                        orientationController.SetLeftOrientation(bubbleSet.Main, bubbleSet.Sub);
 
                     break;
                 case Orientation.Top:
@@ -147,20 +145,20 @@ namespace EdwinGameDev.BubbleTeaMatch4
                         break;
 
                     if (x < gridSize.x - 1 || ValidateAndMoveLeft())
-                        orientationController.SetRightOrientation(mainBubble, subBubble);
+                        orientationController.SetRightOrientation(bubbleSet.Main, bubbleSet.Sub);
 
                     break;
                 case Orientation.Left:
                     if (y + 1 < gridSize.y && grid.cells[x, y + 1] != null)
                         break;
 
-                    orientationController.SetTopOrientation(mainBubble, subBubble);
+                    orientationController.SetTopOrientation(bubbleSet.Main, bubbleSet.Sub);
                     break;
                 case Orientation.Right:
                     if (y - 1 >= 0 && grid.cells[x, y - 1] != null)
                         break;
 
-                    orientationController.SetBottomOrientation(mainBubble, subBubble);
+                    orientationController.SetBottomOrientation(bubbleSet.Main, bubbleSet.Sub);
                     break;
                 default:
                     break;
@@ -176,7 +174,7 @@ namespace EdwinGameDev.BubbleTeaMatch4
                         break;
 
                     if (x < gridSize.x - 1 || ValidateAndMoveLeft())
-                        orientationController.SetRightOrientation(mainBubble, subBubble);
+                        orientationController.SetRightOrientation(bubbleSet.Main, bubbleSet.Sub);
 
                     break;
                 case Orientation.Top:
@@ -184,20 +182,20 @@ namespace EdwinGameDev.BubbleTeaMatch4
                         break;
 
                     if (x != 0 || ValidateAndMoveRight())
-                        orientationController.SetLeftOrientation(mainBubble, subBubble);
+                        orientationController.SetLeftOrientation(bubbleSet.Main, bubbleSet.Sub);
 
                     break;
                 case Orientation.Left:
                     if (y - 1 >= 0 && grid.cells[x, y - 1] != null)
                         break;
 
-                    orientationController.SetBottomOrientation(mainBubble, subBubble);
+                    orientationController.SetBottomOrientation(bubbleSet.Main, bubbleSet.Sub);
                     break;
                 case Orientation.Right:
                     if (y + 1 < gridSize.y && grid.cells[x, y + 1] != null)
                         break;
 
-                    orientationController.SetTopOrientation(mainBubble, subBubble);
+                    orientationController.SetTopOrientation(bubbleSet.Main, bubbleSet.Sub);
                     break;
                 default:
                     break;
