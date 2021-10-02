@@ -8,18 +8,7 @@ namespace EdwinGameDev.BubbleTeaMatch4
     public class GameManager : MonoBehaviour
     {
         [SerializeField] private GameSettings gameSettings;
-        private IGridBuilder gridBuilder;
-        private IBubbleBuilder bubbleBuilder;
         [SerializeField] private ScoreController scoreController;
-
-        private float dropRate = 1f;
-        private float nextDrop;
-
-        private Bubble mainBubble;
-        private Bubble subBubble;
-
-        private Bubble nextMainBubble;
-        private Bubble nextSubBubble;
 
         private GameState gameState = GameState.Initialize;
 
@@ -30,11 +19,16 @@ namespace EdwinGameDev.BubbleTeaMatch4
 
         // Refactor
         private IInputController inputController;
+        public GridBehaviour gridBehaviour;
+        private BubbleSpawner bubbleSpawner;
+
+        private float dropRate = 1f;
+        private float nextDrop;
 
         // Start is called before the first frame update
         void Start()
         {
-            Initialize();
+            gameState = GameState.Initialize;
         }
 
         // Update is called once per frame
@@ -54,21 +48,35 @@ namespace EdwinGameDev.BubbleTeaMatch4
             {
                 case GameState.Initialize:
                     Initialize();
+
+                    // Start Game
+                    gameState = GameState.Creating;
                     break;
                 case GameState.Creating:
-                    SpawnNewBubbleSet();
+                    //Spawn new bubble set
+                    bubbleSpawner.SpawnNewBubbleSet();
+
+                    // Update controlled bubbles
+                    inputController.SetBubbles(bubbleSpawner.CurrentSet);
+
+                    // Start Game
+                    gameState = GameState.Playing;
                     break;
                 case GameState.Playing:
                     BubbleDrop();
-                    PlayerMovement();
+
+                    // Player Movement
+                    if (gridBehaviour.ValidateBubbleMovement(bubbleSpawner.CurrentSet, () => OnReachedBottom()))
+                        inputController.CheckInputs();
                     break;
                 case GameState.Arrange:
                     if (!isArranging)
                         StartCoroutine(ArrangeBubbles());
                     break;
                 case GameState.Linking:
-                    gameState = GameState.Combo;
                     LinkBubbles();
+
+                    gameState = GameState.Combo;
                     break;
                 case GameState.Combo:
                     if (isPoping)
@@ -95,19 +103,13 @@ namespace EdwinGameDev.BubbleTeaMatch4
 
         private void Initialize()
         {
-            gameState = GameState.Initialize;
+            bubbleSpawner = new BubbleSpawner(gameSettings);
+            gridBehaviour = new GridBehaviour(gameSettings);
 
-            bubbleBuilder = new StandardBubbleBuilder(gameSettings);
-            gridBuilder = new StandardGridBuilder(gameSettings);
-            gridBuilder.Build();
-
-            inputController = new BubbleInputController(gridBuilder.Grid,
+            inputController = new BubbleInputController(gridBehaviour.Grid,
                                                         new KeyboardInputProcessor(),
                                                         () => scoreController.AddPoints(10)
                                                         );
-
-            // Start Game
-            gameState = GameState.Creating;
         }
 
         private IEnumerator PopAndFillGap()
@@ -129,10 +131,10 @@ namespace EdwinGameDev.BubbleTeaMatch4
 
                 for (int x = 0; x < gameSettings.GridSize.x; x++)
                 {
-                    if (gridBuilder.Grid.cells[x, y] != null)
+                    if (gridBehaviour.Grid.cells[x, y] != null)
                     {
                         emptyRow = false;
-                        gridBuilder.Grid.cells[x, y].UpdateGraphics();
+                        gridBehaviour.Grid.cells[x, y].UpdateGraphics();
                     }
                 }
                 if (emptyRow)
@@ -175,15 +177,15 @@ namespace EdwinGameDev.BubbleTeaMatch4
                 bool emptyRow = true;
                 for (int x = 0; x < gameSettings.GridSize.x; x++)
                 {
-                    if (gridBuilder.Grid.cells[x, y] != null)
+                    if (gridBehaviour.Grid.cells[x, y] != null)
                     {
                         emptyRow = false;
 
-                        if (gridBuilder.Grid.cells[x, y].ConnectionController.GetConnectionList().Count >= 4)
+                        if (gridBehaviour.Grid.cells[x, y].ConnectionController.GetConnectionList().Count >= 4)
                         {
                             hasConnection = true;
-                            gridBuilder.Grid.cells[x, y].ConnectionController.Matched = true;
-                            gridBuilder.Grid.cells[x, y].GraphicsController.PopAnimation();
+                            gridBehaviour.Grid.cells[x, y].ConnectionController.Matched = true;
+                            gridBehaviour.Grid.cells[x, y].GraphicsController.PopAnimation();
                         }
                     }
                 }
@@ -201,12 +203,12 @@ namespace EdwinGameDev.BubbleTeaMatch4
                 bool emptyRow = true;
                 for (int x = 0; x < gameSettings.GridSize.x; x++)
                 {
-                    if (gridBuilder.Grid.cells[x, y] != null)
+                    if (gridBehaviour.Grid.cells[x, y] != null)
                     {
-                        if (gridBuilder.Grid.cells[x, y].ConnectionController.Matched)
+                        if (gridBehaviour.Grid.cells[x, y].ConnectionController.Matched)
                         {
-                            Destroy(gridBuilder.Grid.cells[x, y].gameObject);
-                            gridBuilder.Grid.cells[x, y] = null;
+                            Destroy(gridBehaviour.Grid.cells[x, y].gameObject);
+                            gridBehaviour.Grid.cells[x, y] = null;
 
                             scoreController.AddPoints(10);
                         }
@@ -229,21 +231,21 @@ namespace EdwinGameDev.BubbleTeaMatch4
 
                 for (int x = 0; x < gameSettings.GridSize.x; x++)
                 {
-                    if (gridBuilder.Grid.cells[x, y] != null)
+                    if (gridBehaviour.Grid.cells[x, y] != null)
                     {
                         emptyRow = false;
 
                         // Horizontal
-                        if (x + 1 < gridBuilder.Grid.cells.GetLength(0) && gridBuilder.Grid.cells[x + 1, y] != null && gridBuilder.Grid.cells[x, y].BubbleGroup == gridBuilder.Grid.cells[x + 1, y].BubbleGroup)
+                        if (x + 1 < gridBehaviour.Grid.cells.GetLength(0) && gridBehaviour.Grid.cells[x + 1, y] != null && gridBehaviour.Grid.cells[x, y].BubbleGroup == gridBehaviour.Grid.cells[x + 1, y].BubbleGroup)
                         {
-                            if (gridBuilder.Grid.cells[x, y].ConnectionController.Connection == ConnectionOrientation.left)
-                                gridBuilder.Grid.cells[x, y].ConnectionController.Connect(ConnectionOrientation.left_right);
+                            if (gridBehaviour.Grid.cells[x, y].ConnectionController.Connection == ConnectionOrientation.left)
+                                gridBehaviour.Grid.cells[x, y].ConnectionController.Connect(ConnectionOrientation.left_right);
                             else
-                                gridBuilder.Grid.cells[x, y].ConnectionController.Connect(ConnectionOrientation.right);
+                                gridBehaviour.Grid.cells[x, y].ConnectionController.Connect(ConnectionOrientation.right);
 
-                            gridBuilder.Grid.cells[x + 1, y].ConnectionController.Connect(ConnectionOrientation.left);
+                            gridBehaviour.Grid.cells[x + 1, y].ConnectionController.Connect(ConnectionOrientation.left);
 
-                            UpdateBubbleConnectionList(gridBuilder.Grid.cells[x, y], gridBuilder.Grid.cells[x + 1, y]);
+                            UpdateBubbleConnectionList(gridBehaviour.Grid.cells[x, y], gridBehaviour.Grid.cells[x + 1, y]);
                         }
                     }
                 }
@@ -258,69 +260,69 @@ namespace EdwinGameDev.BubbleTeaMatch4
 
                 for (int x = 0; x < gameSettings.GridSize.x; x++)
                 {
-                    if (gridBuilder.Grid.cells[x, y] != null)
+                    if (gridBehaviour.Grid.cells[x, y] != null)
                     {
                         emptyRow = false;
                         // Vertical
-                        if (y + 1 < gridBuilder.Grid.cells.GetLength(1) && gridBuilder.Grid.cells[x, y + 1] != null && gridBuilder.Grid.cells[x, y].BubbleGroup == gridBuilder.Grid.cells[x, y + 1].BubbleGroup)
+                        if (y + 1 < gridBehaviour.Grid.cells.GetLength(1) && gridBehaviour.Grid.cells[x, y + 1] != null && gridBehaviour.Grid.cells[x, y].BubbleGroup == gridBehaviour.Grid.cells[x, y + 1].BubbleGroup)
                         {
-                            switch (gridBuilder.Grid.cells[x, y + 1].ConnectionController.Connection)
+                            switch (gridBehaviour.Grid.cells[x, y + 1].ConnectionController.Connection)
                             {
                                 case ConnectionOrientation.none:
-                                    gridBuilder.Grid.cells[x, y + 1].ConnectionController.Connect(ConnectionOrientation.bottom);
+                                    gridBehaviour.Grid.cells[x, y + 1].ConnectionController.Connect(ConnectionOrientation.bottom);
                                     break;
                                 case ConnectionOrientation.top:
-                                    gridBuilder.Grid.cells[x, y + 1].ConnectionController.Connect(ConnectionOrientation.top_bottom);
+                                    gridBehaviour.Grid.cells[x, y + 1].ConnectionController.Connect(ConnectionOrientation.top_bottom);
                                     break;
                                 case ConnectionOrientation.left:
-                                    gridBuilder.Grid.cells[x, y + 1].ConnectionController.Connect(ConnectionOrientation.bottom_left);
+                                    gridBehaviour.Grid.cells[x, y + 1].ConnectionController.Connect(ConnectionOrientation.bottom_left);
                                     break;
                                 case ConnectionOrientation.right:
-                                    gridBuilder.Grid.cells[x, y + 1].ConnectionController.Connect(ConnectionOrientation.bottom_right);
+                                    gridBehaviour.Grid.cells[x, y + 1].ConnectionController.Connect(ConnectionOrientation.bottom_right);
                                     break;
                                 case ConnectionOrientation.left_right:
-                                    gridBuilder.Grid.cells[x, y + 1].ConnectionController.Connect(ConnectionOrientation.bottom_left_right);
+                                    gridBehaviour.Grid.cells[x, y + 1].ConnectionController.Connect(ConnectionOrientation.bottom_left_right);
                                     break;
                                 case ConnectionOrientation.top_left:
-                                    gridBuilder.Grid.cells[x, y + 1].ConnectionController.Connect(ConnectionOrientation.top_bottom_left);
+                                    gridBehaviour.Grid.cells[x, y + 1].ConnectionController.Connect(ConnectionOrientation.top_bottom_left);
                                     break;
                                 case ConnectionOrientation.top_right:
-                                    gridBuilder.Grid.cells[x, y + 1].ConnectionController.Connect(ConnectionOrientation.top_bottom_right);
+                                    gridBehaviour.Grid.cells[x, y + 1].ConnectionController.Connect(ConnectionOrientation.top_bottom_right);
                                     break;
                                 case ConnectionOrientation.top_left_right:
-                                    gridBuilder.Grid.cells[x, y + 1].ConnectionController.Connect(ConnectionOrientation.full);
+                                    gridBehaviour.Grid.cells[x, y + 1].ConnectionController.Connect(ConnectionOrientation.full);
                                     break;
                             }
 
-                            switch (gridBuilder.Grid.cells[x, y].ConnectionController.Connection)
+                            switch (gridBehaviour.Grid.cells[x, y].ConnectionController.Connection)
                             {
                                 case ConnectionOrientation.none:
-                                    gridBuilder.Grid.cells[x, y].ConnectionController.Connect(ConnectionOrientation.top);
+                                    gridBehaviour.Grid.cells[x, y].ConnectionController.Connect(ConnectionOrientation.top);
                                     break;
                                 case ConnectionOrientation.bottom:
-                                    gridBuilder.Grid.cells[x, y].ConnectionController.Connect(ConnectionOrientation.top_bottom);
+                                    gridBehaviour.Grid.cells[x, y].ConnectionController.Connect(ConnectionOrientation.top_bottom);
                                     break;
                                 case ConnectionOrientation.left:
-                                    gridBuilder.Grid.cells[x, y].ConnectionController.Connect(ConnectionOrientation.top_left);
+                                    gridBehaviour.Grid.cells[x, y].ConnectionController.Connect(ConnectionOrientation.top_left);
                                     break;
                                 case ConnectionOrientation.right:
-                                    gridBuilder.Grid.cells[x, y].ConnectionController.Connect(ConnectionOrientation.top_right);
+                                    gridBehaviour.Grid.cells[x, y].ConnectionController.Connect(ConnectionOrientation.top_right);
                                     break;
                                 case ConnectionOrientation.left_right:
-                                    gridBuilder.Grid.cells[x, y].ConnectionController.Connect(ConnectionOrientation.top_left_right);
+                                    gridBehaviour.Grid.cells[x, y].ConnectionController.Connect(ConnectionOrientation.top_left_right);
                                     break;
                                 case ConnectionOrientation.bottom_left:
-                                    gridBuilder.Grid.cells[x, y].ConnectionController.Connect(ConnectionOrientation.top_bottom_left);
+                                    gridBehaviour.Grid.cells[x, y].ConnectionController.Connect(ConnectionOrientation.top_bottom_left);
                                     break;
                                 case ConnectionOrientation.bottom_right:
-                                    gridBuilder.Grid.cells[x, y].ConnectionController.Connect(ConnectionOrientation.top_bottom_right);
+                                    gridBehaviour.Grid.cells[x, y].ConnectionController.Connect(ConnectionOrientation.top_bottom_right);
                                     break;
                                 case ConnectionOrientation.bottom_left_right:
-                                    gridBuilder.Grid.cells[x, y].ConnectionController.Connect(ConnectionOrientation.full);
+                                    gridBehaviour.Grid.cells[x, y].ConnectionController.Connect(ConnectionOrientation.full);
                                     break;
                             }
 
-                            UpdateBubbleConnectionList(gridBuilder.Grid.cells[x, y], gridBuilder.Grid.cells[x, y + 1]);
+                            UpdateBubbleConnectionList(gridBehaviour.Grid.cells[x, y], gridBehaviour.Grid.cells[x, y + 1]);
                         }
                     }
                 }
@@ -329,44 +331,15 @@ namespace EdwinGameDev.BubbleTeaMatch4
             UpdateImage();
         }
 
-        private void SpawnNewBubbleSet()
+        public void OnReachedBottom()
         {
-            // Spawn new Set
-            if (nextMainBubble == null)
+            if (CheckGameOver()) // bubble is greater than grid height
+                SetGameOver();
+            else // bubble has reached bottom
             {
-                // Spawn main
-                mainBubble = bubbleBuilder.Generate(gameSettings.MainBubbleSpawnPosition);
-                // Spawn sub
-                subBubble = bubbleBuilder.Generate(gameSettings.SubBubbleSpawnPosition);
+                nextDrop = 0;
+                gameState = GameState.Arrange;
             }
-            else
-            {
-                // Spawn main
-                mainBubble = nextMainBubble;
-                // Spawn sub
-                subBubble = nextSubBubble;
-            }
-
-            // Enable main bubble highlight
-            mainBubble.GraphicsController.EnableHighlight();
-
-            // Set Initial Position
-            mainBubble.MovementController.SetPosition(gameSettings.MainBubbleSpawnPosition + Vector2Int.down);
-            subBubble.MovementController.SetPosition(gameSettings.SubBubbleSpawnPosition + Vector2Int.down);
-
-            inputController.SetBubbles(mainBubble, subBubble);
-
-            // Next
-            nextMainBubble = bubbleBuilder.Generate(gameSettings.NextMainBubblePosition);
-            nextSubBubble = bubbleBuilder.Generate(gameSettings.NextSubBubblePosition);
-
-            // Start Game
-            gameState = GameState.Playing;
-        }
-
-        private bool BubbleReachedBottom(Bubble bubble)
-        {
-            return gridBuilder.Grid.ReachedBottom(bubble.MovementController.GetPosition());
         }
 
         private void BubbleDrop()
@@ -375,30 +348,24 @@ namespace EdwinGameDev.BubbleTeaMatch4
             {
                 nextDrop = Time.time + dropRate;
 
-                if (!ReachedBottom())
+                // Validate Bubble Drop
+                if (gridBehaviour.ValidateBubbleMovement(bubbleSpawner.CurrentSet, () => OnReachedBottom()))
                 {
+                    // Move down
                     inputController.ValidateAndMoveDown();
                 }
             }
+        }
+
+        private bool CheckGameOver()
+        {
+            return gridBehaviour.InBounds(bubbleSpawner.CurrentSet);
         }
 
         private void SetGameOver()
         {
             gameState = GameState.Pause;
             Debug.Log("GAME OVER");
-        }
-
-        private bool CheckGameOver()
-        {
-            return mainBubble.MovementController.GetPosition().y >= gameSettings.GridSize.y || subBubble.MovementController.GetPosition().y >= gameSettings.GridSize.y;
-        }
-
-        private void PlayerMovement()
-        {
-            if (!ReachedBottom())
-            {
-                inputController.CheckInputs();
-            }
         }
 
         private IEnumerator ArrangeBubbles()
@@ -409,51 +376,25 @@ namespace EdwinGameDev.BubbleTeaMatch4
             {
                 for (int x = 0; x < gameSettings.GridSize.x; x++)
                 {
-                    if (gridBuilder.Grid.cells[x, y] != null)
+                    if (gridBehaviour.Grid.cells[x, y] != null)
                     {
-                        if (gridBuilder.Grid.cells[x, y - 1] == null)
+                        if (gridBehaviour.Grid.cells[x, y - 1] == null)
                         {
-                            Bubble bubble = gridBuilder.Grid.cells[x, y];
+                            Bubble bubble = gridBehaviour.Grid.cells[x, y];
                             bubble.MovementController.MoveDirection(Vector2Int.down);
-                            gridBuilder.Grid.cells[x, y - 1] = gridBuilder.Grid.cells[x, y];
-                            gridBuilder.Grid.cells[x, y] = null;
+                            gridBehaviour.Grid.cells[x, y - 1] = gridBehaviour.Grid.cells[x, y];
+                            gridBehaviour.Grid.cells[x, y] = null;
                             y = 1;
                             x = -1;
                         }
                     }
                 }
-
                 yield return new WaitForEndOfFrame();
             }
 
             isArranging = false;
 
             gameState = GameState.Linking;
-        }
-
-        private bool ReachedBottom()
-        {
-            if (BubbleReachedBottom(mainBubble) || BubbleReachedBottom(subBubble))
-            {
-                if (CheckGameOver())
-                {
-                    SetGameOver();
-                }
-                else
-                {
-                    // Drop Pieces
-                    gridBuilder.Grid.AssignBubble(mainBubble);
-                    gridBuilder.Grid.AssignBubble(subBubble);
-
-                    gameState = GameState.Arrange;
-                }
-
-                return true;
-            }
-            else
-            {
-                return false;
-            }
         }
     }
 }
