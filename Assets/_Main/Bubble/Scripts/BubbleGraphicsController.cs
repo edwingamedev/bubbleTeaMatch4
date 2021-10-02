@@ -24,17 +24,20 @@ namespace EdwinGameDev.BubbleTeaMatch4
         }
         public void PopAnimation()
         {
+            animator.enabled = true;
             animator.SetBool("Pop", true);
         }
 
         public void ResetAnimation()
         {
             animator.SetBool("Pop", false);
+            animator.enabled = false;
         }
 
         public void UpdateGraphics(ConnectionOrientation connection)
         {
-            spriteRenderer.sprite = bubbleSettings.SpriteConnections.GetSprite(connection);
+            animator.enabled = false;
+            spriteRenderer.sprite = bubbleSettings.SpriteConnections.GetSprite(connection);            
         }
     }
 }

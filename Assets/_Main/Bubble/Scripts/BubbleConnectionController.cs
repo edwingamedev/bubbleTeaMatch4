@@ -4,10 +4,16 @@ namespace EdwinGameDev.BubbleTeaMatch4
 {
     public class BubbleConnectionController : IConnectionController
     {
-        private ConnectionOrientation connection = ConnectionOrientation.none;
-        public ConnectionOrientation Connection { get => connection; }
+        private ConnectionOrientation connection;
+        public ConnectionOrientation Connection  => connection;
 
         private List<Bubble> connectionList = new List<Bubble>();
+
+        public BubbleConnectionController()
+        {
+            connection = ConnectionOrientation.none;
+        }
+
         public bool Matched { get; set; }
 
         public List<Bubble> GetConnectionList()
@@ -29,6 +35,5 @@ namespace EdwinGameDev.BubbleTeaMatch4
         {
             connection = newConnection;
         }
-
     }
 }
