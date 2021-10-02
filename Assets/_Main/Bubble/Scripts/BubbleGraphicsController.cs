@@ -36,7 +36,7 @@ namespace EdwinGameDev.BubbleTeaMatch4
 
         public void UpdateGraphics(ConnectionOrientation connection)
         {
-            animator.enabled = false;
+            ResetAnimation();
             spriteRenderer.sprite = bubbleSettings.SpriteConnections.GetSprite(connection);            
         }
     }

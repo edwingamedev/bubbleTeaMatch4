@@ -36,12 +36,15 @@ namespace EdwinGameDev.BubbleTeaMatch4
         {
             if (Input.GetKeyDown(KeyCode.P))
             {
-                previousGameState = gameState;
-
-                if (gameState != GameState.Pause)
-                    gameState = GameState.Pause;
-                else
+                if (gameState == GameState.Pause)
+                {
                     gameState = previousGameState;
+                }
+                else
+                {
+                    previousGameState = gameState;
+                    gameState = GameState.Pause;
+                }
             }
 
             switch (gameState)
@@ -74,6 +77,7 @@ namespace EdwinGameDev.BubbleTeaMatch4
                         StartCoroutine(ArrangeBubbles());
                     break;
                 case GameState.Linking:
+                    ResetLinkStatus();
                     LinkBubbles();
 
                     gameState = GameState.Combo;
@@ -108,8 +112,7 @@ namespace EdwinGameDev.BubbleTeaMatch4
 
             inputController = new BubbleInputController(gridBehaviour.Grid,
                                                         new KeyboardInputProcessor(),
-                                                        () => scoreController.AddPoints(10)
-                                                        );
+                                                        () => scoreController.AddPoints(10));
         }
 
         private IEnumerator PopAndFillGap()
@@ -134,6 +137,7 @@ namespace EdwinGameDev.BubbleTeaMatch4
                     if (gridBehaviour.Grid.cells[x, y] != null)
                     {
                         emptyRow = false;
+
                         gridBehaviour.Grid.cells[x, y].UpdateGraphics();
                     }
                 }
@@ -192,6 +196,7 @@ namespace EdwinGameDev.BubbleTeaMatch4
                 if (emptyRow)
                     break;
             }
+
             //UpdateImage();
             return hasConnection;
         }
@@ -214,6 +219,26 @@ namespace EdwinGameDev.BubbleTeaMatch4
                         }
 
                         emptyRow = false;
+                    }
+                }
+                if (emptyRow)
+                    break;
+            }
+        }
+
+        private void ResetLinkStatus()
+        {
+            bool emptyRow;
+            for (int y = 0; y < gameSettings.GridSize.y; y++)
+            {
+                emptyRow = true;
+
+                for (int x = 0; x < gameSettings.GridSize.x; x++)
+                {
+                    if (gridBehaviour.Grid.cells[x, y] != null)
+                    {
+                        emptyRow = false;
+                        gridBehaviour.Grid.cells[x, y].ConnectionController.Disconnect();
                     }
                 }
                 if (emptyRow)
