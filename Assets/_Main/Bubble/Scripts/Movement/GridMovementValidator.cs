@@ -13,23 +13,33 @@ namespace EdwinGameDev.BubbleTeaMatch4
             gridSize = new Vector2Int(grid.cells.GetLength(0), grid.cells.GetLength(1));
         }
 
-        public bool isValidDownMovement(BubbleSet bubbleSet)
+        private bool ReachedBottom(Bubble bubble)
         {
-            return !grid.ReachedBottom(bubbleSet.Main) ||
-                !grid.ReachedBottom(bubbleSet.Sub);
+            return !grid.ReachedBottom(bubble);
         }
 
-        public bool IsValidHorizontalMovement(BubbleSet bubbleSet, Vector2Int direction)
+        public bool IsValidMovement(BubbleSet bubbleSet, Vector2Int direction)
         {
             Vector2Int mainNewPos = bubbleSet.Main.MovementController.GetPosition() + direction;
             Vector2Int subNewPos = bubbleSet.Sub.MovementController.GetPosition() + direction;
 
-            return mainNewPos.x < gridSize.x &&
-                   mainNewPos.x >= 0 &&
-                   subNewPos.x < gridSize.x &&
-                   subNewPos.x >= 0 &&
-                   grid.cells[mainNewPos.x, mainNewPos.y >= gridSize.y ? gridSize.y - 1 : mainNewPos.y] == null &&
-                   grid.cells[subNewPos.x, subNewPos.y >= gridSize.y ? gridSize.y - 1 : subNewPos.y] == null;
+            return InBounds(mainNewPos) && 
+                   InBounds(subNewPos) &&
+                   ReachedBottom(bubbleSet.Main) &&
+                   ReachedBottom(bubbleSet.Sub) &&
+                   EmptyCell(mainNewPos) && 
+                   EmptyCell(subNewPos);
+        }
+
+        private bool InBounds(Vector2Int position)
+        {
+            return position.x < gridSize.x && position.x >= 0;
+        }
+
+        private bool EmptyCell(Vector2Int position)
+        {
+            Debug.Log(position);
+            return grid.cells[position.x, position.y >= gridSize.y ? gridSize.y - 1 : position.y] == null;
         }
     }
 }

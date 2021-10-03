@@ -18,6 +18,7 @@ namespace EdwinGameDev.BubbleTeaMatch4
         private float nextInput;
 
         private Action OnMoveDown;
+        private Vector2Int moveVector = Vector2Int.zero;
 
         public BubbleInputController(Grid grid, IInputProcessor inputProcessor, Action OnMoveDown)
         {
@@ -44,22 +45,28 @@ namespace EdwinGameDev.BubbleTeaMatch4
 
                 if (inputProcessor.Left())
                 {
-                    ValidateAndMoveLeft();
+                    moveVector += Vector2Int.left;
                 }
 
                 if (inputProcessor.Right())
                 {
-                    ValidateAndMoveRight();
+                    moveVector += Vector2Int.right;
                 }
 
                 if (inputProcessor.Down())
                 {
-                    if (ValidateAndMoveDown())
-                    {
-                        // Movement Callback
-                        OnMoveDown?.Invoke();
-                    }
+                    moveVector += Vector2Int.down;
                 }
+
+                if (moveVector != Vector2Int.zero)
+                {
+                    // Validate Movement
+                    ValidateVerticalMovement(moveVector);
+                    ValidateHorizontalMovement(moveVector);
+                }
+
+                // Reset Movement
+                moveVector = Vector2Int.zero;
             }
 
             if (inputProcessor.TurnClockwise())
@@ -77,13 +84,28 @@ namespace EdwinGameDev.BubbleTeaMatch4
             }
         }
 
-        private bool ValidateAndMoveLeft()
+        private bool ValidateVerticalMovement(Vector2Int moveDirection)
         {
-            var moveDirection = Vector2Int.left;
+            return ValidateAndMove(new Vector2Int(0, moveDirection.y));
+        }
 
-            if (movementValidator.IsValidHorizontalMovement(bubbleSet, moveDirection))
+        private bool ValidateHorizontalMovement(Vector2Int moveDirection)
+        {
+            return ValidateAndMove(new Vector2Int(moveDirection.x, 0));
+        }
+
+        private bool ValidateAndMove(Vector2Int moveDirection)
+        {
+            if (ValidateMovement(moveDirection))
             {
+                // Move
                 MoveBubbles(moveDirection);
+
+                if (moveDirection.y < 0)
+                {
+                    // Movement Callback
+                    OnMoveDown?.Invoke();
+                }
 
                 return true;
             }
@@ -91,32 +113,14 @@ namespace EdwinGameDev.BubbleTeaMatch4
             return false;
         }
 
-        private bool ValidateAndMoveRight()
+        private bool ValidateMovement(Vector2Int moveDirection)
         {
-            var moveDirection = Vector2Int.right;
-
-            if (movementValidator.IsValidHorizontalMovement(bubbleSet, moveDirection))
-            {
-                MoveBubbles(moveDirection);
-
-                return true;
-            }
-
-            return false;
+            return movementValidator.IsValidMovement(bubbleSet, moveDirection);
         }
 
         public bool ValidateAndMoveDown()
         {
-            var moveDirection = Vector2Int.down;
-
-            if (movementValidator.isValidDownMovement(bubbleSet))
-            {
-                MoveBubbles(moveDirection);
-
-                return true;
-            }
-
-            return false;
+            return ValidateAndMove(Vector2Int.down);
         }
 
         private void MoveBubbles(Vector2Int moveDirection)
@@ -136,7 +140,7 @@ namespace EdwinGameDev.BubbleTeaMatch4
                     if (x - 1 >= 0 && grid.cells[x - 1, y] != null)
                         break;
 
-                    if (x != 0 || ValidateAndMoveRight())
+                    if (x != 0 || ValidateAndMove(Vector2Int.right))
                         orientationController.SetLeftOrientation(bubbleSet.Main, bubbleSet.Sub);
 
                     break;
@@ -144,7 +148,7 @@ namespace EdwinGameDev.BubbleTeaMatch4
                     if (x + 1 < gridSize.x && grid.cells[x + 1, y] != null)
                         break;
 
-                    if (x < gridSize.x - 1 || ValidateAndMoveLeft())
+                    if (x < gridSize.x - 1 || ValidateAndMove(Vector2Int.left))
                         orientationController.SetRightOrientation(bubbleSet.Main, bubbleSet.Sub);
 
                     break;
@@ -173,7 +177,7 @@ namespace EdwinGameDev.BubbleTeaMatch4
                     if (x + 1 < gridSize.x && grid.cells[x + 1, y] != null)
                         break;
 
-                    if (x < gridSize.x - 1 || ValidateAndMoveLeft())
+                    if (x < gridSize.x - 1 || ValidateAndMove(Vector2Int.left))
                         orientationController.SetRightOrientation(bubbleSet.Main, bubbleSet.Sub);
 
                     break;
@@ -181,7 +185,7 @@ namespace EdwinGameDev.BubbleTeaMatch4
                     if (x - 1 >= 0 && grid.cells[x - 1, y] != null)
                         break;
 
-                    if (x != 0 || ValidateAndMoveRight())
+                    if (x != 0 || ValidateAndMove(Vector2Int.right))
                         orientationController.SetLeftOrientation(bubbleSet.Main, bubbleSet.Sub);
 
                     break;
