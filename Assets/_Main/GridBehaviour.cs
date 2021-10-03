@@ -10,44 +10,40 @@ namespace EdwinGameDev.BubbleTeaMatch4
 
         private GameSettings gameSettings;
 
-        public GridBehaviour (GameSettings gameSettings)
+        public GridBehaviour(GameSettings gameSettings)
         {
             this.gameSettings = gameSettings;
             gridBuilder = new StandardGridBuilder(gameSettings);
             Grid = gridBuilder.BuildNewGrid();
         }
 
-        public bool ValidateBubbleMovement(BubbleSet bubbleSet, Action OnReachedBottom)
+        public bool ValidateBubbleMovement(BubbleSet bubbleSet)
         {
-            if (!ReachedBottom(bubbleSet))
-            {
-                return true;
-            }
-            else
-            {
-                Grid.AssignBubble(bubbleSet.Main);
-                Grid.AssignBubble(bubbleSet.Sub);
-
-                OnReachedBottom?.Invoke();
-
-                return false;
-            }
+            return !ReachedBottom(bubbleSet);
         }
 
-        public bool InBounds(BubbleSet bubbleSet)
+        public bool OutOfBounds(BubbleSet bubbleSet)
         {
-            return bubbleSet.Main.MovementController.GetPosition().y >= gameSettings.GridSize.y ||
-                    bubbleSet.Sub.MovementController.GetPosition().y >= gameSettings.GridSize.y;
+            return bubbleSet?.Main.MovementController.GetPosition().y >= gameSettings?.GridSize.y ||
+                    bubbleSet?.Sub.MovementController.GetPosition().y >= gameSettings?.GridSize.y;
         }
 
         public bool ReachedBottom(BubbleSet bubbleSet)
         {
-            return BubbleReachedBottom(bubbleSet.Main) || BubbleReachedBottom(bubbleSet.Sub);
+            var reachedBottom = BubbleReachedBottom(bubbleSet.Main) || BubbleReachedBottom(bubbleSet.Sub);
+
+            if (reachedBottom)
+            {
+                Grid.AssignBubble(bubbleSet.Main);
+                Grid.AssignBubble(bubbleSet.Sub);
+            }
+
+            return reachedBottom;
         }
 
         private bool BubbleReachedBottom(Bubble bubble)
         {
-            return Grid.ReachedBottom(bubble.MovementController.GetPosition());
+            return Grid.ReachedBottom(bubble);
         }
     }
 }
