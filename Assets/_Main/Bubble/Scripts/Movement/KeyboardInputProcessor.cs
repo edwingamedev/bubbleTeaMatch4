@@ -4,6 +4,11 @@ namespace EdwinGameDev.BubbleTeaMatch4
 {
     public class KeyboardInputProcessor : IInputProcessor
     {
+        public bool StartGame()
+        {
+            return Input.GetKeyDown(KeyCode.Space);
+        }
+
         public bool Down()
         {
             return Input.GetButton("Vertical") && Input.GetAxis("Vertical") < 0;

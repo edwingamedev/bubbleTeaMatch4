@@ -8,6 +8,7 @@ namespace EdwinGameDev.BubbleTeaMatch4
     {
         private GameSettings settings;
         private int bubbleAmount;
+        private int currenNumOfBubbles;
 
         public StandardBubbleBuilder(GameSettings settings)
         {
@@ -22,6 +23,8 @@ namespace EdwinGameDev.BubbleTeaMatch4
             var go = Object.Instantiate(settings.BubbleSettings.Prefab, (Vector2)position, Quaternion.identity);
             var bubble = go.GetComponent<Bubble>();
             bubble.BubbleGroup = bubbleIndex;
+
+            go.name = $"Bubble_{++currenNumOfBubbles}";
 
             Material material = new Material(settings.BubbleSettings.Shader);
             material.SetColor("_MainColor", settings.BubbleSettings.BubblePresets[bubbleIndex].mainColor);
