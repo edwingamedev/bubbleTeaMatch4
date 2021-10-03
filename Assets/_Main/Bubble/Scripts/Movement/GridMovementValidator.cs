@@ -13,16 +13,16 @@ namespace EdwinGameDev.BubbleTeaMatch4
             gridSize = new Vector2Int(grid.cells.GetLength(0), grid.cells.GetLength(1));
         }
 
-        public bool isValidDownMovement(Vector2Int main, Vector2Int sub)
+        public bool isValidDownMovement(BubbleSet bubbleSet)
         {
-            return !grid.ReachedBottom(main) ||
-                !grid.ReachedBottom(sub);
+            return !grid.ReachedBottom(bubbleSet.Main) ||
+                !grid.ReachedBottom(bubbleSet.Sub);
         }
 
-        public bool IsValidHorizontalMovement(Vector2Int main, Vector2Int sub, Vector2Int direction)
+        public bool IsValidHorizontalMovement(BubbleSet bubbleSet, Vector2Int direction)
         {
-            Vector2Int mainNewPos = main + direction;
-            Vector2Int subNewPos = sub + direction;
+            Vector2Int mainNewPos = bubbleSet.Main.MovementController.GetPosition() + direction;
+            Vector2Int subNewPos = bubbleSet.Sub.MovementController.GetPosition() + direction;
 
             return mainNewPos.x < gridSize.x &&
                    mainNewPos.x >= 0 &&

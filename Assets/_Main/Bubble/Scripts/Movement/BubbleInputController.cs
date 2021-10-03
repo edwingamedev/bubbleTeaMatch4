@@ -81,7 +81,7 @@ namespace EdwinGameDev.BubbleTeaMatch4
         {
             var moveDirection = Vector2Int.left;
 
-            if (movementValidator.IsValidHorizontalMovement(bubbleSet.Main.MovementController.GetPosition(), bubbleSet.Sub.MovementController.GetPosition(), moveDirection))
+            if (movementValidator.IsValidHorizontalMovement(bubbleSet, moveDirection))
             {
                 MoveBubbles(moveDirection);
 
@@ -95,7 +95,7 @@ namespace EdwinGameDev.BubbleTeaMatch4
         {
             var moveDirection = Vector2Int.right;
 
-            if (movementValidator.IsValidHorizontalMovement(bubbleSet.Main.MovementController.GetPosition(), bubbleSet.Sub.MovementController.GetPosition(), moveDirection))
+            if (movementValidator.IsValidHorizontalMovement(bubbleSet, moveDirection))
             {
                 MoveBubbles(moveDirection);
 
@@ -109,7 +109,7 @@ namespace EdwinGameDev.BubbleTeaMatch4
         {
             var moveDirection = Vector2Int.down;
 
-            if (movementValidator.isValidDownMovement(bubbleSet.Main.MovementController.GetPosition(), bubbleSet.Sub.MovementController.GetPosition()))
+            if (movementValidator.isValidDownMovement(bubbleSet))
             {
                 MoveBubbles(moveDirection);
 
