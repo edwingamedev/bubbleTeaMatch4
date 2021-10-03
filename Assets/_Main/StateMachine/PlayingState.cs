@@ -6,7 +6,7 @@ namespace EdwinGameDev.BubbleTeaMatch4
     {
         private GameBoard gameVariables;
 
-        private float dropRate = 1f;
+        private float dropRate => gameVariables.gameSettings.DropRate;
         private float nextDrop;
 
         public PlayingState(GameBoard gameVariables)
