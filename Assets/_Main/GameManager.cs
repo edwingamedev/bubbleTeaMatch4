@@ -10,10 +10,8 @@ namespace EdwinGameDev.BubbleTeaMatch4
         [SerializeField] private GameSettings gameSettings;
         [SerializeField] private ScoreController scoreController;
 
-        private GameState gameState = GameState.Playing;
-
         private GameBoard gameBoard;
-
+        private bool paused;
 
         // STATE MACHINE        
         private IStateMachineProvider stateMachineProvider;
@@ -47,7 +45,7 @@ namespace EdwinGameDev.BubbleTeaMatch4
         // Update is called once per frame
         void Update()
         {
-            if (gameState != GameState.Pause)
+            if (!paused)
             {
                 gameStateMachine?.Execute();
             }
@@ -56,14 +54,7 @@ namespace EdwinGameDev.BubbleTeaMatch4
 
             if (Input.GetKeyDown(KeyCode.P))
             {
-                if (gameState == GameState.Pause)
-                {
-                    gameState = GameState.Playing;
-                }
-                else
-                {
-                    gameState = GameState.Pause;
-                }
+                paused = !paused;
             }
         }
     }
