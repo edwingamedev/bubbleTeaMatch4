@@ -12,9 +12,11 @@ namespace EdwinGameDev.BubbleTeaMatch4
             cells = new Bubble[size.x, size.y];
         }
 
-        public bool ReachedBottom(Vector2 position)
+        public bool ReachedBottom(Bubble bubble)
         {
-            return (position.y == 0 || cells[Mathf.CeilToInt(position.x), Mathf.CeilToInt(position.y - 1)] != null);
+            var position = bubble.MovementController.GetPosition();
+
+            return position.y == 0 || cells[Mathf.CeilToInt(position.x), Mathf.CeilToInt(position.y - 1)] != null;
         }
 
         public void AssignBubble(Bubble bubble)
