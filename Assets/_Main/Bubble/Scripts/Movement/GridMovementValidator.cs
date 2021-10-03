@@ -10,7 +10,7 @@ namespace EdwinGameDev.BubbleTeaMatch4
         public GridMovementValidator(Grid grid)
         {
             this.grid = grid;
-            gridSize = new Vector2Int(grid.cells.GetLength(0), grid.cells.GetLength(1));
+            gridSize = grid.Size;
         }
 
         private bool ReachedBottom(Bubble bubble)
@@ -39,7 +39,7 @@ namespace EdwinGameDev.BubbleTeaMatch4
         private bool EmptyCell(Vector2Int position)
         {
             Debug.Log(position);
-            return grid.cells[position.x, position.y >= gridSize.y ? gridSize.y - 1 : position.y] == null;
+            return !grid.IsOccupied(position.x, position.y >= gridSize.y ? gridSize.y - 1 : position.y);
         }
     }
 }

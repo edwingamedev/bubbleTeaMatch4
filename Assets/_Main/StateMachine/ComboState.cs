@@ -45,15 +45,15 @@ namespace EdwinGameDev.BubbleTeaMatch4
                 bool emptyRow = true;
                 for (int x = 0; x < gameVariables.gameSettings.GridSize.x; x++)
                 {
-                    if (gameVariables.gridBehaviour.Grid.cells[x, y] != null)
+                    if (gameVariables.gridBehaviour.Grid.IsOccupied(x, y))
                     {
                         emptyRow = false;
 
-                        if (gameVariables.gridBehaviour.Grid.cells[x, y].ConnectionController.GetConnectionList().Count >= 4)
+                        if (gameVariables.gridBehaviour.Grid.GetBubble(x, y).ConnectionController.GetConnectionList().Count >= 4)
                         {
                             gameVariables.HasMatches = true;
-                            gameVariables.gridBehaviour.Grid.cells[x, y].ConnectionController.Matched = true;
-                            gameVariables.gridBehaviour.Grid.cells[x, y].GraphicsController.PopAnimation();
+                            gameVariables.gridBehaviour.Grid.GetBubble(x, y).ConnectionController.Matched = true;
+                            gameVariables.gridBehaviour.Grid.GetBubble(x, y).GraphicsController.PopAnimation();
                         }
                     }
                 }
@@ -76,14 +76,15 @@ namespace EdwinGameDev.BubbleTeaMatch4
 
                 for (int x = 0; x < gameVariables.gameSettings.GridSize.x; x++)
                 {
-                    if (gameVariables.gridBehaviour.Grid.cells[x, y] != null)
+                    if (gameVariables.gridBehaviour.Grid.IsOccupied(x, y))
                     {
                         emptyRow = false;
 
-                        if (gameVariables.gridBehaviour.Grid.cells[x, y].ConnectionController.Matched)
-                        {
-                            UnityEngine.Object.Destroy(gameVariables.gridBehaviour.Grid.cells[x, y].gameObject);
-                            gameVariables.gridBehaviour.Grid.cells[x, y] = null;
+                        if (gameVariables.gridBehaviour.Grid.GetBubble(x, y).ConnectionController.Matched)
+                        {                            
+                            gameVariables.gridBehaviour.Grid.UnnassignBubble(x, y);
+                                                        
+                            UnityEngine.Object.Destroy(gameVariables.gridBehaviour.Grid.GetBubble(x, y));
 
                             UnityEngine.Debug.Log("POPPED");
 

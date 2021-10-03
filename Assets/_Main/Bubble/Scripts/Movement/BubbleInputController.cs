@@ -10,7 +10,6 @@ namespace EdwinGameDev.BubbleTeaMatch4
         private IOrientationController<Bubble> orientationController;
 
         private Grid grid;
-        private Vector2Int gridSize;
 
         private BubbleSet bubbleSet;
 
@@ -23,8 +22,6 @@ namespace EdwinGameDev.BubbleTeaMatch4
         public BubbleInputController(Grid grid, IInputProcessor inputProcessor, Action OnMoveDown)
         {
             this.grid = grid;
-            gridSize = new Vector2Int(grid.cells.GetLength(0), grid.cells.GetLength(1));
-
             this.OnMoveDown = OnMoveDown;
 
             this.inputProcessor = inputProcessor;
@@ -137,7 +134,7 @@ namespace EdwinGameDev.BubbleTeaMatch4
             switch (subPos)
             {
                 case Orientation.Bottom:
-                    if (x - 1 >= 0 && grid.cells[x - 1, y] != null)
+                    if (x - 1 >= 0 && grid.IsOccupied(x - 1, y))
                         break;
 
                     if (x != 0 || ValidateAndMove(Vector2Int.right))
@@ -145,21 +142,21 @@ namespace EdwinGameDev.BubbleTeaMatch4
 
                     break;
                 case Orientation.Top:
-                    if (x + 1 < gridSize.x && grid.cells[x + 1, y] != null)
+                    if (x + 1 < grid.Size.x && grid.IsOccupied(x + 1, y))
                         break;
 
-                    if (x < gridSize.x - 1 || ValidateAndMove(Vector2Int.left))
+                    if (x < grid.Size.x - 1 || ValidateAndMove(Vector2Int.left))
                         orientationController.SetRightOrientation(bubbleSet.Main, bubbleSet.Sub);
 
                     break;
                 case Orientation.Left:
-                    if (y + 1 < gridSize.y && grid.cells[x, y + 1] != null)
+                    if (y + 1 < grid.Size.y && grid.IsOccupied(x, y + 1))
                         break;
 
                     orientationController.SetTopOrientation(bubbleSet.Main, bubbleSet.Sub);
                     break;
                 case Orientation.Right:
-                    if (y - 1 >= 0 && grid.cells[x, y - 1] != null)
+                    if (y - 1 >= 0 && grid.IsOccupied(x, y - 1))
                         break;
 
                     orientationController.SetBottomOrientation(bubbleSet.Main, bubbleSet.Sub);
@@ -174,15 +171,15 @@ namespace EdwinGameDev.BubbleTeaMatch4
             switch (subPos)
             {
                 case Orientation.Bottom:
-                    if (x + 1 < gridSize.x && grid.cells[x + 1, y] != null)
+                    if (x + 1 < grid.Size.x && grid.IsOccupied(x + 1, y))
                         break;
 
-                    if (x < gridSize.x - 1 || ValidateAndMove(Vector2Int.left))
+                    if (x < grid.Size.x - 1 || ValidateAndMove(Vector2Int.left))
                         orientationController.SetRightOrientation(bubbleSet.Main, bubbleSet.Sub);
 
                     break;
                 case Orientation.Top:
-                    if (x - 1 >= 0 && grid.cells[x - 1, y] != null)
+                    if (x - 1 >= 0 && grid.IsOccupied(x - 1, y))
                         break;
 
                     if (x != 0 || ValidateAndMove(Vector2Int.right))
@@ -190,13 +187,13 @@ namespace EdwinGameDev.BubbleTeaMatch4
 
                     break;
                 case Orientation.Left:
-                    if (y - 1 >= 0 && grid.cells[x, y - 1] != null)
+                    if (y - 1 >= 0 && grid.IsOccupied(x, y - 1))
                         break;
 
                     orientationController.SetBottomOrientation(bubbleSet.Main, bubbleSet.Sub);
                     break;
                 case Orientation.Right:
-                    if (y + 1 < gridSize.y && grid.cells[x, y + 1] != null)
+                    if (y + 1 < grid.Size.y && grid.IsOccupied(x, y + 1))
                         break;
 
                     orientationController.SetTopOrientation(bubbleSet.Main, bubbleSet.Sub);

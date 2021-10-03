@@ -34,8 +34,8 @@ namespace EdwinGameDev.BubbleTeaMatch4
 
             if (reachedBottom)
             {
-                Grid.AssignBubble(bubbleSet.Main);
-                Grid.AssignBubble(bubbleSet.Sub);
+                Grid.AssignBubble(bubbleSet.Main, bubbleSet.Main.MovementController.GetPosition().x, bubbleSet.Main.MovementController.GetPosition().y);
+                Grid.AssignBubble(bubbleSet.Sub, bubbleSet.Sub.MovementController.GetPosition().x, bubbleSet.Sub.MovementController.GetPosition().y);
 
                 Debug.Log("ReachedBottom");
             }

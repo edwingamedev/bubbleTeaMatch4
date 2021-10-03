@@ -6,24 +6,35 @@ namespace EdwinGameDev.BubbleTeaMatch4
 {
     public class Grid
     {
-        public Bubble[,] cells;
+        private Bubble[,] cells;
+
+        public Vector2Int Size { get; }
+
         public Grid(Vector2Int size)
         {
             cells = new Bubble[size.x, size.y];
+            this.Size = size;
+        }
+
+        public Bubble GetBubble(int x, int y)
+        {
+            return cells[x, y];
+        }
+
+        public bool IsOccupied(int x, int y)
+        {
+            return cells[x, y] != null;
         }
 
         public bool ReachedBottom(Bubble bubble)
         {
             var position = bubble.MovementController.GetPosition();
 
-            return position.y == 0 || cells[Mathf.CeilToInt(position.x), Mathf.CeilToInt(position.y - 1)] != null;
+            return position.y == 0 || IsOccupied(Mathf.CeilToInt(position.x), Mathf.CeilToInt(position.y-1));
         }
 
-        public void AssignBubble(Bubble bubble)
+        public void AssignBubble(Bubble bubble, int x, int y)
         {
-            int x = bubble.MovementController.GetPosition().x;
-            int y = bubble.MovementController.GetPosition().y;
-
             if (y < cells.GetLength(1))
             {
                 if (cells[x, y] == null)
@@ -38,13 +49,9 @@ namespace EdwinGameDev.BubbleTeaMatch4
             }
         }
 
-        public void UnnassignBubble(Vector2Int position)
+        public void UnnassignBubble(int x, int y)
         {
-            var bubble = cells[position.x, position.y];
-            cells[position.x, position.y] = null;
-
-            //TODO: Pooling
-            Object.Destroy(bubble);
+            cells[x, y] = null;
         }
     }
 }

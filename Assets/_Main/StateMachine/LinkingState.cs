@@ -27,10 +27,10 @@ namespace EdwinGameDev.BubbleTeaMatch4
 
                 for (int x = 0; x < gameVariables.gameSettings.GridSize.x; x++)
                 {
-                    if (gameVariables.gridBehaviour.Grid.cells[x, y] != null)
+                    if (gameVariables.gridBehaviour.Grid.IsOccupied(x, y))
                     {
                         emptyRow = false;
-                        gameVariables.gridBehaviour.Grid.cells[x, y].ConnectionController.Disconnect();
+                        gameVariables.gridBehaviour.Grid.GetBubble(x,y).ConnectionController.Disconnect();
                     }
                 }
                 if (emptyRow)
@@ -48,23 +48,23 @@ namespace EdwinGameDev.BubbleTeaMatch4
 
                 for (int x = 0; x < gameVariables.gameSettings.GridSize.x; x++)
                 {
-                    if (gameVariables.gridBehaviour.Grid.cells[x, y] != null)
+                    if (gameVariables.gridBehaviour.Grid.IsOccupied(x, y))
                     {
                         emptyRow = false;
 
                         // Horizontal
-                        if (x + 1 < gameVariables.gridBehaviour.Grid.cells.GetLength(0) &&
-                                    gameVariables.gridBehaviour.Grid.cells[x + 1, y] != null &&
-                                    gameVariables.gridBehaviour.Grid.cells[x, y].BubbleGroup == gameVariables.gridBehaviour.Grid.cells[x + 1, y].BubbleGroup)
+                        if (x + 1 < gameVariables.gridBehaviour.Grid.Size.x &&
+                                    gameVariables.gridBehaviour.Grid.IsOccupied(x + 1, y) &&
+                                    gameVariables.gridBehaviour.Grid.GetBubble(x, y).BubbleGroup == gameVariables.gridBehaviour.Grid.GetBubble(x + 1, y).BubbleGroup)
                         {
-                            if (gameVariables.gridBehaviour.Grid.cells[x, y].ConnectionController.Connection == ConnectionOrientation.left)
-                                gameVariables.gridBehaviour.Grid.cells[x, y].ConnectionController.Connect(ConnectionOrientation.left_right);
+                            if (gameVariables.gridBehaviour.Grid.GetBubble(x, y).ConnectionController.Connection == ConnectionOrientation.left)
+                                gameVariables.gridBehaviour.Grid.GetBubble(x, y).ConnectionController.Connect(ConnectionOrientation.left_right);
                             else
-                                gameVariables.gridBehaviour.Grid.cells[x, y].ConnectionController.Connect(ConnectionOrientation.right);
+                                gameVariables.gridBehaviour.Grid.GetBubble(x, y).ConnectionController.Connect(ConnectionOrientation.right);
 
-                            gameVariables.gridBehaviour.Grid.cells[x + 1, y].ConnectionController.Connect(ConnectionOrientation.left);
+                            gameVariables.gridBehaviour.Grid.GetBubble(x + 1, y).ConnectionController.Connect(ConnectionOrientation.left);
 
-                            UpdateBubbleConnectionList(gameVariables.gridBehaviour.Grid.cells[x, y], gameVariables.gridBehaviour.Grid.cells[x + 1, y]);
+                            UpdateBubbleConnectionList(gameVariables.gridBehaviour.Grid.GetBubble(x, y), gameVariables.gridBehaviour.Grid.GetBubble(x + 1, y));
                         }
                     }
                 }
@@ -79,71 +79,71 @@ namespace EdwinGameDev.BubbleTeaMatch4
 
                 for (int x = 0; x < gameVariables.gameSettings.GridSize.x; x++)
                 {
-                    if (gameVariables.gridBehaviour.Grid.cells[x, y] != null)
+                    if (gameVariables.gridBehaviour.Grid.IsOccupied(x, y))
                     {
                         emptyRow = false;
                         // Vertical
-                        if (y + 1 < gameVariables.gridBehaviour.Grid.cells.GetLength(1) &&
-                                    gameVariables.gridBehaviour.Grid.cells[x, y + 1] != null &&
-                                    gameVariables.gridBehaviour.Grid.cells[x, y].BubbleGroup == gameVariables.gridBehaviour.Grid.cells[x, y + 1].BubbleGroup)
+                        if (y + 1 < gameVariables.gridBehaviour.Grid.Size.y &&
+                                    gameVariables.gridBehaviour.Grid.IsOccupied(x, y + 1) &&
+                                    gameVariables.gridBehaviour.Grid.GetBubble(x, y).BubbleGroup == gameVariables.gridBehaviour.Grid.GetBubble(x, y + 1).BubbleGroup)
                         {
-                            switch (gameVariables.gridBehaviour.Grid.cells[x, y + 1].ConnectionController.Connection)
+                            switch (gameVariables.gridBehaviour.Grid.GetBubble(x, y + 1).ConnectionController.Connection)
                             {
                                 case ConnectionOrientation.none:
-                                    gameVariables.gridBehaviour.Grid.cells[x, y + 1].ConnectionController.Connect(ConnectionOrientation.bottom);
+                                    gameVariables.gridBehaviour.Grid.GetBubble(x, y + 1).ConnectionController.Connect(ConnectionOrientation.bottom);
                                     break;
                                 case ConnectionOrientation.top:
-                                    gameVariables.gridBehaviour.Grid.cells[x, y + 1].ConnectionController.Connect(ConnectionOrientation.top_bottom);
+                                    gameVariables.gridBehaviour.Grid.GetBubble(x, y + 1).ConnectionController.Connect(ConnectionOrientation.top_bottom);
                                     break;
                                 case ConnectionOrientation.left:
-                                    gameVariables.gridBehaviour.Grid.cells[x, y + 1].ConnectionController.Connect(ConnectionOrientation.bottom_left);
+                                    gameVariables.gridBehaviour.Grid.GetBubble(x, y + 1).ConnectionController.Connect(ConnectionOrientation.bottom_left);
                                     break;
                                 case ConnectionOrientation.right:
-                                    gameVariables.gridBehaviour.Grid.cells[x, y + 1].ConnectionController.Connect(ConnectionOrientation.bottom_right);
+                                    gameVariables.gridBehaviour.Grid.GetBubble(x, y + 1).ConnectionController.Connect(ConnectionOrientation.bottom_right);
                                     break;
                                 case ConnectionOrientation.left_right:
-                                    gameVariables.gridBehaviour.Grid.cells[x, y + 1].ConnectionController.Connect(ConnectionOrientation.bottom_left_right);
+                                    gameVariables.gridBehaviour.Grid.GetBubble(x, y + 1).ConnectionController.Connect(ConnectionOrientation.bottom_left_right);
                                     break;
                                 case ConnectionOrientation.top_left:
-                                    gameVariables.gridBehaviour.Grid.cells[x, y + 1].ConnectionController.Connect(ConnectionOrientation.top_bottom_left);
+                                    gameVariables.gridBehaviour.Grid.GetBubble(x, y + 1).ConnectionController.Connect(ConnectionOrientation.top_bottom_left);
                                     break;
                                 case ConnectionOrientation.top_right:
-                                    gameVariables.gridBehaviour.Grid.cells[x, y + 1].ConnectionController.Connect(ConnectionOrientation.top_bottom_right);
+                                    gameVariables.gridBehaviour.Grid.GetBubble(x, y + 1).ConnectionController.Connect(ConnectionOrientation.top_bottom_right);
                                     break;
                                 case ConnectionOrientation.top_left_right:
-                                    gameVariables.gridBehaviour.Grid.cells[x, y + 1].ConnectionController.Connect(ConnectionOrientation.full);
+                                    gameVariables.gridBehaviour.Grid.GetBubble(x, y + 1).ConnectionController.Connect(ConnectionOrientation.full);
                                     break;
                             }
 
-                            switch (gameVariables.gridBehaviour.Grid.cells[x, y].ConnectionController.Connection)
+                            switch (gameVariables.gridBehaviour.Grid.GetBubble(x, y).ConnectionController.Connection)
                             {
                                 case ConnectionOrientation.none:
-                                    gameVariables.gridBehaviour.Grid.cells[x, y].ConnectionController.Connect(ConnectionOrientation.top);
+                                    gameVariables.gridBehaviour.Grid.GetBubble(x, y).ConnectionController.Connect(ConnectionOrientation.top);
                                     break;
                                 case ConnectionOrientation.bottom:
-                                    gameVariables.gridBehaviour.Grid.cells[x, y].ConnectionController.Connect(ConnectionOrientation.top_bottom);
+                                    gameVariables.gridBehaviour.Grid.GetBubble(x, y).ConnectionController.Connect(ConnectionOrientation.top_bottom);
                                     break;
                                 case ConnectionOrientation.left:
-                                    gameVariables.gridBehaviour.Grid.cells[x, y].ConnectionController.Connect(ConnectionOrientation.top_left);
+                                    gameVariables.gridBehaviour.Grid.GetBubble(x, y).ConnectionController.Connect(ConnectionOrientation.top_left);
                                     break;
                                 case ConnectionOrientation.right:
-                                    gameVariables.gridBehaviour.Grid.cells[x, y].ConnectionController.Connect(ConnectionOrientation.top_right);
+                                    gameVariables.gridBehaviour.Grid.GetBubble(x, y).ConnectionController.Connect(ConnectionOrientation.top_right);
                                     break;
                                 case ConnectionOrientation.left_right:
-                                    gameVariables.gridBehaviour.Grid.cells[x, y].ConnectionController.Connect(ConnectionOrientation.top_left_right);
+                                    gameVariables.gridBehaviour.Grid.GetBubble(x, y).ConnectionController.Connect(ConnectionOrientation.top_left_right);
                                     break;
                                 case ConnectionOrientation.bottom_left:
-                                    gameVariables.gridBehaviour.Grid.cells[x, y].ConnectionController.Connect(ConnectionOrientation.top_bottom_left);
+                                    gameVariables.gridBehaviour.Grid.GetBubble(x, y).ConnectionController.Connect(ConnectionOrientation.top_bottom_left);
                                     break;
                                 case ConnectionOrientation.bottom_right:
-                                    gameVariables.gridBehaviour.Grid.cells[x, y].ConnectionController.Connect(ConnectionOrientation.top_bottom_right);
+                                    gameVariables.gridBehaviour.Grid.GetBubble(x, y).ConnectionController.Connect(ConnectionOrientation.top_bottom_right);
                                     break;
                                 case ConnectionOrientation.bottom_left_right:
-                                    gameVariables.gridBehaviour.Grid.cells[x, y].ConnectionController.Connect(ConnectionOrientation.full);
+                                    gameVariables.gridBehaviour.Grid.GetBubble(x, y).ConnectionController.Connect(ConnectionOrientation.full);
                                     break;
                             }
 
-                            UpdateBubbleConnectionList(gameVariables.gridBehaviour.Grid.cells[x, y], gameVariables.gridBehaviour.Grid.cells[x, y + 1]);
+                            UpdateBubbleConnectionList(gameVariables.gridBehaviour.Grid.GetBubble(x, y), gameVariables.gridBehaviour.Grid.GetBubble(x, y + 1));
                         }
                     }
                 }
@@ -189,11 +189,11 @@ namespace EdwinGameDev.BubbleTeaMatch4
 
                 for (int x = 0; x < gameVariables.gameSettings.GridSize.x; x++)
                 {
-                    if (gameVariables.gridBehaviour.Grid.cells[x, y] != null)
+                    if (gameVariables.gridBehaviour.Grid.IsOccupied(x, y))
                     {
                         emptyRow = false;
 
-                        gameVariables.gridBehaviour.Grid.cells[x, y].UpdateGraphics();
+                        gameVariables.gridBehaviour.Grid.GetBubble(x, y).UpdateGraphics();
                     }
                 }
                 if (emptyRow)
