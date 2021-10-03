@@ -24,8 +24,11 @@ namespace EdwinGameDev.BubbleTeaMatch4
 
         public bool OutOfBounds(BubbleSet bubbleSet)
         {
-            return bubbleSet?.Main.MovementController.GetPosition().y >= gameSettings?.GridSize.y ||
-                    bubbleSet?.Sub.MovementController.GetPosition().y >= gameSettings?.GridSize.y;
+            var mainPos = bubbleSet.Main.MovementController.GetPosition();
+            var subPos = bubbleSet.Sub.MovementController.GetPosition();
+
+            return mainPos.y >= gameSettings.GridSize.y && Grid.IsOccupied(mainPos.x, mainPos.y >= Grid.Size.y ? mainPos.y - 1 : mainPos.y) ||
+                   subPos.y >= gameSettings.GridSize.y && Grid.IsOccupied(subPos.x, subPos.y >= Grid.Size.y ? subPos.y-1 : subPos.y);
         }
 
         public bool ReachedBottom(BubbleSet bubbleSet)
