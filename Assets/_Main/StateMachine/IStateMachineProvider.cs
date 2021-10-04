@@ -1,7 +1,9 @@
-﻿namespace EdwinGameDev.BubbleTeaMatch4
+﻿using System;
+
+namespace EdwinGameDev.BubbleTeaMatch4
 {
     public interface IStateMachineProvider
     {
-        StateMachine GetStateMachine();
+        StateMachine GetStateMachine(Action OnStartGame, Action OnGameOver);
     }
 }

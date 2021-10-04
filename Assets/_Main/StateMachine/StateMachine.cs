@@ -5,11 +5,11 @@ namespace EdwinGameDev.BubbleTeaMatch4
 {
     public class StateMachine
     {
-        private IState _currentState;
+        public IState CurrentState { get; private set; }
 
-        private Dictionary<Type, List<Transition>> _transitions = new Dictionary<Type, List<Transition>>();
-        private List<Transition> _currentTransitions = new List<Transition>();
-        private List<Transition> _anyTransitions = new List<Transition>();
+        private Dictionary<Type, List<Transition>> transitions = new Dictionary<Type, List<Transition>>();
+        private List<Transition> currentTransitions = new List<Transition>();
+        private List<Transition> anyTransitions = new List<Transition>();
 
         private readonly List<Transition> emptyTransitions = new List<Transition>(0);
 
@@ -20,51 +20,51 @@ namespace EdwinGameDev.BubbleTeaMatch4
             if (transition != null)
                 SetState(transition.To);
 
-            _currentState?.Tick();
+            CurrentState?.Tick();
         }
 
         public void SetState(IState state)
         {
-            if (state == _currentState)
+            if (state == CurrentState)
                 return;
 
-            _currentState?.OnExit();
-            _currentState = state;
+            CurrentState?.OnExit();
+            CurrentState = state;
 
-            _transitions.TryGetValue(_currentState.GetType(), out _currentTransitions);
+            transitions.TryGetValue(CurrentState.GetType(), out currentTransitions);
 
-            if (_currentTransitions == null)
-                _currentTransitions = emptyTransitions;
+            if (currentTransitions == null)
+                currentTransitions = emptyTransitions;
 
-            UnityEngine.Debug.Log(_currentState.GetType());
-            _currentState.OnEnter();
+            UnityEngine.Debug.Log(CurrentState.GetType());
+            CurrentState.OnEnter();
         }
 
         public void AddTransition(IState from, IState to, Func<bool> condition)
         {
-            if (_transitions.TryGetValue(from.GetType(), out var transitions) == false)
+            if (this.transitions.TryGetValue(from.GetType(), out var _transitions) == false)
             {
-                transitions = new List<Transition>();
-                _transitions[from.GetType()] = transitions;
+                _transitions = new List<Transition>();
+                this.transitions[from.GetType()] = _transitions;
             }
 
-            transitions.Add(new Transition(to, condition));
+            _transitions.Add(new Transition(to, condition));
         }
 
         public void AddAnyTransition(IState to, Func<bool> condition)
         {
-            _anyTransitions.Add(new Transition(to, condition));
+            anyTransitions.Add(new Transition(to, condition));
         }
 
         private Transition GetTransition()
         {
-            foreach (var transition in _anyTransitions)
+            foreach (var transition in anyTransitions)
             {
                 if (transition.Condition())
                     return transition;
             }
 
-            foreach (var transition in _currentTransitions)
+            foreach (var transition in currentTransitions)
             {
                 if (transition.Condition())
                     return transition;
