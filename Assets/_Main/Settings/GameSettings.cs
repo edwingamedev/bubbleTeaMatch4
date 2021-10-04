@@ -6,12 +6,12 @@ namespace EdwinGameDev.BubbleTeaMatch4
     [CreateAssetMenu(fileName = "Settings", menuName = "ScriptableObjects/Settings")]
     public class GameSettings : ScriptableObject
     {
-        [SerializeField] private int cellSize;
-        [SerializeField] private Vector2Int gridSize;
+        [SerializeField] private int cellSize = 8;
+        [SerializeField] private Vector2Int gridSize = new Vector2Int(8,16);
         [SerializeField] private BubbleSettings bubbleSettings;
-        [SerializeField] private Vector2Int spawnPosition;
-        [SerializeField] private Vector2Int nextBubblePosition;
-        [SerializeField] private float dropRate;
+        [SerializeField] private Vector2Int spawnPosition = new Vector2Int(3, 16);
+        [SerializeField] private Vector2Int nextBubblePosition = new Vector2Int(9, 12);
+        [SerializeField] private float dropRate = 1;
 
         public int CellSize => cellSize;
         public Vector2Int GridSize => gridSize;
