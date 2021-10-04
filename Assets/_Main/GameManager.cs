@@ -22,6 +22,14 @@ namespace EdwinGameDev.BubbleTeaMatch4
             Initialize();
         }
 
+        public void StartGame()
+        {
+        }
+
+        public void GameOver()
+        {
+            Debug.Log("GameOver");
+        }
         private void Initialize()
         {
             var gridBehaviour = new GridBehaviour(gameSettings);
@@ -39,7 +47,7 @@ namespace EdwinGameDev.BubbleTeaMatch4
             };
 
             stateMachineProvider = new SingleGameStateProvider(gameBoard);
-            gameStateMachine = stateMachineProvider.GetStateMachine();
+            gameStateMachine = stateMachineProvider.GetStateMachine(StartGame, GameOver);
         }
 
         // Update is called once per frame

@@ -1,4 +1,6 @@
-﻿namespace EdwinGameDev.BubbleTeaMatch4
+﻿using System;
+
+namespace EdwinGameDev.BubbleTeaMatch4
 {
     public class SingleGameStateProvider : IStateMachineProvider
     {
@@ -11,7 +13,7 @@
             this.gameBoard = gameBoard;
         }
 
-        public StateMachine GetStateMachine()
+        public StateMachine GetStateMachine(Action OnStartGame, Action OnGameOver)
         {
             stateMachine = new StateMachine();
 
@@ -22,8 +24,8 @@
             var linkingState = new LinkingState(gameBoard); // comboState;
             var comboState = new ComboState(gameBoard); // spawnState || arrangeState;
 
-            var gameOverState = new GameOverState();
-            var startState = new StartState(); // spawnState
+            var gameOverState = new GameOverState(OnGameOver);
+            var startState = new StartState(OnStartGame); // spawnState
 
             // Add Transitions
 
