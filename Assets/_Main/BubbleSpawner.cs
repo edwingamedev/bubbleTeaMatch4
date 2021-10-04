@@ -46,10 +46,7 @@ namespace EdwinGameDev.BubbleTeaMatch4
 
             // Set Next bubbles
             nextSet.Main = bubbleBuilder.Generate(gameSettings.NextMainBubblePosition);
-            nextSet.Sub = bubbleBuilder.Generate(gameSettings.NextSubBubblePosition);
-
-
-            Debug.Log($"{CurrentSet.Main.name} | {CurrentSet.Sub.name}");
+            nextSet.Sub = bubbleBuilder.Generate(gameSettings.NextSubBubblePosition);                        
         }
 
         public void Reset()

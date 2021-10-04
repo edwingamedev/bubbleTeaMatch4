@@ -29,7 +29,7 @@ namespace EdwinGameDev.BubbleTeaMatch4
             go.MovementController.SetPosition(position);
 
             var bubble = go.GetComponent<Bubble>();
-            bubble.BubbleGroup = bubbleIndex;
+            bubble.bubbleGroup = bubbleIndex;
 
             go.name = $"Bubble_{++currenNumOfBubbles}";
 

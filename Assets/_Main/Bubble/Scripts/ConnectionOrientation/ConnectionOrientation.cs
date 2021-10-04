@@ -1,5 +1,5 @@
 ﻿namespace EdwinGameDev.BubbleTeaMatch4
-{
+{    
     public enum ConnectionOrientation
     {
         none,

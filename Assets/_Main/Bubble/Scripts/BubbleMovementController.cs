@@ -2,17 +2,12 @@
 
 namespace EdwinGameDev.BubbleTeaMatch4
 {
-    public class BubbleMovementController : IMovementController
-    {               
-        public Orientation Orientation { get ; set ; }
+    public class BubbleMovementController : MonoBehaviour, IMovementController
+    {
+        [SerializeField] private Orientation orientation = Orientation.Top;
         private Vector2Int position;
-        private Transform transform;
 
-        public BubbleMovementController(Transform bubbleTransform)
-        {
-            this.transform = bubbleTransform;
-            Orientation = Orientation.Top;
-        }
+        public Orientation Orientation { get => orientation; set => orientation = value; }
 
         public Vector2Int GetPosition()
         {

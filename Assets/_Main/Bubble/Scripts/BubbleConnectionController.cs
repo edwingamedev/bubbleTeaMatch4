@@ -1,27 +1,29 @@
 ﻿using System.Collections.Generic;
+using UnityEngine;
 
 namespace EdwinGameDev.BubbleTeaMatch4
 {
-    public class BubbleConnectionController : IConnectionController
-    {        
-        public ConnectionOrientation Connection { get; private set; }
+    public class BubbleConnectionController : MonoBehaviour, IConnectionController
+    {
+        [SerializeField] private GameSettings gameSettings;
+        [SerializeField] private ConnectionOrientation connection;
+        public ConnectionOrientation Connection { get => connection; private set => connection = value; }
 
-        private List<Bubble> connectionList;
-        private GameSettings gameSettings;
+        [SerializeField] private List<Bubble> connectionList = new List<Bubble>();
 
-        public BubbleConnectionController(GameSettings gameSettings)
+        public bool Matched()
         {
-            this.gameSettings = gameSettings;
-
-            Connection = ConnectionOrientation.none;
-            connectionList = new List<Bubble>();
-        }        
-
-        public bool Matched => GetConnectionList().Count >= gameSettings.BubblesAmountForMatch;//{ get; set; }
+            return GetConnectionList().Count >= gameSettings.BubblesAmountForMatch;
+        } 
 
         public List<Bubble> GetConnectionList()
         {
             return connectionList;
+        }
+
+        public void RemoveConnection(Bubble bubble)
+        {
+            this.connectionList.Remove(bubble);
         }
 
         public void SetConnectionList(List<Bubble> newConnections)
@@ -40,9 +42,9 @@ namespace EdwinGameDev.BubbleTeaMatch4
         }
 
         public void Reset()
-        {
-            Connection = ConnectionOrientation.none;
-            connectionList = new List<Bubble>();
+        {            
+            Disconnect();
+            connectionList.Clear();
         }
     }
 }

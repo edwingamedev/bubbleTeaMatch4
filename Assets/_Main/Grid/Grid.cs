@@ -47,11 +47,6 @@ namespace EdwinGameDev.BubbleTeaMatch4
                     cells[x, y] = bubble;
                     bubble.GraphicsController.DisableHighlight();
                 }
-                else
-                {
-                    //bubble.Disable();
-                    Debug.Log("## Cell Occuped ## bubble error: " + bubble.name);
-                }
             }
         }
 

@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace EdwinGameDev.BubbleTeaMatch4
 {
+    [System.Serializable]
     public class Bubble : MonoBehaviour, IPool
     {
         public GameSettings gameSettings;
@@ -12,15 +13,17 @@ namespace EdwinGameDev.BubbleTeaMatch4
         public IMovementController MovementController { get; private set; }
         public IConnectionController ConnectionController { get; private set; }
 
-        public int BubbleGroup { get; set; }
+        public int bubbleGroup;
 
         private void Awake()
         {
             Initialize();
         }
+
         public void Reset()
         {
             MovementController.Reset();
+
             ConnectionController.Reset();
 
             UpdateGraphics();
@@ -29,8 +32,8 @@ namespace EdwinGameDev.BubbleTeaMatch4
         private void Initialize()
         {
             GraphicsController = GetComponent<IGraphicsController>();
-            MovementController = new BubbleMovementController(transform);
-            ConnectionController = new BubbleConnectionController(gameSettings);
+            MovementController = GetComponent<IMovementController>();
+            ConnectionController = GetComponent<IConnectionController>();
         }
 
         public void UpdateGraphics()
@@ -45,13 +48,13 @@ namespace EdwinGameDev.BubbleTeaMatch4
 
         public void EnableObject()
         {
-            Reset();
-
             gameObject.SetActive(true);
+
+            Reset();
         }
+
         public void DisableObject()
         {
-            ConnectionController.Disconnect();
             gameObject.SetActive(false);
         }
 
