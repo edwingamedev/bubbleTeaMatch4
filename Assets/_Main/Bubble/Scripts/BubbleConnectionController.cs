@@ -21,11 +21,6 @@ namespace EdwinGameDev.BubbleTeaMatch4
             return connectionList;
         }
 
-        public void RemoveConnection(Bubble bubble)
-        {
-            this.connectionList.Remove(bubble);
-        }
-
         public void SetConnectionList(List<Bubble> newConnections)
         {
             this.connectionList = newConnections;
