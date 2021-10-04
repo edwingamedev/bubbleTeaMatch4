@@ -37,8 +37,7 @@ namespace EdwinGameDev.BubbleTeaMatch4
         }
 
         private bool EmptyCell(Vector2Int position)
-        {
-            Debug.Log(position);
+        {            
             return !grid.IsOccupied(position.x, position.y >= gridSize.y ? gridSize.y - 1 : position.y);
         }
     }

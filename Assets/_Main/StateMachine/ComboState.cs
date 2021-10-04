@@ -27,12 +27,10 @@ namespace EdwinGameDev.BubbleTeaMatch4
                 await PopAndFill(popDelay);
 
                 gameVariables.ComboStarted = false;
-                UnityEngine.Debug.Log("Combo MATCH");
             }
             else
             {
                 gameVariables.ComboStarted = false;
-                UnityEngine.Debug.Log("Combo NO MATCH");
             }
         }
 
@@ -86,7 +84,6 @@ namespace EdwinGameDev.BubbleTeaMatch4
                                                         
                             UnityEngine.Object.Destroy(gameVariables.gridBehaviour.Grid.GetBubble(x, y));
 
-                            UnityEngine.Debug.Log("POPPED");
 
                             // ADD POINTS
                             //scoreController.AddPoints(10);

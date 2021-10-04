@@ -45,7 +45,6 @@ namespace EdwinGameDev.BubbleTeaMatch4
                 await Task.Delay(arrangeDelay);
             }
 
-            UnityEngine.Debug.Log("ArrangeBubbles");
             gameVariables.BubbleRearranged = true;
         }
 

@@ -150,8 +150,6 @@ namespace EdwinGameDev.BubbleTeaMatch4
             }
 
             UpdateImage();
-
-            UnityEngine.Debug.Log("LinkingState");
         }
 
         private void UpdateBubbleConnectionList(Bubble bubbleA, Bubble bubbleB)

@@ -44,6 +44,7 @@ namespace EdwinGameDev.BubbleTeaMatch4
                 }
                 else
                 {
+                    //bubble.Disable();
                     Debug.Log("## Cell Occuped ## bubble error: " + bubble.name);
                 }
             }

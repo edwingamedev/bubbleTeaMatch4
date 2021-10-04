@@ -16,9 +16,6 @@
 
             // Update controlled bubbles
             gameVariables.inputController.SetBubbles(gameVariables.bubbleSpawner.CurrentSet);
-
-            UnityEngine.Debug.Log("Spawned");
-
         }
 
         public void OnExit() { }
