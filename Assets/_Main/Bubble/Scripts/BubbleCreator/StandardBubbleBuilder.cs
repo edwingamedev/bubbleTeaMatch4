@@ -31,7 +31,14 @@ namespace EdwinGameDev.BubbleTeaMatch4
             var bubble = go.GetComponent<Bubble>();
             bubble.bubbleGroup = bubbleIndex;
 
-            go.name = $"Bubble_{++currenNumOfBubbles}";
+            string bubbleName = string.Empty;
+
+            if (bubbleIndex == 0) bubbleName = "Verde";
+            else if (bubbleIndex == 1) bubbleName = "Roxo";
+            else if (bubbleIndex == 2) bubbleName = "Vermelho";
+            else if (bubbleIndex == 3) bubbleName = "Amarelo";
+
+            go.name = $"Bubble_{bubbleName}_{++currenNumOfBubbles}";
 
             Material material = new Material(settings.BubbleSettings.Shader);
             material.SetColor("_MainColor", settings.BubbleSettings.BubblePresets[bubbleIndex].mainColor);
