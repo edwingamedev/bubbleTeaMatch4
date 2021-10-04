@@ -11,6 +11,7 @@ namespace EdwinGameDev.BubbleTeaMatch4
         [SerializeField] private BubbleSettings bubbleSettings;
         [SerializeField] private Vector2Int spawnPosition = new Vector2Int(3, 16);
         [SerializeField] private Vector2Int nextBubblePosition = new Vector2Int(9, 12);
+        [SerializeField] private int bubblesAmountForMatch = 4;
         [SerializeField] private float dropRate = 1;
 
         public int CellSize => cellSize;
@@ -25,5 +26,6 @@ namespace EdwinGameDev.BubbleTeaMatch4
         public Vector2Int NextSubBubblePosition => nextBubblePosition + Vector2Int.up;
 
         public float DropRate => dropRate;
+        public int BubblesAmountForMatch => bubblesAmountForMatch;
     }
 }

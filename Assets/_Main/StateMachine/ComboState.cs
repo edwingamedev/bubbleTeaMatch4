@@ -47,10 +47,10 @@ namespace EdwinGameDev.BubbleTeaMatch4
                     {
                         emptyRow = false;
 
-                        if (gameVariables.gridBehaviour.Grid.GetBubble(x, y).ConnectionController.GetConnectionList().Count >= 4)
+                        if (gameVariables.gridBehaviour.Grid.GetBubble(x, y).ConnectionController.Matched)
                         {
                             gameVariables.HasMatches = true;
-                            gameVariables.gridBehaviour.Grid.GetBubble(x, y).ConnectionController.Matched = true;
+
                             gameVariables.gridBehaviour.Grid.GetBubble(x, y).GraphicsController.PopAnimation();
                         }
                     }

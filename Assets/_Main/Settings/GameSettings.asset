@@ -16,5 +16,6 @@ MonoBehaviour:
   gridSize: {x: 8, y: 16}
   bubbleSettings: {fileID: 11400000, guid: c8753b45b911def48b9978fbe21f5ca1, type: 2}
   spawnPosition: {x: 3, y: 16}
-  nextBubblePosition: {x: 9, y: 13}
+  nextBubblePosition: {x: 9, y: 12}
+  bubblesAmountForMatch: 4
   dropRate: 1

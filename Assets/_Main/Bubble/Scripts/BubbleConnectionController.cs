@@ -17,7 +17,7 @@ namespace EdwinGameDev.BubbleTeaMatch4
             connectionList = new List<Bubble>();
         }        
 
-        public bool Matched { get; set; }
+        public bool Matched => GetConnectionList().Count >= gameSettings.BubblesAmountForMatch;//{ get; set; }
 
         public List<Bubble> GetConnectionList()
         {
