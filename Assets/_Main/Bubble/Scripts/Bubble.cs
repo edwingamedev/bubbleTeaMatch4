@@ -7,6 +7,7 @@ namespace EdwinGameDev.BubbleTeaMatch4
 {
     public class Bubble : MonoBehaviour
     {
+        public GameSettings gameSettings;
         public IGraphicsController GraphicsController;
         public IMovementController MovementController { get; private set; }
         public IConnectionController ConnectionController { get; private set; }
@@ -15,9 +16,21 @@ namespace EdwinGameDev.BubbleTeaMatch4
 
         private void Awake()
         {
-            MovementController = new BubbleMovementController(transform);
-            ConnectionController = new BubbleConnectionController();
+            Initialize();
+        }
+        public void Reset()
+        {
+            MovementController.Reset();
+            ConnectionController.Reset();
+
+            UpdateGraphics();
+        }
+
+        private void Initialize()
+        {
             GraphicsController = GetComponent<IGraphicsController>();
+            MovementController = new BubbleMovementController(transform);
+            ConnectionController = new BubbleConnectionController(gameSettings);
         }
 
         public void UpdateGraphics()

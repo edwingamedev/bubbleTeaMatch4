@@ -24,6 +24,9 @@ namespace EdwinGameDev.BubbleTeaMatch4
 
         public void StartGame()
         {
+            gameBoard.bubbleSpawner.Reset();
+            gameBoard.gridBehaviour.ResetGrid();
+            scoreController.ResetScore();
         }
 
         public void GameOver()

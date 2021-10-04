@@ -10,6 +10,11 @@ namespace EdwinGameDev.BubbleTeaMatch4
 
         private GameSettings gameSettings;
 
+        public void ResetGrid()
+        {
+            Grid.ResetGrid();
+        }
+
         public GridBehaviour(GameSettings gameSettings)
         {
             this.gameSettings = gameSettings;

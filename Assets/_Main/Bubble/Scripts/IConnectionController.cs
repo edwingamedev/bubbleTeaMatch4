@@ -9,6 +9,8 @@ namespace EdwinGameDev.BubbleTeaMatch4
         void Connect(ConnectionOrientation newConnection);
         void Disconnect();
         ConnectionOrientation Connection { get ; }
-        bool Matched { get; set; }
+        bool Matched { get;}
+
+        void Reset();
     }
 }

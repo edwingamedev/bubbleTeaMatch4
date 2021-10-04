@@ -1,7 +1,8 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace EdwinGameDev.BubbleTeaMatch4
-{
+{   
     public class BubbleSpawner
     {
         public BubbleSet CurrentSet { get; private set; }
@@ -46,6 +47,16 @@ namespace EdwinGameDev.BubbleTeaMatch4
             // Set Next bubbles
             nextSet.Main = bubbleBuilder.Generate(gameSettings.NextMainBubblePosition);
             nextSet.Sub = bubbleBuilder.Generate(gameSettings.NextSubBubblePosition);
+
+
+            Debug.Log($"{CurrentSet.Main.name} | {CurrentSet.Sub.name}");
+        }
+
+        public void Reset()
+        {
+            CurrentSet = new BubbleSet();
+            nextSet = null;
+            bubbleBuilder.Reset();
         }
     }
 }

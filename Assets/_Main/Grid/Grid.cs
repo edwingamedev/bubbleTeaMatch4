@@ -6,9 +6,14 @@ namespace EdwinGameDev.BubbleTeaMatch4
 {
     public class Grid
     {
-        private Bubble[,] cells;
+        private Bubble[,] cells = new Bubble[0,0];
 
         public Vector2Int Size { get; }
+
+        public void ResetGrid()
+        {
+            cells = new Bubble[Size.x, Size.y];
+        }
 
         public Grid(Vector2Int size)
         {

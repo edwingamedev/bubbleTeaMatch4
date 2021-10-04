@@ -4,14 +4,14 @@ namespace EdwinGameDev.BubbleTeaMatch4
 {
     public class BubbleMovementController : IMovementController
     {               
-        private Orientation bubblePosition = Orientation.Top;
-        public Orientation Orientation { get => bubblePosition; set => bubblePosition = value; }
+        public Orientation Orientation { get ; set ; }
         private Vector2Int position;
         private Transform transform;
 
         public BubbleMovementController(Transform bubbleTransform)
         {
             this.transform = bubbleTransform;
+            Orientation = Orientation.Top;
         }
 
         public Vector2Int GetPosition()
@@ -29,6 +29,11 @@ namespace EdwinGameDev.BubbleTeaMatch4
         {
             SetPosition(new Vector2Int(Mathf.CeilToInt(transform.position.x) + direction.x,
                                         Mathf.CeilToInt(transform.position.y) + direction.y));
+        }
+
+        public void Reset()
+        {
+            Orientation = Orientation.Top;
         }
     }
 }
