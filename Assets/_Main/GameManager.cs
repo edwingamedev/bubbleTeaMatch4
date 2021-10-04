@@ -10,6 +10,8 @@ namespace EdwinGameDev.BubbleTeaMatch4
         [SerializeField] private GameSettings gameSettings;
         [SerializeField] private ScoreController scoreController;
 
+        [SerializeField] private Transform bubblePool;
+
         private GameBoard gameBoard;
         private bool paused;
 
@@ -33,10 +35,11 @@ namespace EdwinGameDev.BubbleTeaMatch4
         {
             Debug.Log("GameOver");
         }
+
         private void Initialize()
         {
             var gridBehaviour = new GridBehaviour(gameSettings);
-            var bubbleSpawner = new BubbleSpawner(gameSettings);
+            var bubbleSpawner = new BubbleSpawner(gameSettings, bubblePool);
 
             var inputController = new BubbleInputController(gridBehaviour.Grid,
                                                         new KeyboardInputProcessor(),

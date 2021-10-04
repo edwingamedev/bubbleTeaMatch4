@@ -79,12 +79,10 @@ namespace EdwinGameDev.BubbleTeaMatch4
                         emptyRow = false;
 
                         if (gameVariables.gridBehaviour.Grid.GetBubble(x, y).ConnectionController.Matched)
-                        {                            
-                            gameVariables.gridBehaviour.Grid.UnnassignBubble(x, y);
-                                                        
-                            UnityEngine.Object.Destroy(gameVariables.gridBehaviour.Grid.GetBubble(x, y));
-
-
+                        {
+                            gameVariables.gridBehaviour.Grid.GetBubble(x, y).DisableObject();
+                            gameVariables.gridBehaviour.Grid.UnnassignBubble(x, y);                                                     
+                            
                             // ADD POINTS
                             //scoreController.AddPoints(10);
                         }                        

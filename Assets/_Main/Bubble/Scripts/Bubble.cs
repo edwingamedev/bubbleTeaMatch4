@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace EdwinGameDev.BubbleTeaMatch4
 {
-    public class Bubble : MonoBehaviour
+    public class Bubble : MonoBehaviour, IPool
     {
         public GameSettings gameSettings;
         public IGraphicsController GraphicsController;
@@ -36,6 +36,28 @@ namespace EdwinGameDev.BubbleTeaMatch4
         public void UpdateGraphics()
         {
             GraphicsController.UpdateGraphics(ConnectionController.Connection);
+        }
+
+        public bool isEnabled()
+        {
+            return gameObject.activeInHierarchy;
+        }
+
+        public void EnableObject()
+        {
+            Reset();
+
+            gameObject.SetActive(true);
+        }
+        public void DisableObject()
+        {
+            ConnectionController.Disconnect();
+            gameObject.SetActive(false);
+        }
+
+        public GameObject GetObject()
+        {
+            return gameObject;
         }
     }
 }
