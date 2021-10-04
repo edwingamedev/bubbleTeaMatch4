@@ -30,7 +30,13 @@ namespace EdwinGameDev.BubbleTeaMatch4
                     if (gameVariables.gridBehaviour.Grid.IsOccupied(x, y))
                     {
                         emptyRow = false;
-                        gameVariables.gridBehaviour.Grid.GetBubble(x,y).ConnectionController.Disconnect();
+                        Bubble bubble = gameVariables.gridBehaviour.Grid.GetBubble(x, y);
+                        bubble.ConnectionController.Disconnect();
+
+                        var newConnection = new List<Bubble>();
+                        newConnection.Add(bubble);
+
+                        bubble.ConnectionController.SetConnectionList(newConnection);
                     }
                 }
                 if (emptyRow)
@@ -55,7 +61,7 @@ namespace EdwinGameDev.BubbleTeaMatch4
                         // Horizontal
                         if (x + 1 < gameVariables.gridBehaviour.Grid.Size.x &&
                                     gameVariables.gridBehaviour.Grid.IsOccupied(x + 1, y) &&
-                                    gameVariables.gridBehaviour.Grid.GetBubble(x, y).BubbleGroup == gameVariables.gridBehaviour.Grid.GetBubble(x + 1, y).BubbleGroup)
+                                    gameVariables.gridBehaviour.Grid.GetBubble(x, y).bubbleGroup == gameVariables.gridBehaviour.Grid.GetBubble(x + 1, y).bubbleGroup)
                         {
                             if (gameVariables.gridBehaviour.Grid.GetBubble(x, y).ConnectionController.Connection == ConnectionOrientation.left)
                                 gameVariables.gridBehaviour.Grid.GetBubble(x, y).ConnectionController.Connect(ConnectionOrientation.left_right);
@@ -85,7 +91,7 @@ namespace EdwinGameDev.BubbleTeaMatch4
                         // Vertical
                         if (y + 1 < gameVariables.gridBehaviour.Grid.Size.y &&
                                     gameVariables.gridBehaviour.Grid.IsOccupied(x, y + 1) &&
-                                    gameVariables.gridBehaviour.Grid.GetBubble(x, y).BubbleGroup == gameVariables.gridBehaviour.Grid.GetBubble(x, y + 1).BubbleGroup)
+                                    gameVariables.gridBehaviour.Grid.GetBubble(x, y).bubbleGroup == gameVariables.gridBehaviour.Grid.GetBubble(x, y + 1).bubbleGroup)
                         {
                             switch (gameVariables.gridBehaviour.Grid.GetBubble(x, y + 1).ConnectionController.Connection)
                             {
@@ -153,7 +159,7 @@ namespace EdwinGameDev.BubbleTeaMatch4
         }
 
         private void UpdateBubbleConnectionList(Bubble bubbleA, Bubble bubbleB)
-        {
+        {      
             List<Bubble> bubbleAList = bubbleA.ConnectionController.GetConnectionList();
             if (!bubbleAList.Contains(bubbleB))
             {
@@ -166,7 +172,7 @@ namespace EdwinGameDev.BubbleTeaMatch4
                 bubbleBList.Add(bubbleA);
             }
 
-            List<Bubble> bubbleCList = bubbleAList.Union(bubbleBList).ToList();
+            List<Bubble> bubbleCList = bubbleAList.Union(bubbleBList).ToList();            
 
             for (int i = 0; i < bubbleAList.Count; i++)
             {
