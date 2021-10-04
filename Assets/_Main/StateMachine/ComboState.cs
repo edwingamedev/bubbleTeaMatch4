@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using UnityEngine;
 
 namespace EdwinGameDev.BubbleTeaMatch4
 {
@@ -7,9 +9,11 @@ namespace EdwinGameDev.BubbleTeaMatch4
     {
         private GameBoard gameVariables;
         private int popDelay = 500;
+        private List<Vector2Int> matchesIndex;
 
         public ComboState(GameBoard gameVariables)
         {
+            matchesIndex = new List<Vector2Int>();
             this.gameVariables = gameVariables;
         }
 
@@ -24,7 +28,7 @@ namespace EdwinGameDev.BubbleTeaMatch4
         {
             if (ValidateMatches())
             {
-                await PopAndFill(popDelay);
+                await PopMatches(popDelay);
 
                 gameVariables.ComboStarted = false;
             }
@@ -36,6 +40,7 @@ namespace EdwinGameDev.BubbleTeaMatch4
 
         private bool ValidateMatches()
         {
+            matchesIndex.Clear();
             gameVariables.HasMatches = false;
 
             for (int y = 0; y < gameVariables.gameSettings.GridSize.y; y++)
@@ -47,8 +52,9 @@ namespace EdwinGameDev.BubbleTeaMatch4
                     {
                         emptyRow = false;
 
-                        if (gameVariables.gridBehaviour.Grid.GetBubble(x, y).ConnectionController.Matched)
+                        if (gameVariables.gridBehaviour.Grid.GetBubble(x, y).ConnectionController.Matched())
                         {
+                            matchesIndex.Add(new Vector2Int(x, y));
                             gameVariables.HasMatches = true;
 
                             gameVariables.gridBehaviour.Grid.GetBubble(x, y).GraphicsController.PopAnimation();
@@ -61,6 +67,18 @@ namespace EdwinGameDev.BubbleTeaMatch4
 
             //UpdateImage();
             return gameVariables.HasMatches;
+        }
+
+        private async Task PopMatches(int taskDelay)
+        {
+            if (taskDelay != 0)
+                await Task.Delay(taskDelay);
+
+            foreach (var cellIndex in matchesIndex)
+            {
+                gameVariables.gridBehaviour.Grid.GetBubble(cellIndex.x, cellIndex.y).DisableObject();
+                gameVariables.gridBehaviour.Grid.UnnassignBubble(cellIndex.x, cellIndex.y);
+            }
         }
 
         private async Task PopAndFill(int taskDelay)
@@ -78,7 +96,7 @@ namespace EdwinGameDev.BubbleTeaMatch4
                     {
                         emptyRow = false;
 
-                        if (gameVariables.gridBehaviour.Grid.GetBubble(x, y).ConnectionController.Matched)
+                        if (gameVariables.gridBehaviour.Grid.GetBubble(x, y).ConnectionController.Matched())
                         {
                             gameVariables.gridBehaviour.Grid.GetBubble(x, y).DisableObject();
                             gameVariables.gridBehaviour.Grid.UnnassignBubble(x, y);                                                     
