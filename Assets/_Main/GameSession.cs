@@ -12,7 +12,7 @@ namespace EdwinGameDev.BubbleTeaMatch4
         private IInputProcessor inputProcessor;
         private GameBoard gameBoard;
 
-        private Vector2 boardOffset;
+        private Vector2Int boardOffset;
 
         public Action OnStart;
         public Action OnGameOver;
@@ -22,14 +22,14 @@ namespace EdwinGameDev.BubbleTeaMatch4
         private IStateMachineProvider stateMachineProvider;
         private StateMachine gameStateMachine;
 
-        public GameSession(GameSettings gameSettings, ScoreController scoreController, Vector2 boardOffset, IInputProcessor inputProcessor, Pooling pooling)
+        public GameSession(GameSettings gameSettings, ScoreController scoreController, Vector2Int boardOffset, IInputProcessor inputProcessor, Pooling pooling)
         {
             OnStart += ResetGame;
 
             this.gameSettings = gameSettings;
             this.scoreController = scoreController;
             this.inputProcessor = inputProcessor;
-
+            this.boardOffset = boardOffset;
             this.pooling = pooling;
         }                
 
@@ -46,7 +46,7 @@ namespace EdwinGameDev.BubbleTeaMatch4
             }
 
             var gridBehaviour = new GridBehaviour(gameSettings);
-            var bubbleSpawner = new BubbleSpawner(gameSettings, pooling);
+            var bubbleSpawner = new BubbleSpawner(gameSettings, boardOffset, pooling);
 
             var inputController = new BubbleInputController(gridBehaviour.Grid,
                                                             inputProcessor,

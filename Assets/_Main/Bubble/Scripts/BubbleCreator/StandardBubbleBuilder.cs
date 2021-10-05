@@ -10,12 +10,13 @@ namespace EdwinGameDev.BubbleTeaMatch4
         private int bubbleAmount;
         private int currenNumOfBubbles;
         private Pooling pooling;
+        private Vector2Int boardOffset;
 
-        public StandardBubbleBuilder(GameSettings settings, Pooling pooling)
+        public StandardBubbleBuilder(GameSettings settings, Vector2Int boardOffset, Pooling pooling)
         {
             this.settings = settings;
             bubbleAmount = settings.BubbleSettings.BubblePresets.Count;
-
+            this.boardOffset = boardOffset;
             this.pooling = pooling;
         }
 
@@ -25,6 +26,7 @@ namespace EdwinGameDev.BubbleTeaMatch4
 
             //var go = Object.Instantiate(settings.BubbleSettings.Prefab, (Vector2)position, Quaternion.identity);
             var go = pooling.GetFromPool() as Bubble;
+            go.MovementController.SetOffSet(boardOffset);
             go.MovementController.SetPosition(position);
 
             var bubble = go.GetComponent<Bubble>();

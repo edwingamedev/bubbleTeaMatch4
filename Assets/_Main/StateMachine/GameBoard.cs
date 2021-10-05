@@ -8,7 +8,7 @@ namespace EdwinGameDev.BubbleTeaMatch4
         public GridBehaviour gridBehaviour;
         public BubbleSpawner bubbleSpawner;
         public IInputController inputController;
-        public Vector2 boardOffset;
+        public Vector2Int boardOffset;
 
         public bool GameStarted { get;  set; }
         public bool HasMatches { get; set; }

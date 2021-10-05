@@ -7,7 +7,6 @@ namespace EdwinGameDev.BubbleTeaMatch4
     public class StandardGridBuilder : IGridBuilder
     {
         private GameSettings settings;
-
         public StandardGridBuilder(GameSettings settings)
         {
             this.settings = settings;

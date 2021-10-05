@@ -10,5 +10,6 @@ namespace EdwinGameDev.BubbleTeaMatch4
         Orientation Orientation { get; set; }
 
         void Reset();
+        void SetOffSet(Vector2Int offset);
     }
 }

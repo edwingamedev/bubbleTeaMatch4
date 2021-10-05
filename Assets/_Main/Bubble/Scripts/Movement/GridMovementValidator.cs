@@ -13,27 +13,27 @@ namespace EdwinGameDev.BubbleTeaMatch4
             gridSize = grid.Size;
         }
 
-        private bool ReachedBottom(Bubble bubble)
-        {
-            return !grid.ReachedBottom(bubble);
-        }
-
         public bool IsValidMovement(BubbleSet bubbleSet, Vector2Int direction)
         {
             Vector2Int mainNewPos = bubbleSet.Main.MovementController.GetPosition() + direction;
             Vector2Int subNewPos = bubbleSet.Sub.MovementController.GetPosition() + direction;
 
-            return InBounds(mainNewPos) && 
+            return InBounds(mainNewPos) &&
                    InBounds(subNewPos) &&
                    ReachedBottom(bubbleSet.Main) &&
                    ReachedBottom(bubbleSet.Sub) &&
-                   EmptyCell(mainNewPos) && 
+                   EmptyCell(mainNewPos) &&
                    EmptyCell(subNewPos);
         }
 
-        private bool InBounds(Vector2Int position)
+        private bool ReachedBottom(Bubble bubble)
         {
-            return position.x < gridSize.x && position.x >= 0;
+            return !grid.ReachedBottom(bubble);
+        }
+
+        private bool InBounds(Vector2Int position)
+        {            
+            return grid.InBounds(position);
         }
 
         private bool EmptyCell(Vector2Int position)
