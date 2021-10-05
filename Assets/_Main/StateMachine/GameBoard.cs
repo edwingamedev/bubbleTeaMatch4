@@ -7,6 +7,7 @@
         public BubbleSpawner bubbleSpawner;
         public IInputController inputController;
 
+        public bool GameStarted { get;  set; }
         public bool HasMatches { get; set; }
         public bool BubbleRearranged { get; set; }
         public bool ComboStarted{ get; set; }

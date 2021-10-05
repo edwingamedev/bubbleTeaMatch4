@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,28 +16,26 @@ namespace EdwinGameDev.BubbleTeaMatch4
         private GameBoard gameBoard;
         private bool paused;
 
-        // STATE MACHINE        
+        // GAME STATE MACHINE        
         private IStateMachineProvider stateMachineProvider;
         private StateMachine gameStateMachine;
 
+        public Action OnStart;
+        public Action OnGameOver;
+
         void Awake()
         {
-            Initialize();
+            //InitializeSinglePlayer();
+            OnGameOver += this.GameOver;
+            OnStart += this.OnStartGame;
         }
 
         public void StartGame()
         {
-            gameBoard.bubbleSpawner.Reset();
-            gameBoard.gridBehaviour.ResetGrid();
-            scoreController.ResetScore();
+            gameBoard.GameStarted = true;
         }
 
-        public void GameOver()
-        {
-            Debug.Log("GameOver");
-        }
-
-        private void Initialize()
+        public void InitializeSinglePlayer()
         {
             var gridBehaviour = new GridBehaviour(gameSettings);
             var bubbleSpawner = new BubbleSpawner(gameSettings, bubblePool);
@@ -53,7 +52,20 @@ namespace EdwinGameDev.BubbleTeaMatch4
             };
 
             stateMachineProvider = new SingleGameStateProvider(gameBoard);
-            gameStateMachine = stateMachineProvider.GetStateMachine(StartGame, GameOver);
+            gameStateMachine = stateMachineProvider.GetStateMachine(OnStart, OnGameOver);
+        }
+
+        private void OnStartGame()
+        {
+            gameBoard.GameStarted = false;
+            gameBoard.bubbleSpawner.Reset();
+            gameBoard.gridBehaviour.ResetGrid();
+            scoreController.ResetScore();
+        }
+
+        private void GameOver()
+        {
+            Debug.Log("GameOver");
         }
 
         // Update is called once per frame
@@ -65,7 +77,6 @@ namespace EdwinGameDev.BubbleTeaMatch4
             }
 
             // TODO: PAUSE BEHAVIOUR
-
             if (Input.GetKeyDown(KeyCode.P))
             {
                 paused = !paused;
