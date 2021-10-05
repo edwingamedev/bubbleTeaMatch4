@@ -6,8 +6,8 @@ namespace EdwinGameDev.BubbleTeaMatch4
     public class SinglePlayerMenuScreen : ScreenBehaviour
     {
         private Canvas canvas;
-        public GameManager gameManager;
-        public Button startButton;
+        public GameSessionController gameManager;
+        //public Button startButton;
         public Button backButton;
 
         private void Awake()
@@ -18,25 +18,28 @@ namespace EdwinGameDev.BubbleTeaMatch4
             EventsAssignment();
         }
 
+
+        // Update is called once per frame
+        public void Update()
+        {
+            gameManager?.Update();
+        }
+
         private void EventsAssignment()
         {
-            //gameManager.OnStart += () => startButton.gameObject.SetActive(false);
-            gameManager.OnGameOver += () => startButton.gameObject.SetActive(true);
-
-            startButton.onClick.AddListener(StartGame);
+            gameManager.OnGameOver += GameOver;
             backButton.onClick.AddListener(ScreenManager.LoadPreviousScreen);
         }
 
-        public void StartGame()
+        public void GameOver()
         {
-            startButton.gameObject.SetActive(false);
-            gameManager.StartGame();
+            ScreenManager.LoadScreen(typeof(GameOverScreen));
         }
+
 
         public override void OnActivate()
         {
-            if (canvas)
-                canvas.enabled = true;
+            gameObject.SetActive(true);
 
             // Initialize Single Player
             gameManager.InitializeSinglePlayer();
@@ -44,8 +47,7 @@ namespace EdwinGameDev.BubbleTeaMatch4
 
         public override void OnDeactivate()
         {
-            if (canvas)
-                canvas.enabled = false;
+            gameObject.SetActive(false);
         }
     }
 }

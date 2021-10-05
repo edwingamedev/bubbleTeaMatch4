@@ -1,10 +1,13 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 
 namespace EdwinGameDev.BubbleTeaMatch4
 {
-    public class MenuScreen : ScreenBehaviour
+    public class GameOverScreen : ScreenBehaviour
     {
         private Canvas canvas;
+        public Button startButton;
+        public Button menuButton;
 
         private void Awake()
         {
@@ -12,22 +15,20 @@ namespace EdwinGameDev.BubbleTeaMatch4
 
             ScreenManager.AssignScreen(this);
 
-            ScreenManager.LoadScreen(typeof(MenuScreen));
+            menuButton.onClick.AddListener(() => ScreenManager.LoadScreen(typeof(MenuScreen)));
+            startButton.onClick.AddListener(() => ScreenManager.LoadScreen(typeof(SinglePlayerMenuScreen)));
         }
 
         public override void OnActivate()
         {
+            Debug.Log("GameOver");
+
             gameObject.SetActive(true);
         }
 
         public override void OnDeactivate()
         {
             gameObject.SetActive(false);
-        }
-
-        public void SinglePlayer()
-        {
-            ScreenManager.LoadScreen(typeof(SinglePlayerMenuScreen));
         }
     }
 }

@@ -34,7 +34,7 @@ namespace EdwinGameDev.BubbleTeaMatch4
             // Game over
             stateMachine.AddTransition(playingState, gameOverState, CheckGameOver);
             // Spawn
-            stateMachine.AddTransition(startState, spawnState, StartGame);
+            stateMachine.AddTransition(startState, spawnState, GoToNextState);
 
             // Play
             stateMachine.AddTransition(spawnState, playingState, GoToNextState);

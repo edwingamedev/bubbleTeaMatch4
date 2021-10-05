@@ -6,15 +6,14 @@ using UnityEngine;
 
 namespace EdwinGameDev.BubbleTeaMatch4
 {
-    public class GameManager : MonoBehaviour
+    [System.Serializable]
+    public class GameSessionController
     {
         [SerializeField] private GameSettings gameSettings;
         [SerializeField] private ScoreController scoreController;
-
         [SerializeField] private Transform bubblePool;
 
         private GameBoard gameBoard;
-        private bool paused;
 
         // GAME STATE MACHINE        
         private IStateMachineProvider stateMachineProvider;
@@ -23,20 +22,23 @@ namespace EdwinGameDev.BubbleTeaMatch4
         public Action OnStart;
         public Action OnGameOver;
 
-        void Awake()
+        public GameSessionController()
         {
-            //InitializeSinglePlayer();
-            OnGameOver += this.GameOver;
-            OnStart += this.OnStartGame;
+            OnStart += ResetGame;
         }
 
-        public void StartGame()
+        public void Update()
         {
-            gameBoard.GameStarted = true;
+            gameStateMachine?.Execute();
         }
 
         public void InitializeSinglePlayer()
         {
+            if (gameBoard != null)
+            {
+                ResetGame();
+            }
+
             var gridBehaviour = new GridBehaviour(gameSettings);
             var bubbleSpawner = new BubbleSpawner(gameSettings, bubblePool);
 
@@ -53,34 +55,16 @@ namespace EdwinGameDev.BubbleTeaMatch4
 
             stateMachineProvider = new SingleGameStateProvider(gameBoard);
             gameStateMachine = stateMachineProvider.GetStateMachine(OnStart, OnGameOver);
+
+            gameBoard.GameStarted = true;
         }
 
-        private void OnStartGame()
+        private void ResetGame()
         {
             gameBoard.GameStarted = false;
             gameBoard.bubbleSpawner.Reset();
             gameBoard.gridBehaviour.ResetGrid();
             scoreController.ResetScore();
-        }
-
-        private void GameOver()
-        {
-            Debug.Log("GameOver");
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-            if (!paused)
-            {
-                gameStateMachine?.Execute();
-            }
-
-            // TODO: PAUSE BEHAVIOUR
-            if (Input.GetKeyDown(KeyCode.P))
-            {
-                paused = !paused;
-            }
         }
     }
 }
