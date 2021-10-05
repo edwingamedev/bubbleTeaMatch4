@@ -5,6 +5,5 @@
         void CheckInputs();
         void SetBubbles(BubbleSet bubbleSet);
         bool ValidateAndMoveDown();
-        bool StartGame();
     }
 }

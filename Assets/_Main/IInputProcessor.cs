@@ -2,7 +2,6 @@
 {
     public interface IInputProcessor
     {
-        bool StartGame();
         bool Left();
 
         bool Right();

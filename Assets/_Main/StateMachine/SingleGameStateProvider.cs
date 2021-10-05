@@ -54,17 +54,13 @@ namespace EdwinGameDev.BubbleTeaMatch4
             return stateMachine;
         }
 
-        private bool StartGame()
-        {
-            return gameBoard.GameStarted;
-        }
 
-        // Setup conditions
-        private bool PressedStart() => gameBoard.inputController.StartGame();
+        // Setup conditions        
+        private bool StartGame() => gameBoard.GameStarted;
         private bool CheckGameOver() => gameBoard.gridBehaviour.OutOfBounds(gameBoard.bubbleSpawner.CurrentSet);
         private bool GoToNextState() => true;
         private bool BubblesRearranged() => gameBoard.BubbleRearranged;
-        private bool ReachedBottom() => !CheckGameOver() && gameBoard.gridBehaviour.ReachedBottom(gameBoard.bubbleSpawner.CurrentSet);        
+        private bool ReachedBottom() => !CheckGameOver() && gameBoard.gridBehaviour.ReachedBottom(gameBoard.bubbleSpawner.CurrentSet);
         private bool HasMatchesAndComboEnded() => gameBoard.HasMatches && !gameBoard.ComboStarted;
         private bool FinishedCombo() => !gameBoard.HasMatches && !gameBoard.ComboStarted;
     }

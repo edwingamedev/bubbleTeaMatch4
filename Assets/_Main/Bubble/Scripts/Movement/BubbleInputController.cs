@@ -202,10 +202,5 @@ namespace EdwinGameDev.BubbleTeaMatch4
                     break;
             }
         }
-
-        public bool StartGame()
-        {
-            return inputProcessor.StartGame();
-        }
     }
 }

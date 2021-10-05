@@ -8,18 +8,28 @@ namespace EdwinGameDev.BubbleTeaMatch4
         private Canvas canvas;
         public GameManager gameManager;
         public Button startButton;
+        public Button backButton;
 
         private void Awake()
         {
             canvas = GetComponentInChildren<Canvas>();
             ScreenManager.AssignScreen(this);
-            gameManager.OnStart += () => startButton.gameObject.SetActive(false);
+
+            EventsAssignment();
+        }
+
+        private void EventsAssignment()
+        {
+            //gameManager.OnStart += () => startButton.gameObject.SetActive(false);
             gameManager.OnGameOver += () => startButton.gameObject.SetActive(true);
+
             startButton.onClick.AddListener(StartGame);
+            backButton.onClick.AddListener(ScreenManager.LoadPreviousScreen);
         }
 
         public void StartGame()
         {
+            startButton.gameObject.SetActive(false);
             gameManager.StartGame();
         }
 

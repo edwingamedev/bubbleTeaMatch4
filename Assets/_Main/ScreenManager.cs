@@ -7,8 +7,10 @@ namespace EdwinGameDev.BubbleTeaMatch4
 {
     public static class ScreenManager
     {
-        private static List<ScreenBehaviour> screenBehaviours = new List<ScreenBehaviour>();
         public static ScreenBehaviour currentScreen;
+
+        private static List<ScreenBehaviour> screenBehaviours = new List<ScreenBehaviour>();
+        private static Stack<Type> loadedScreens = new Stack<Type>();
 
         public static void AssignScreen(ScreenBehaviour screenBehaviour)
         {
@@ -16,28 +18,57 @@ namespace EdwinGameDev.BubbleTeaMatch4
             {
                 screenBehaviours.Add(screenBehaviour);
                 screenBehaviour.OnDeactivate();
-            }                
+            }
         }
 
         public static void UnassignScreen(ScreenBehaviour screenBehaviour)
         {
             if (screenBehaviours.Contains(screenBehaviour))
+            {
                 screenBehaviours.Remove(screenBehaviour);
+            }
+        }
+
+        public static void LoadPreviousScreen()
+        {
+            // Pop previous scene from stack           
+            var screen = GetScreenByType(loadedScreens.Pop());
+
+            if (screen)
+            {
+                Load(screen);
+            }
         }
 
         public static void LoadScreen(Type screenType)
         {
-            var screen = screenBehaviours.Find((screen) => screen.GetType() == screenType);
+            var screen = GetScreenByType(screenType);
 
             if (screen)
             {
-                // Disable previous screen
-                currentScreen?.OnDeactivate();
+                // Add loaded screen to stack                
+                if (currentScreen != null)
+                    loadedScreens.Push(currentScreen.GetType());
 
-                // Enable new screen
-                screen.OnActivate();
-                currentScreen = screen;
+                Load(screen);
             }
+        }
+
+        private static void Load(ScreenBehaviour screen)
+        {
+            // Disable previous screen
+            currentScreen?.OnDeactivate();
+
+            // Sets new screen
+            currentScreen = screen;
+
+            // Enable new screen
+            currentScreen?.OnActivate();
+        }
+
+        private static ScreenBehaviour GetScreenByType(Type screenType)
+        {
+            return screenBehaviours.Find((screen) => screen.GetType() == screenType);
         }
     }
 }
