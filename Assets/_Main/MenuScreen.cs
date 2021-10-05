@@ -1,18 +1,21 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 
 namespace EdwinGameDev.BubbleTeaMatch4
 {
     public class MenuScreen : ScreenBehaviour
-    {
-        private Canvas canvas;
+    {        
+        public Button singleplayerButton;
+        public Button multiplayerButton;
 
         private void Awake()
         {
-            canvas = GetComponentInChildren<Canvas>();
-
             ScreenManager.AssignScreen(this);
-
             ScreenManager.LoadScreen(typeof(MenuScreen));
+
+
+            singleplayerButton.onClick.AddListener(StartSinglePlayer);
+            multiplayerButton.onClick.AddListener(StartMultiplayer);
         }
 
         public override void OnActivate()
@@ -25,7 +28,12 @@ namespace EdwinGameDev.BubbleTeaMatch4
             gameObject.SetActive(false);
         }
 
-        public void SinglePlayer()
+        private void StartMultiplayer()
+        {
+            ScreenManager.LoadScreen(typeof(SinglePlayerMenuScreen));
+        }
+
+        private void StartSinglePlayer()
         {
             ScreenManager.LoadScreen(typeof(SinglePlayerMenuScreen));
         }

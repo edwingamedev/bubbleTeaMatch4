@@ -4,15 +4,12 @@ using UnityEngine.UI;
 namespace EdwinGameDev.BubbleTeaMatch4
 {
     public class SinglePlayerMenuScreen : ScreenBehaviour
-    {
-        private Canvas canvas;
-        public GameSessionController gameManager;
-        //public Button startButton;
+    {        
+        public GameSessionController gameManager;      
         public Button backButton;
 
         private void Awake()
-        {
-            canvas = GetComponentInChildren<Canvas>();
+        {            
             ScreenManager.AssignScreen(this);
 
             EventsAssignment();
@@ -22,7 +19,7 @@ namespace EdwinGameDev.BubbleTeaMatch4
         // Update is called once per frame
         public void Update()
         {
-            gameManager?.Update();
+            gameManager?.GameLoop();
         }
 
         private void EventsAssignment()
@@ -42,7 +39,7 @@ namespace EdwinGameDev.BubbleTeaMatch4
             gameObject.SetActive(true);
 
             // Initialize Single Player
-            gameManager.InitializeSinglePlayer();
+            gameManager.StartSingleplayer();
         }
 
         public override void OnDeactivate()

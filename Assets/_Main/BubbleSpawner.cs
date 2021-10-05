@@ -12,9 +12,9 @@ namespace EdwinGameDev.BubbleTeaMatch4
         private IBubbleBuilder bubbleBuilder;
         private GameSettings gameSettings;
 
-        public BubbleSpawner(GameSettings gameSettings, Transform poolTransform)
+        public BubbleSpawner(GameSettings gameSettings, Pooling pooling)
         {
-            bubbleBuilder = new StandardBubbleBuilder(gameSettings, poolTransform);
+            bubbleBuilder = new StandardBubbleBuilder(gameSettings, pooling);
             this.gameSettings = gameSettings;
             CurrentSet = new BubbleSet();
         }

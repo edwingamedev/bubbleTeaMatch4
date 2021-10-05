@@ -4,15 +4,12 @@ using UnityEngine.UI;
 namespace EdwinGameDev.BubbleTeaMatch4
 {
     public class GameOverScreen : ScreenBehaviour
-    {
-        private Canvas canvas;
+    {        
         public Button startButton;
         public Button menuButton;
 
         private void Awake()
         {
-            canvas = GetComponentInChildren<Canvas>();
-
             ScreenManager.AssignScreen(this);
 
             menuButton.onClick.AddListener(() => ScreenManager.LoadScreen(typeof(MenuScreen)));

@@ -11,13 +11,12 @@ namespace EdwinGameDev.BubbleTeaMatch4
         private int currenNumOfBubbles;
         private Pooling pooling;
 
-        public StandardBubbleBuilder(GameSettings settings, Transform poolTransform)
+        public StandardBubbleBuilder(GameSettings settings, Pooling pooling)
         {
             this.settings = settings;
             bubbleAmount = settings.BubbleSettings.BubblePresets.Count;
 
-            pooling = new Pooling(poolTransform);
-            pooling.CreatePool(settings.BubbleSettings.Prefab.GetComponent<IPool>(), 50);
+            this.pooling = pooling;
         }
 
         public Bubble Generate(Vector2Int position)

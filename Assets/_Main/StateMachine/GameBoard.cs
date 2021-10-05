@@ -1,4 +1,6 @@
-﻿namespace EdwinGameDev.BubbleTeaMatch4
+﻿using UnityEngine;
+
+namespace EdwinGameDev.BubbleTeaMatch4
 {
     public class GameBoard
     {
@@ -6,6 +8,7 @@
         public GridBehaviour gridBehaviour;
         public BubbleSpawner bubbleSpawner;
         public IInputController inputController;
+        public Vector2 boardOffset;
 
         public bool GameStarted { get;  set; }
         public bool HasMatches { get; set; }

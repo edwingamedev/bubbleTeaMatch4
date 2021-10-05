@@ -6,65 +6,97 @@ using UnityEngine;
 
 namespace EdwinGameDev.BubbleTeaMatch4
 {
-    [System.Serializable]
-    public class GameSessionController
-    {
+    public class GameSessionController : MonoBehaviour
+    {        
+        [SerializeField] private Camera singleplayerCamera;
+        [SerializeField] private Camera vsCamera;
+
         [SerializeField] private GameSettings gameSettings;
         [SerializeField] private ScoreController scoreController;
-        [SerializeField] private Transform bubblePool;
 
-        private GameBoard gameBoard;
-
-        // GAME STATE MACHINE        
-        private IStateMachineProvider stateMachineProvider;
-        private StateMachine gameStateMachine;
-
-        public Action OnStart;
+        [SerializeField] private List<GameSession> sessions = new List<GameSession>();
+        private Pooling bubblePool;
         public Action OnGameOver;
 
-        public GameSessionController()
+        private void Start()
         {
-            OnStart += ResetGame;
+            CreateBubblePool();
         }
 
-        public void Update()
+        public void GameLoop()
         {
-            gameStateMachine?.Execute();
-        }
-
-        public void InitializeSinglePlayer()
-        {
-            if (gameBoard != null)
+            foreach (var session in sessions)
             {
-                ResetGame();
+                session.Update();
+            }
+        }
+
+        private void CreateBubblePool()
+        {
+            var go = new GameObject();
+            go.name = "BubblePool";
+            bubblePool = new Pooling(go.transform);
+            bubblePool.CreatePool(gameSettings.BubbleSettings.Prefab.GetComponent<IPool>(), 50);
+        }
+        private void EnableVSCamera()
+        {
+            vsCamera.gameObject.SetActive(true);
+            singleplayerCamera.gameObject.SetActive(false);
+        }
+
+        private void EnableSoloCamera()
+        {
+            singleplayerCamera.gameObject.SetActive(true);
+            vsCamera.gameObject.SetActive(false);
+        }
+
+        public void StartSingleplayer()
+        {
+            EnableSoloCamera();
+
+            // First Player
+            if (sessions.Count > 0)
+            {
+                sessions[0].InitializeSinglePlayer();            }
+            else
+            {
+                GameSession session = new GameSession(gameSettings, scoreController, Vector2.zero, new KeyboardInputProcessor(), bubblePool);
+
+                session.InitializeSinglePlayer();
+                sessions.Add(session);
+            }
+        }
+
+        public void StartMultiplayer()
+        {
+            EnableVSCamera();
+
+            // First Player
+            if (sessions.Count > 0)
+            {
+                sessions[0].InitializeSinglePlayer();
+            }
+            else
+            {
+                GameSession session = new GameSession(gameSettings, scoreController, Vector2.zero, new KeyboardInputProcessor(), bubblePool);
+
+                session.InitializeSinglePlayer();
+                sessions.Add(session);
             }
 
-            var gridBehaviour = new GridBehaviour(gameSettings);
-            var bubbleSpawner = new BubbleSpawner(gameSettings, bubblePool);
-
-            var inputController = new BubbleInputController(gridBehaviour.Grid,
-                                                        new KeyboardInputProcessor(),
-                                                        () => scoreController.AddPoints(10));
-            gameBoard = new GameBoard()
+            if (sessions.Count > 1)
             {
-                gameSettings = gameSettings,
-                bubbleSpawner = bubbleSpawner,
-                gridBehaviour = gridBehaviour,
-                inputController = inputController
-            };
+                sessions[1].InitializeSinglePlayer();
+            }
+            else
+            {
+                GameSession session = new GameSession(gameSettings, scoreController, new Vector2(50,0), new AIInputProcessor(), bubblePool);
 
-            stateMachineProvider = new SingleGameStateProvider(gameBoard);
-            gameStateMachine = stateMachineProvider.GetStateMachine(OnStart, OnGameOver);
+                session.InitializeSinglePlayer();
+                sessions.Add(session);
+            }
 
-            gameBoard.GameStarted = true;
-        }
-
-        private void ResetGame()
-        {
-            gameBoard.GameStarted = false;
-            gameBoard.bubbleSpawner.Reset();
-            gameBoard.gridBehaviour.ResetGrid();
-            scoreController.ResetScore();
+            // second Player
         }
     }
 }
