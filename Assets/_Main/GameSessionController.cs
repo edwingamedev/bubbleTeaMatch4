@@ -15,7 +15,8 @@ namespace EdwinGameDev.BubbleTeaMatch4
         [SerializeField] private ScoreController scoreController;
 
         [SerializeField] private List<GameSession> sessions = new List<GameSession>();
-        private Pooling bubblePool;
+        private Pooling playerPool;
+        private Pooling cpuPool;
         public Action OnGameOver;
 
         private void Start()
@@ -35,9 +36,15 @@ namespace EdwinGameDev.BubbleTeaMatch4
         {
             var go = new GameObject();
             go.name = "BubblePool";
-            bubblePool = new Pooling(go.transform);
-            bubblePool.CreatePool(gameSettings.BubbleSettings.Prefab.GetComponent<IPool>(), 50);
+            playerPool = new Pooling(go.transform);
+            playerPool.CreatePool(gameSettings.BubbleSettings.Prefab.GetComponent<IPool>(), 50);
+
+            var go2 = new GameObject();
+            go2.name = "BubblePool";
+            cpuPool = new Pooling(go2.transform);
+            cpuPool.CreatePool(gameSettings.BubbleSettings.Prefab.GetComponent<IPool>(), 50);
         }
+
         private void EnableVSCamera()
         {
             vsCamera.gameObject.SetActive(true);
@@ -60,7 +67,7 @@ namespace EdwinGameDev.BubbleTeaMatch4
                 sessions[0].InitializeSinglePlayer();            }
             else
             {
-                GameSession session = new GameSession(gameSettings, scoreController, Vector2.zero, new KeyboardInputProcessor(), bubblePool);
+                GameSession session = new GameSession(gameSettings, scoreController, Vector2Int.zero, new KeyboardInputProcessor(), playerPool);
 
                 session.InitializeSinglePlayer();
                 sessions.Add(session);
@@ -78,7 +85,7 @@ namespace EdwinGameDev.BubbleTeaMatch4
             }
             else
             {
-                GameSession session = new GameSession(gameSettings, scoreController, Vector2.zero, new KeyboardInputProcessor(), bubblePool);
+                GameSession session = new GameSession(gameSettings, scoreController, Vector2Int.zero, new KeyboardInputProcessor(), playerPool);
 
                 session.InitializeSinglePlayer();
                 sessions.Add(session);
@@ -90,7 +97,7 @@ namespace EdwinGameDev.BubbleTeaMatch4
             }
             else
             {
-                GameSession session = new GameSession(gameSettings, scoreController, new Vector2(50,0), new AIInputProcessor(), bubblePool);
+                GameSession session = new GameSession(gameSettings, scoreController, new Vector2Int(50,0), new AIInputProcessor(), cpuPool);
 
                 session.InitializeSinglePlayer();
                 sessions.Add(session);

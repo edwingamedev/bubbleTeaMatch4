@@ -33,13 +33,12 @@ namespace EdwinGameDev.BubbleTeaMatch4
             ScreenManager.LoadScreen(typeof(GameOverScreen));
         }
 
-
         public override void OnActivate()
         {
             gameObject.SetActive(true);
 
             // Initialize Single Player
-            gameManager.StartSingleplayer();
+            gameManager.StartMultiplayer();
         }
 
         public override void OnDeactivate()
