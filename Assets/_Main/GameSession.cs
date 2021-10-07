@@ -7,11 +7,10 @@ namespace EdwinGameDev.BubbleTeaMatch4
     public class GameSession
     {
         private GameSettings gameSettings;
-        private ScoreController scoreController;
         private Pooling pooling;
         private IInputProcessor inputProcessor;
         private GameBoard gameBoard;
-
+        private MatchScenario matchScenario;
         private Vector2Int boardOffset;
 
         public Action OnStart;
@@ -22,15 +21,17 @@ namespace EdwinGameDev.BubbleTeaMatch4
         private IStateMachineProvider stateMachineProvider;
         private StateMachine gameStateMachine;
 
-        public GameSession(GameSettings gameSettings, ScoreController scoreController, Vector2Int boardOffset, IInputProcessor inputProcessor, Pooling pooling)
+        public GameSession(GameSettings gameSettings, MatchScenario matchScenario, Vector2Int boardOffset, IInputProcessor inputProcessor, Pooling pooling)
         {
             OnStart += ResetGame;
 
             this.gameSettings = gameSettings;
-            this.scoreController = scoreController;
+            this.matchScenario = matchScenario;
             this.inputProcessor = inputProcessor;
             this.boardOffset = boardOffset;
             this.pooling = pooling;
+
+            matchScenario.transform.position = new Vector2(boardOffset.x, boardOffset.y);
         }                
 
         public void Update()
@@ -45,12 +46,14 @@ namespace EdwinGameDev.BubbleTeaMatch4
                 ResetGame();
             }
 
+            matchScenario.colorGenerator.Generate();
+
             var gridBehaviour = new GridBehaviour(gameSettings);
             var bubbleSpawner = new BubbleSpawner(gameSettings, boardOffset, pooling);
 
             var inputController = new BubbleInputController(gridBehaviour.Grid,
                                                             inputProcessor,
-                                                            () => scoreController.AddPoints(10));
+                                                            () => matchScenario.scoreController.AddPoints(10));
             gameBoard = new GameBoard()
             {
                 gameSettings = gameSettings,
@@ -75,7 +78,7 @@ namespace EdwinGameDev.BubbleTeaMatch4
                 gameBoard.gridBehaviour.ResetGrid();
             }
 
-            scoreController.ResetScore();
+            matchScenario.scoreController.ResetScore();
         }
     }
 }

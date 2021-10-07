@@ -1,15 +1,14 @@
-﻿using UnityEngine;
-using UnityEngine.UI;
+﻿using UnityEngine.UI;
 
 namespace EdwinGameDev.BubbleTeaMatch4
 {
-    public class SinglePlayerMenuScreen : ScreenBehaviour
-    {        
-        public GameSessionController gameManager;      
+    public class MultiPlayerMenuScreen : ScreenBehaviour
+    {
+        public GameSessionController gameManager;
         public Button backButton;
 
         private void Awake()
-        {            
+        {
             ScreenManager.AssignScreen(this);
 
             EventsAssignment();
@@ -38,7 +37,7 @@ namespace EdwinGameDev.BubbleTeaMatch4
             gameObject.SetActive(true);
 
             // Initialize Single Player
-            gameManager.StartSingleplayer();
+            gameManager.StartMultiplayer();
         }
 
         public override void OnDeactivate()

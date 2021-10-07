@@ -30,7 +30,7 @@ namespace EdwinGameDev.BubbleTeaMatch4
 
         private void StartMultiplayer()
         {
-            ScreenManager.LoadScreen(typeof(SinglePlayerMenuScreen));
+            ScreenManager.LoadScreen(typeof(MultiPlayerMenuScreen));
         }
 
         private void StartSinglePlayer()

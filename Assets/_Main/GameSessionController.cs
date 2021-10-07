@@ -12,7 +12,10 @@ namespace EdwinGameDev.BubbleTeaMatch4
         [SerializeField] private Camera vsCamera;
 
         [SerializeField] private GameSettings gameSettings;
-        [SerializeField] private ScoreController scoreController;
+        [SerializeField] private GameObject matchScenarioPrefab;
+
+        [SerializeField] private int playerLayer;
+        [SerializeField] private int cpuLayer;
 
         [SerializeField] private List<GameSession> sessions = new List<GameSession>();
         private Pooling playerPool;
@@ -64,10 +67,13 @@ namespace EdwinGameDev.BubbleTeaMatch4
             // First Player
             if (sessions.Count > 0)
             {
-                sessions[0].InitializeSinglePlayer();            }
+                sessions[0].InitializeSinglePlayer();            
+            }
             else
             {
-                GameSession session = new GameSession(gameSettings, scoreController, Vector2Int.zero, new KeyboardInputProcessor(), playerPool);
+                MatchScenario matchScenario = GenerateScenario(playerLayer);
+
+                GameSession session = new GameSession(gameSettings, matchScenario, Vector2Int.zero, new KeyboardInputProcessor(), playerPool);
 
                 session.InitializeSinglePlayer();
                 sessions.Add(session);
@@ -85,25 +91,53 @@ namespace EdwinGameDev.BubbleTeaMatch4
             }
             else
             {
-                GameSession session = new GameSession(gameSettings, scoreController, Vector2Int.zero, new KeyboardInputProcessor(), playerPool);
+                MatchScenario matchScenario = GenerateScenario(playerLayer);
 
-                session.InitializeSinglePlayer();
-                sessions.Add(session);
-            }
-
-            if (sessions.Count > 1)
-            {
-                sessions[1].InitializeSinglePlayer();
-            }
-            else
-            {
-                GameSession session = new GameSession(gameSettings, scoreController, new Vector2Int(50,0), new AIInputProcessor(), cpuPool);
+                GameSession session = new GameSession(gameSettings, matchScenario, Vector2Int.zero, new KeyboardInputProcessor(), playerPool);
 
                 session.InitializeSinglePlayer();
                 sessions.Add(session);
             }
 
             // second Player
+            if (sessions.Count > 1)
+            {
+                sessions[1].InitializeSinglePlayer();
+            }
+            else
+            {
+                MatchScenario matchScenario = GenerateScenario(cpuLayer);
+                GameSession session = new GameSession(gameSettings, matchScenario, new Vector2Int(50,0), new AIInputProcessor(), cpuPool);
+
+                session.InitializeSinglePlayer();
+                sessions.Add(session);
+            }
+        }
+
+        private void SetLayerRecursively(GameObject obj, int layerIndex)
+        {
+            if (null == obj)
+                return;
+
+            obj.layer = layerIndex;
+
+            foreach (Transform child in obj.transform)
+            {
+                if (null == child)
+                    continue;
+
+                SetLayerRecursively(child.gameObject, layerIndex);
+            }
+        }
+
+        private MatchScenario GenerateScenario(int layerIndex)
+        {
+            GameObject scenario = Instantiate(matchScenarioPrefab);
+            scenario.SetActive(true);
+
+            SetLayerRecursively(scenario, layerIndex);
+
+            return scenario.GetComponent<MatchScenario>();
         }
     }
 }
