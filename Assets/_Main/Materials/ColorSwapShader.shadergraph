@@ -900,9 +900,9 @@
     "hlslDeclarationOverride": 0,
     "m_Hidden": false,
     "m_Value": {
-        "r": 0.5882353186607361,
-        "g": 0.4235294461250305,
-        "b": 0.4235294461250305,
+        "r": 0.49803924560546877,
+        "g": 0.4392157196998596,
+        "b": 0.5411764979362488,
         "a": 1.0
     },
     "m_ColorMode": 0
@@ -1178,7 +1178,7 @@
     },
     "m_Name": "ColorSwap1",
     "m_DefaultReferenceName": "Color_8a1db50e841c4a99b1b1b418184e248c",
-    "m_OverrideReferenceName": "",
+    "m_OverrideReferenceName": "_FirstColor",
     "m_GeneratePropertyBlock": true,
     "m_Precision": 0,
     "overrideHLSLDeclaration": false,
@@ -1484,9 +1484,9 @@
     "hlslDeclarationOverride": 0,
     "m_Hidden": false,
     "m_Value": {
-        "r": 0.6705882549285889,
-        "g": 0.5803921818733215,
-        "b": 0.4784314036369324,
+        "r": 0.6078431606292725,
+        "g": 0.6705882549285889,
+        "b": 0.6980392336845398,
         "a": 1.0
     },
     "m_ColorMode": 0
@@ -1678,7 +1678,7 @@
     },
     "m_Name": "ColorSwap2",
     "m_DefaultReferenceName": "Color_e376490665b94e76937e39bf33c63bdd",
-    "m_OverrideReferenceName": "",
+    "m_OverrideReferenceName": "_SecondColor",
     "m_GeneratePropertyBlock": true,
     "m_Precision": 0,
     "overrideHLSLDeclaration": false,

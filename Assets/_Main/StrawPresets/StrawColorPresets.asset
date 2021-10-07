@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 165f42378655c74449b8ca1cb25be092, type: 3}
+  m_Name: StrawColorPresets
+  m_EditorClassIdentifier: 
+  shader: {fileID: -6465566751694194690, guid: 67f8aa9e5811c444087e7b19882b4eeb, type: 3}
+  colorPresets:
+  - {fileID: 11400000, guid: 855f9d21178267e42901f62b7360d9ca, type: 2}
+  - {fileID: 11400000, guid: 65813f6dd9257694d9caf6c1c05e1a42, type: 2}
+  - {fileID: 11400000, guid: 261d101f6bbb12240b1c729a47ea5300, type: 2}
+  - {fileID: 11400000, guid: 2a1d3cad06b522d40a058f6d2833dd38, type: 2}
+  - {fileID: 11400000, guid: bcac411328e059c40982e868effd541f, type: 2}
+  - {fileID: 11400000, guid: cb702a31b5bb9774682a233d37bdf3ab, type: 2}
+  - {fileID: 11400000, guid: 63cb3f6bb9a1d9447bf95ebde2764b06, type: 2}

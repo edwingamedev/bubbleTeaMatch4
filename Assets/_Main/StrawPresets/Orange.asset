@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c37ee412e0582a64abb4600e38560329, type: 3}
-  m_Name: YellowBubble
+  m_Name: Orange
   m_EditorClassIdentifier: 
-  mainColor: {r: 0.97647065, g: 0.7607844, b: 0.16862746, a: 1}
-  detail: {r: 0.5176471, g: 0.71792275, b: 0.9529412, a: 1}
+  mainColor: {r: 0.990566, g: 0.60963017, b: 0.22895159, a: 1}
+  detail: {r: 1, g: 1, b: 1, a: 1}

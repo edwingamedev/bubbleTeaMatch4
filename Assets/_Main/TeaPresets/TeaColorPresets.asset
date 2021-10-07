@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 165f42378655c74449b8ca1cb25be092, type: 3}
+  m_Name: TeaColorPresets
+  m_EditorClassIdentifier: 
+  shader: {fileID: -6465566751694194690, guid: 3b024842cd3102b408e36acaaa0fff4b, type: 3}
+  colorPresets:
+  - {fileID: 11400000, guid: 8a810b7d4f1ef0349bfb04dddb6c7c7e, type: 2}
+  - {fileID: 11400000, guid: 7c124190da18f93469492f6ce94c1b78, type: 2}
+  - {fileID: 11400000, guid: 7cac4abbbd6c17b4e806bfc5be6c738b, type: 2}
+  - {fileID: 11400000, guid: 2501a5d48e7894f468207a8dee9f6c88, type: 2}
+  - {fileID: 11400000, guid: f28179442f4747c4296270f5356a1957, type: 2}
+  - {fileID: 11400000, guid: 8259327b7ed6f614790a3c90324fa14b, type: 2}
+  - {fileID: 11400000, guid: b7c3b5a58aba01d4f9f51c765e9adf63, type: 2}
+  - {fileID: 11400000, guid: 1c097dfc984697e4196fd51e1032dd7f, type: 2}

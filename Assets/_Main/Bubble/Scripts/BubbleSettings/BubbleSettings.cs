@@ -8,14 +8,14 @@ namespace EdwinGameDev.BubbleTeaMatch4
     {
         [SerializeField] private GameObject prefab;
         [SerializeField] private Shader shader;
-        [SerializeField] private List<BubblePreset> bubblePresets;
-        [SerializeField] private BubblePreset evilBubble;
+        [SerializeField] private List<ColorPreset> bubblePresets;
+        [SerializeField] private ColorPreset evilBubble;
         [SerializeField] private BubbleSpriteConnections spriteConnections;
-        public List<BubblePreset> BubblePresets => bubblePresets;
+        public List<ColorPreset> BubblePresets => bubblePresets;
 
         public Shader Shader => shader;
         public GameObject Prefab => prefab;
-        public BubblePreset EvilBubble => evilBubble;
+        public ColorPreset EvilBubble => evilBubble;
         public BubbleSpriteConnections SpriteConnections => spriteConnections;
     }
 }

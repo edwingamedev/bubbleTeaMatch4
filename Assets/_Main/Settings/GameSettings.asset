@@ -15,6 +15,8 @@ MonoBehaviour:
   cellSize: 8
   gridSize: {x: 8, y: 16}
   bubbleSettings: {fileID: 11400000, guid: c8753b45b911def48b9978fbe21f5ca1, type: 2}
+  teaPreset: {fileID: 11400000, guid: 623ee9fde516e6749a8aa1c786a153bf, type: 2}
+  strawPreset: {fileID: 11400000, guid: 173bdf6c252d19e4b85a2580f6f6e4d0, type: 2}
   spawnPosition: {x: 3, y: 16}
   nextBubblePosition: {x: 9, y: 12}
   bubblesAmountForMatch: 4
