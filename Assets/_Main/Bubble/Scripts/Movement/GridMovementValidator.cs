@@ -18,8 +18,8 @@ namespace EdwinGameDev.BubbleTeaMatch4
             Vector2Int mainNewPos = bubbleSet.Main.MovementController.GetPosition() + direction;
             Vector2Int subNewPos = bubbleSet.Sub.MovementController.GetPosition() + direction;
 
-            return InBounds(mainNewPos) &&
-                   InBounds(subNewPos) &&
+            return InBoundsHorizontally(mainNewPos) &&
+                   InBoundsHorizontally(subNewPos) &&
                    ReachedBottom(bubbleSet.Main) &&
                    ReachedBottom(bubbleSet.Sub) &&
                    EmptyCell(mainNewPos) &&
@@ -31,9 +31,9 @@ namespace EdwinGameDev.BubbleTeaMatch4
             return !grid.ReachedBottom(bubble);
         }
 
-        private bool InBounds(Vector2Int position)
+        private bool InBoundsHorizontally(Vector2Int position)
         {            
-            return grid.InBounds(position);
+            return grid.InBoundsHorizontally(position);
         }
 
         private bool EmptyCell(Vector2Int position)

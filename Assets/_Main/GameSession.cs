@@ -22,7 +22,37 @@ namespace EdwinGameDev.BubbleTeaMatch4
         private IStateMachineProvider stateMachineProvider;
         private StateMachine gameStateMachine;
 
-        public GameSession(GameSettings gameSettings, MatchScenario matchScenario, Vector2Int boardOffset, IInputProcessor inputProcessor, Pooling pooling)
+        public void AddEvilBubbleToQueue()
+        {
+            gameBoard.spawnEvilbubble.Enqueue(SpawnEvilBubble);
+        }
+
+        private void SpawnEvilBubble()
+        {
+            //Spawn new bubble set
+            bool empty = false;
+
+            for (int x = 0; x < gameBoard.gridBehaviour.Grid.Size.x; x++)
+            {
+                for (int y = gameBoard.gridBehaviour.Grid.Size.y - 1; y > 0; y--)
+                {
+                    if (!gameBoard.gridBehaviour.Grid.IsOccupied(x, y))
+                    {
+                        empty = true;
+                        var evilBubble = gameBoard.bubbleSpawner.SpawnEvilBubble(new Vector2Int(x, y));
+                        gameBoard.gridBehaviour.Grid.AssignBubble(evilBubble, x, y);
+                    }
+
+                    if (empty)
+                        break;
+                }
+
+                if (empty)
+                    break;
+            }
+        }
+
+        public GameSession(GameSettings gameSettings, MatchScenario matchScenario, Vector2Int boardOffset, IInputProcessor inputProcessor, Pooling bubblePooling, Pooling evilPooling)
         {
             OnStart += ResetGame;
 
@@ -65,7 +95,7 @@ namespace EdwinGameDev.BubbleTeaMatch4
                 boardOffset = boardOffset
             };
 
-            stateMachineProvider = new SingleGameStateProvider(gameBoard);
+            stateMachineProvider = new GameStateProvider(gameBoard, OnCombo);
             gameStateMachine = stateMachineProvider.GetStateMachine(OnStart, OnGameOver);
 
             gameBoard.GameStarted = true;

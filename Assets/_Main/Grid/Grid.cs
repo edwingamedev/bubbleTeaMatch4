@@ -38,7 +38,15 @@ namespace EdwinGameDev.BubbleTeaMatch4
             return position.y == 0 || IsOccupied(Mathf.CeilToInt(position.x), Mathf.CeilToInt(position.y - 1));
         }
 
-        public bool InBounds(Vector2Int position)
+        public bool InBounds(int x, int y)
+        {
+            return x < Size.x && 
+                   x >= 0 &&
+                   y < Size.y &&
+                   y >= 0;
+        }
+
+        public bool InBoundsHorizontally(Vector2Int position)
         {
             return position.x < Size.x && position.x >= 0;
         }

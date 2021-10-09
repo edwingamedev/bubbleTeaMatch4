@@ -10,18 +10,20 @@ namespace EdwinGameDev.BubbleTeaMatch4
         private GameBoard gameVariables;
         private int popDelay = 500;
         private List<Vector2Int> matchesIndex;
+        private Action OnCombo;
 
-        public ComboState(GameBoard gameVariables)
+        public ComboState(GameBoard gameVariables, Action OnCombo)
         {
             matchesIndex = new List<Vector2Int>();
             this.gameVariables = gameVariables;
+            this.OnCombo = OnCombo;
         }
 
         public void OnEnter()
         {
             gameVariables.ComboStarted = true;
-                        
-            _ = Combo();            
+
+            _ = Combo();
         }
 
         private async Task Combo()
@@ -29,6 +31,8 @@ namespace EdwinGameDev.BubbleTeaMatch4
             if (ValidateMatches())
             {
                 await PopMatches(popDelay);
+                               
+                OnCombo?.Invoke();
 
                 gameVariables.ComboStarted = false;
             }
@@ -52,12 +56,19 @@ namespace EdwinGameDev.BubbleTeaMatch4
                     {
                         emptyRow = false;
 
-                        if (gameVariables.gridBehaviour.Grid.GetBubble(x, y).ConnectionController.Matched())
+                        var bubble = gameVariables.gridBehaviour.Grid.GetBubble(x, y);
+
+                        if (bubble.ConnectionController.Matched())
                         {
                             matchesIndex.Add(new Vector2Int(x, y));
                             gameVariables.HasMatches = true;
 
-                            gameVariables.gridBehaviour.Grid.GetBubble(x, y).GraphicsController.PopAnimation();
+                            bubble.GraphicsController.PopAnimation();
+
+                            VerifyEvilBubble(x + 1, y);
+                            VerifyEvilBubble(x - 1, y);
+                            VerifyEvilBubble(x, y + 1);
+                            VerifyEvilBubble(x, y - 1);
                         }
                     }
                 }
@@ -67,6 +78,25 @@ namespace EdwinGameDev.BubbleTeaMatch4
 
             //UpdateImage();
             return gameVariables.HasMatches;
+        }
+
+        private void VerifyEvilBubble(int x, int y)
+        {
+            if (gameVariables.gridBehaviour.Grid.InBounds(x,y) && 
+                gameVariables.gridBehaviour.Grid.IsOccupied(x, y))
+            {
+                Bubble newBubble = gameVariables.gridBehaviour.Grid.GetBubble(x, y);
+                if (newBubble.bubbleGroup == -1)
+                {
+                    var pos = new Vector2Int(x, y);
+
+                    if (!matchesIndex.Contains(pos))
+                    {
+                        matchesIndex.Add(pos);
+                        newBubble.GraphicsController.PopAnimation();
+                    }                    
+                }
+            }
         }
 
         private async Task PopMatches(int taskDelay)
@@ -99,12 +129,12 @@ namespace EdwinGameDev.BubbleTeaMatch4
                         if (gameVariables.gridBehaviour.Grid.GetBubble(x, y).ConnectionController.Matched())
                         {
                             gameVariables.gridBehaviour.Grid.GetBubble(x, y).DisableObject();
-                            gameVariables.gridBehaviour.Grid.UnnassignBubble(x, y);                                                     
-                            
+                            gameVariables.gridBehaviour.Grid.UnnassignBubble(x, y);
+
                             // ADD POINTS
                             //scoreController.AddPoints(10);
-                        }                        
-                    }                    
+                        }
+                    }
                 }
                 if (emptyRow)
                     break;

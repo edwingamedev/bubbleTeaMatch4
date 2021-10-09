@@ -2,15 +2,17 @@
 
 namespace EdwinGameDev.BubbleTeaMatch4
 {
-    public class SingleGameStateProvider : IStateMachineProvider
+    public class GameStateProvider : IStateMachineProvider
     {
         private StateMachine stateMachine;
 
         private GameBoard gameBoard;
+        private Action OnCombo;
 
-        public SingleGameStateProvider(GameBoard gameBoard)
+        public GameStateProvider(GameBoard gameBoard, Action OnCombo)
         {
             this.gameBoard = gameBoard;
+            this.OnCombo = OnCombo;
         }
 
         public StateMachine GetStateMachine(Action OnStartGame, Action OnGameOver)
@@ -18,14 +20,15 @@ namespace EdwinGameDev.BubbleTeaMatch4
             stateMachine = new StateMachine();
 
             // Create States
-            var spawnState = new SpawnState(gameBoard); // playingState;
-            var playingState = new PlayingState(gameBoard); // arrangeState; || gameOverState;
-            var arrangeState = new ArrangeState(gameBoard); // linkingState;            
-            var linkingState = new LinkingState(gameBoard); // comboState;
-            var comboState = new ComboState(gameBoard); // spawnState || arrangeState;
+            var spawnState = new SpawnState(gameBoard); 
+            var playingState = new PlayingState(gameBoard);
+            var arrangeState = new ArrangeState(gameBoard);           
+            var linkingState = new LinkingState(gameBoard);
+            var comboState = new ComboState(gameBoard, OnCombo);
+            var enemyAttack = new EnemyAttackState(gameBoard);
 
             var gameOverState = new GameOverState(OnGameOver);
-            var startState = new StartState(OnStartGame); // spawnState
+            var startState = new StartState(OnStartGame);            
 
             // Add Transitions
 
@@ -42,12 +45,16 @@ namespace EdwinGameDev.BubbleTeaMatch4
             stateMachine.AddTransition(playingState, arrangeState, ReachedBottom);
 
             stateMachine.AddTransition(comboState, arrangeState, HasMatchesAndComboEnded);
-            stateMachine.AddTransition(comboState, spawnState, FinishedCombo);
+            stateMachine.AddTransition(comboState, enemyAttack, () => { return FinishedCombo() && !NoEvilBubble(); });
+            stateMachine.AddTransition(comboState, spawnState, () => { return FinishedCombo() && NoEvilBubble(); });
 
             // Link
             stateMachine.AddTransition(arrangeState, linkingState, BubblesRearranged);
             // Combo
             stateMachine.AddTransition(linkingState, comboState, GoToNextState);
+
+            // Enemy Attack
+            stateMachine.AddTransition(enemyAttack, arrangeState, GoToNextState);
 
             stateMachine.SetState(startState);
 
@@ -55,9 +62,10 @@ namespace EdwinGameDev.BubbleTeaMatch4
         }
 
 
-        // Setup conditions        
+        // Setup conditions
         private bool StartGame() => gameBoard.GameStarted;
         private bool CheckGameOver() => gameBoard.gridBehaviour.OutOfBounds(gameBoard.bubbleSpawner.CurrentSet);
+        private bool NoEvilBubble() => gameBoard.spawnEvilbubble.Count == 0;
         private bool GoToNextState() => true;
         private bool BubblesRearranged() => gameBoard.BubbleRearranged;
         private bool ReachedBottom() => !CheckGameOver() && gameBoard.gridBehaviour.ReachedBottom(gameBoard.bubbleSpawner.CurrentSet);
