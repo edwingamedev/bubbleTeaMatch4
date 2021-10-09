@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System;
+using System.Collections.Generic;
+using UnityEngine;
 
 namespace EdwinGameDev.BubbleTeaMatch4
 {
@@ -9,6 +11,7 @@ namespace EdwinGameDev.BubbleTeaMatch4
         public BubbleSpawner bubbleSpawner;
         public IInputController inputController;
         public Vector2Int boardOffset;
+        public Queue<Action> spawnEvilbubble = new Queue<Action>();
 
         public bool GameStarted { get;  set; }
         public bool HasMatches { get; set; }
