@@ -7,7 +7,8 @@ namespace EdwinGameDev.BubbleTeaMatch4
     public class GameSession
     {
         private GameSettings gameSettings;
-        private Pooling pooling;
+        private Pooling bubblePooling;
+        private Pooling evilPooling;
         private IInputProcessor inputProcessor;
         private GameBoard gameBoard;
         private MatchScenario matchScenario;
@@ -29,10 +30,11 @@ namespace EdwinGameDev.BubbleTeaMatch4
             this.matchScenario = matchScenario;
             this.inputProcessor = inputProcessor;
             this.boardOffset = boardOffset;
-            this.pooling = pooling;
+            this.bubblePooling = bubblePooling;
+            this.evilPooling = evilPooling;
 
             matchScenario.transform.position = new Vector2(boardOffset.x, boardOffset.y);
-        }                
+        }
 
         public void Update()
         {
@@ -49,7 +51,7 @@ namespace EdwinGameDev.BubbleTeaMatch4
             matchScenario.colorGenerator.Generate();
 
             var gridBehaviour = new GridBehaviour(gameSettings);
-            var bubbleSpawner = new BubbleSpawner(gameSettings, boardOffset, pooling);
+            var bubbleSpawner = new BubbleSpawner(gameSettings, boardOffset, bubblePooling, evilPooling);
 
             var inputController = new BubbleInputController(gridBehaviour.Grid,
                                                             inputProcessor,

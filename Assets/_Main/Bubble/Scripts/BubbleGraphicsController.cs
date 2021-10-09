@@ -22,6 +22,7 @@ namespace EdwinGameDev.BubbleTeaMatch4
         {
             spriteRenderer.material = material;
         }
+
         public void PopAnimation()
         {
             animator.enabled = true;

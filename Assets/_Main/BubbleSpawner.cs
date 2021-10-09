@@ -12,11 +12,16 @@ namespace EdwinGameDev.BubbleTeaMatch4
         private IBubbleBuilder bubbleBuilder;
         private GameSettings gameSettings;
 
-        public BubbleSpawner(GameSettings gameSettings, Vector2Int boardOffset, Pooling pooling)
+        public BubbleSpawner(GameSettings gameSettings, Vector2Int boardOffset, Pooling bubblePooling, Pooling evilPooling)
         {
-            bubbleBuilder = new StandardBubbleBuilder(gameSettings, boardOffset, pooling);
+            bubbleBuilder = new StandardBubbleBuilder(gameSettings, boardOffset, bubblePooling, evilPooling);
             this.gameSettings = gameSettings;
             CurrentSet = new BubbleSet();
+        }
+
+        public Bubble SpawnEvilBubble(Vector2Int position) 
+        {
+           return bubbleBuilder.GenerateEvilBubble(position);
         }
 
         public void SpawnNewBubbleSet()
