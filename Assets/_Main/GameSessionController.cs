@@ -7,7 +7,7 @@ using UnityEngine;
 namespace EdwinGameDev.BubbleTeaMatch4
 {
     public class GameSessionController : MonoBehaviour
-    {        
+    {
         [SerializeField] private Camera singleplayerCamera;
         [SerializeField] private Camera vsCamera;
 
@@ -18,13 +18,23 @@ namespace EdwinGameDev.BubbleTeaMatch4
         [SerializeField] private int cpuLayer;
 
         [SerializeField] private List<GameSession> sessions = new List<GameSession>();
-        private Pooling playerPool;
-        private Pooling cpuPool;
+
+        private PoolProvider poolProvider = new PoolProvider();
+        private List<Pooling> bubblePool = new List<Pooling>();
+        private List<Pooling> evilBubblePool = new List<Pooling>();
+
         public Action OnGameOver;
 
         private void Start()
         {
-            CreateBubblePool();
+            var bubble = gameSettings.BubbleSettings.Prefab.GetComponent<IPool>();
+            var evilBubble = gameSettings.BubbleSettings.EvilPrefab.GetComponent<IPool>();
+
+            bubblePool.Add(poolProvider.CreateBubblePool(bubble, "BubblePool", 50));
+            bubblePool.Add(poolProvider.CreateBubblePool(bubble, "BubblePool", 50));
+
+            evilBubblePool.Add(poolProvider.CreateBubblePool(evilBubble, "EvilBubblePool", 50));
+            evilBubblePool.Add(poolProvider.CreateBubblePool(evilBubble, "EvilBubblePool", 50));
         }
 
         public void GameLoop()
@@ -33,19 +43,6 @@ namespace EdwinGameDev.BubbleTeaMatch4
             {
                 session.Update();
             }
-        }
-
-        private void CreateBubblePool()
-        {
-            var go = new GameObject();
-            go.name = "BubblePool";
-            playerPool = new Pooling(go.transform);
-            playerPool.CreatePool(gameSettings.BubbleSettings.Prefab.GetComponent<IPool>(), 50);
-
-            var go2 = new GameObject();
-            go2.name = "BubblePool";
-            cpuPool = new Pooling(go2.transform);
-            cpuPool.CreatePool(gameSettings.BubbleSettings.Prefab.GetComponent<IPool>(), 50);
         }
 
         private void EnableVSCamera()
@@ -67,17 +64,19 @@ namespace EdwinGameDev.BubbleTeaMatch4
             // First Player
             if (sessions.Count > 0)
             {
-                sessions[0].InitializeSinglePlayer();            
+                sessions[0].InitializeSinglePlayer();
             }
             else
             {
                 MatchScenario matchScenario = GenerateScenario(playerLayer);
 
-                GameSession session = new GameSession(gameSettings, matchScenario, Vector2Int.zero, new KeyboardInputProcessor(), playerPool);
+                GameSession session = new GameSession(gameSettings, matchScenario, Vector2Int.zero, new KeyboardInputProcessor(), bubblePool[0], evilBubblePool[0]);
 
-                session.InitializeSinglePlayer();
-                sessions.Add(session);
+                sessions.Add(session);                
             }
+
+            sessions[0].OnCombo += sessions[0].EnemyAttack;
+            sessions[0].InitializeSinglePlayer();
         }
 
         public void StartMultiplayer()
@@ -93,9 +92,8 @@ namespace EdwinGameDev.BubbleTeaMatch4
             {
                 MatchScenario matchScenario = GenerateScenario(playerLayer);
 
-                GameSession session = new GameSession(gameSettings, matchScenario, Vector2Int.zero, new KeyboardInputProcessor(), playerPool);
-
-                session.InitializeSinglePlayer();
+                GameSession session = new GameSession(gameSettings, matchScenario, Vector2Int.zero, new KeyboardInputProcessor(), bubblePool[0], evilBubblePool[0]);
+                                
                 sessions.Add(session);
             }
 
@@ -107,11 +105,16 @@ namespace EdwinGameDev.BubbleTeaMatch4
             else
             {
                 MatchScenario matchScenario = GenerateScenario(cpuLayer);
-                GameSession session = new GameSession(gameSettings, matchScenario, new Vector2Int(50,0), new AIInputProcessor(), cpuPool);
-
-                session.InitializeSinglePlayer();
+                GameSession session = new GameSession(gameSettings, matchScenario, new Vector2Int(50, 0), new AIInputProcessor(), bubblePool[1], evilBubblePool[1]);
+                                
                 sessions.Add(session);
             }
+
+            sessions[0].OnCombo += sessions[1].EnemyAttack;
+            sessions[1].OnCombo += sessions[0].EnemyAttack;
+
+            sessions[0].InitializeSinglePlayer();
+            sessions[1].InitializeSinglePlayer();
         }
 
         private void SetLayerRecursively(GameObject obj, int layerIndex)

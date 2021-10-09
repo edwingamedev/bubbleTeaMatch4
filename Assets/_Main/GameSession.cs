@@ -22,7 +22,7 @@ namespace EdwinGameDev.BubbleTeaMatch4
         private IStateMachineProvider stateMachineProvider;
         private StateMachine gameStateMachine;
 
-        public void AddEvilBubbleToQueue()
+        public void EnemyAttack()
         {
             gameBoard.spawnEvilbubble.Enqueue(SpawnEvilBubble);
         }
