@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace EdwinGameDev.BubbleTeaMatch4
 {
-    [System.Serializable]
+    [Serializable]
     public class GameSession
     {
         private GameSettings gameSettings;
@@ -21,6 +21,7 @@ namespace EdwinGameDev.BubbleTeaMatch4
         // GAME STATE MACHINE        
         private IStateMachineProvider stateMachineProvider;
         private StateMachine gameStateMachine;
+        private int evilSpawnPos = 0;
 
         public void EnemyAttack()
         {
@@ -30,26 +31,17 @@ namespace EdwinGameDev.BubbleTeaMatch4
         private void SpawnEvilBubble()
         {
             //Spawn new bubble set
-            bool empty = false;
+            var x = evilSpawnPos % gameBoard.gridBehaviour.Grid.Size.x;
+            var y = gameBoard.gridBehaviour.Grid.Size.y - 1;
 
-            for (int x = 0; x < gameBoard.gridBehaviour.Grid.Size.x; x++)
+            do
             {
-                for (int y = gameBoard.gridBehaviour.Grid.Size.y - 1; y > 0; y--)
-                {
-                    if (!gameBoard.gridBehaviour.Grid.IsOccupied(x, y))
-                    {
-                        empty = true;
-                        var evilBubble = gameBoard.bubbleSpawner.SpawnEvilBubble(new Vector2Int(x, y));
-                        gameBoard.gridBehaviour.Grid.AssignBubble(evilBubble, x, y);
-                    }
+                var evilBubble = gameBoard.bubbleSpawner.SpawnEvilBubble(new Vector2Int(x, y));
+                gameBoard.gridBehaviour.Grid.AssignBubble(evilBubble, x, y);
 
-                    if (empty)
-                        break;
-                }
+                x = ++evilSpawnPos % gameBoard.gridBehaviour.Grid.Size.x;
+            } while (gameBoard.gridBehaviour.Grid.IsOccupied(x, y));
 
-                if (empty)
-                    break;
-            }
         }
 
         public GameSession(GameSettings gameSettings, MatchScenario matchScenario, Vector2Int boardOffset, IInputProcessor inputProcessor, Pooling bubblePooling, Pooling evilPooling)
