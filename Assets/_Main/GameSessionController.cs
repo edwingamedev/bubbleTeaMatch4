@@ -57,7 +57,7 @@ namespace EdwinGameDev.BubbleTeaMatch4
             vsCamera.gameObject.SetActive(false);
         }
 
-        public void StartSoloMode()
+        public void StartSelfAttackMode()
         {
             EnableSoloCamera();
 
@@ -73,7 +73,6 @@ namespace EdwinGameDev.BubbleTeaMatch4
             }
 
             sessions[0].OnCombo = sessions[0].EnemyAttack;
-
             sessions[0].InitializeSinglePlayer();
         }
 
@@ -92,6 +91,7 @@ namespace EdwinGameDev.BubbleTeaMatch4
                 sessions.Add(session);
             }
 
+            sessions[0].OnCombo = null;
             sessions[0].InitializeSinglePlayer();
         }
 
