@@ -23,8 +23,14 @@ namespace EdwinGameDev.BubbleTeaMatch4
 
         private void EventsAssignment()
         {
-            gameManager.OnGameOver += GameOver;
+            gameManager.OnGameOver = GameOver;
+            gameManager.OnWin = Win;
             backButton.onClick.AddListener(ScreenManager.LoadPreviousScreen);
+        }
+
+        public void Win()
+        {
+            ScreenManager.LoadScreen(typeof(WinScreen));
         }
 
         public void GameOver()

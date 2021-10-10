@@ -24,6 +24,7 @@ namespace EdwinGameDev.BubbleTeaMatch4
         private List<Pooling> evilBubblePool = new List<Pooling>();
 
         public Action OnGameOver;
+        public Action OnWin;
 
         private void Start()
         {
@@ -73,6 +74,7 @@ namespace EdwinGameDev.BubbleTeaMatch4
             }
 
             sessions[0].OnCombo = sessions[0].EnemyAttack;
+            sessions[0].OnGameOver = OnGameOver;            
             sessions[0].InitializeSinglePlayer();
         }
 
@@ -92,6 +94,7 @@ namespace EdwinGameDev.BubbleTeaMatch4
             }
 
             sessions[0].OnCombo = null;
+            sessions[0].OnGameOver = OnGameOver;
             sessions[0].InitializeSinglePlayer();
         }
 
@@ -118,8 +121,11 @@ namespace EdwinGameDev.BubbleTeaMatch4
                 sessions.Add(session);
             }
 
+            sessions[0].OnGameOver = OnGameOver;
             sessions[0].OnCombo = sessions[1].EnemyAttack;
+
             sessions[1].OnCombo = sessions[0].EnemyAttack;
+            sessions[1].OnGameOver = OnWin;
 
             for (int i = 0; i < sessions.Count; i++)
             {

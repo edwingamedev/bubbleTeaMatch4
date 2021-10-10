@@ -3,8 +3,8 @@ using UnityEngine.UI;
 
 namespace EdwinGameDev.BubbleTeaMatch4
 {
-    public class GameOverScreen : ScreenBehaviour
-    {        
+    public class WinScreen : ScreenBehaviour
+    {
         public Button startButton;
         public Button menuButton;
 

@@ -29,10 +29,24 @@ namespace EdwinGameDev.BubbleTeaMatch4
             }
         }
 
+        public static void ReloadPreviousScreen()
+        {
+            // Pop previous scene from stack         
+            LoadScreen(loadedScreens.Peek());
+        }
+
         public static void LoadPreviousScreen()
         {
             // Pop previous scene from stack           
-            var screen = GetScreenByType(loadedScreens.Pop());
+            var previousType = loadedScreens.Pop();
+
+            while(previousType == currentScreen.GetType())
+            {
+                previousType = loadedScreens.Pop();
+            }
+
+            var screen = GetScreenByType(previousType);
+
 
             if (screen)
             {
@@ -47,8 +61,15 @@ namespace EdwinGameDev.BubbleTeaMatch4
             if (screen)
             {
                 // Add loaded screen to stack                
-                if (currentScreen != null)
+               if (currentScreen != null &&
+                    currentScreen.GetType() != screenType &&
+                    currentScreen.GetType() != typeof(GameOverScreen) &&
+                    currentScreen.GetType() != typeof(WinScreen)
+                    )
+                {
                     loadedScreens.Push(currentScreen.GetType());
+                }
+
 
                 Load(screen);
             }
