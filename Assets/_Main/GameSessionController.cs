@@ -62,20 +62,18 @@ namespace EdwinGameDev.BubbleTeaMatch4
             EnableSoloCamera();
 
             // First Player
-            if (sessions.Count > 0)
+            if (sessions.Count <= 0)
             {
-                sessions[0].InitializeSinglePlayer();
-            }
-            else
-            {
+
                 MatchScenario matchScenario = GenerateScenario(playerLayer);
 
                 GameSession session = new GameSession(gameSettings, matchScenario, Vector2Int.zero, new KeyboardInputProcessor(), bubblePool[0], evilBubblePool[0]);
 
-                sessions.Add(session);                
+                sessions.Add(session);
             }
 
-            sessions[0].OnCombo += sessions[0].EnemyAttack;
+            sessions[0].OnCombo = sessions[0].EnemyAttack;
+
             sessions[0].InitializeSinglePlayer();
         }
 
@@ -84,37 +82,31 @@ namespace EdwinGameDev.BubbleTeaMatch4
             EnableVSCamera();
 
             // First Player
-            if (sessions.Count > 0)
-            {
-                sessions[0].InitializeSinglePlayer();
-            }
-            else
+            if (sessions.Count <= 0)
             {
                 MatchScenario matchScenario = GenerateScenario(playerLayer);
 
                 GameSession session = new GameSession(gameSettings, matchScenario, Vector2Int.zero, new KeyboardInputProcessor(), bubblePool[0], evilBubblePool[0]);
-                                
+
                 sessions.Add(session);
             }
 
             // second Player
-            if (sessions.Count > 1)
-            {
-                sessions[1].InitializeSinglePlayer();
-            }
-            else
+            if (sessions.Count <= 1)
             {
                 MatchScenario matchScenario = GenerateScenario(cpuLayer);
                 GameSession session = new GameSession(gameSettings, matchScenario, new Vector2Int(50, 0), new AIInputProcessor(), bubblePool[1], evilBubblePool[1]);
-                                
+
                 sessions.Add(session);
             }
 
-            sessions[0].OnCombo += sessions[1].EnemyAttack;
-            sessions[1].OnCombo += sessions[0].EnemyAttack;
+            sessions[0].OnCombo = sessions[1].EnemyAttack;
+            sessions[1].OnCombo = sessions[0].EnemyAttack;
 
-            sessions[0].InitializeSinglePlayer();
-            sessions[1].InitializeSinglePlayer();
+            for (int i = 0; i < sessions.Count; i++)
+            {
+                sessions[i].InitializeSinglePlayer();
+            }
         }
 
         private void SetLayerRecursively(GameObject obj, int layerIndex)
