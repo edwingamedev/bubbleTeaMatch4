@@ -57,7 +57,7 @@ namespace EdwinGameDev.BubbleTeaMatch4
             vsCamera.gameObject.SetActive(false);
         }
 
-        public void StartSingleplayer()
+        public void StartSoloMode()
         {
             EnableSoloCamera();
 
@@ -73,6 +73,24 @@ namespace EdwinGameDev.BubbleTeaMatch4
             }
 
             sessions[0].OnCombo = sessions[0].EnemyAttack;
+
+            sessions[0].InitializeSinglePlayer();
+        }
+
+        public void StartSingleplayer()
+        {
+            EnableSoloCamera();
+
+            // First Player
+            if (sessions.Count <= 0)
+            {
+
+                MatchScenario matchScenario = GenerateScenario(playerLayer);
+
+                GameSession session = new GameSession(gameSettings, matchScenario, Vector2Int.zero, new KeyboardInputProcessor(), bubblePool[0], evilBubblePool[0]);
+
+                sessions.Add(session);
+            }
 
             sessions[0].InitializeSinglePlayer();
         }
