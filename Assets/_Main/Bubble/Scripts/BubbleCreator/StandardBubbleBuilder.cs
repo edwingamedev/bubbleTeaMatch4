@@ -68,6 +68,7 @@ namespace EdwinGameDev.BubbleTeaMatch4
         public void Reset()
         {
             bubblePooling.DisableObjects();
+            evilPooling.DisableObjects();
         }
     }
 }
