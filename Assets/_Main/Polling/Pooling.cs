@@ -45,13 +45,13 @@ namespace EdwinGameDev.BubbleTeaMatch4
             poolSize++;
         }
 
-        public IPool ExtendPool()
+        public void ExtendPool()
         {
             // Add to the pool
-            AddToThePool();
-
-            // Get last object of the pool
-            return objectPool[poolSize - 1];
+            for (int i = 0; i < 4; i++)
+            {
+                AddToThePool();
+            }
         }
 
         public void DisableObjects()
@@ -82,7 +82,9 @@ namespace EdwinGameDev.BubbleTeaMatch4
             }
 
             // No available object found, extend the pool
-            return ExtendPool();
+            ExtendPool();
+
+            return GetFromPool();
         }
     }
 }
