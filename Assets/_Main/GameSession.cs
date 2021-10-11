@@ -87,6 +87,8 @@ namespace EdwinGameDev.BubbleTeaMatch4
                 boardOffset = boardOffset
             };
 
+            OnCombo += () => matchScenario.scoreController.AddPoints(50);
+
             stateMachineProvider = new GameStateProvider(gameBoard, OnCombo);
             gameStateMachine = stateMachineProvider.GetStateMachine(OnStart, OnGameOver);
 

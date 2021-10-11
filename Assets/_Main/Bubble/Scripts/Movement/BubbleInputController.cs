@@ -23,7 +23,7 @@ namespace EdwinGameDev.BubbleTeaMatch4
             this.inputProcessor = inputProcessor;
 
 
-            inputProcessor.OnMove = (n) => ValidateAndMove(n);
+            inputProcessor.OnMove = (n) => ValidateAndMovePlayer(n);
             inputProcessor.OnTurnClockwise = TurnClockwise;
             inputProcessor.OnTurnCounterClockwise = TurnCounterClockwise;
 
@@ -41,18 +41,24 @@ namespace EdwinGameDev.BubbleTeaMatch4
             inputProcessor.CheckInputs();
         }
 
+        private void ValidateAndMovePlayer(Vector2Int moveDirection)
+        {
+            if (ValidateAndMove(moveDirection))
+            {
+                if (moveDirection.y < 0)
+                {
+                    // Movement Callback
+                    OnMoveDown?.Invoke();
+                }
+            }
+        }
+
         private bool ValidateAndMove(Vector2Int moveDirection)
         {
             if (ValidateMovement(moveDirection))
             {
                 // Move
                 MoveBubbles(moveDirection);
-
-                if (moveDirection.y < 0)
-                {
-                    // Movement Callback
-                    OnMoveDown?.Invoke();
-                }
 
                 return true;
             }
