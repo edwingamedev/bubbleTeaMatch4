@@ -7,7 +7,7 @@ namespace EdwinGameDev.BubbleTeaMatch4
     [CreateAssetMenu(fileName = "Color", menuName = "ScriptableObjects/ColorPreset")]
     public class ColorPreset : ScriptableObject
     {
-        public Color mainColor;        
-        public Color detail;
+        public Color mainColor = Color.gray;        
+        public Color detail = Color.white;
     }
 }

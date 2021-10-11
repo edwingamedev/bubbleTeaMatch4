@@ -7,24 +7,28 @@ using UnityEngine;
 namespace EdwinGameDev.BubbleTeaMatch4
 {
     public class GameSessionController : MonoBehaviour
-    {
-        private const int xDistanceBetweenPlayers = 50;
+    {       
+        // Config
+        [SerializeField] private GameSettings gameSettings;
+        [SerializeField] private GameObject matchScenarioPrefab;
         [SerializeField] private Camera singleplayerCamera;
         [SerializeField] private Camera vsCamera;
 
-        [SerializeField] private GameSettings gameSettings;
-        [SerializeField] private GameObject matchScenarioPrefab;
-        [Range(1, 31)]
-        [SerializeField] private int playerLayer;
-        [Range(1, 31)]
-        [SerializeField] private int cpuLayer;
+        // Layers
+        [Range(1, 31)] [SerializeField] private int playerLayer;
+        [Range(1, 31)] [SerializeField] private int cpuLayer;
 
+        // Session
         private List<GameSession> sessions = new List<GameSession>();
         private PoolProvider poolProvider = new PoolProvider();
         private List<Pooling> bubblePool = new List<Pooling>();
         private List<Pooling> evilBubblePool = new List<Pooling>();
-        private IInputProcessor playerInput = new KeyboardInputProcessor();
+        private const int xDistanceBetweenPlayers = 50;
 
+        // Input
+        private IInputProcessor playerInput = new TouchInputProcessor();
+
+        // Callbacks
         public Action OnGameOver;
         public Action OnWin;
 
@@ -98,7 +102,6 @@ namespace EdwinGameDev.BubbleTeaMatch4
             // First Player
             if (sessions.Count <= 0)
             {
-
                 MatchScenario matchScenario = GenerateScenario(playerLayer);
 
                 GameSession session = new GameSession(gameSettings, matchScenario, Vector2Int.zero, playerInput, bubblePool[0], evilBubblePool[0]);
@@ -107,6 +110,7 @@ namespace EdwinGameDev.BubbleTeaMatch4
             }
 
             DisableSessions();
+
             sessions[0].enabled = true;
             sessions[0].OnCombo = null;
             sessions[0].OnGameOver = OnGameOver;
