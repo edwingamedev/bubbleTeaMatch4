@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: BlackBubble
   m_EditorClassIdentifier: 
   mainColor: {r: 0.38431376, g: 0.33333334, b: 0.39607847, a: 1}
-  detail: {r: 0.7803922, g: 0.86274517, b: 0.81568635, a: 1}
+  detail: {r: 0.854902, g: 0.15686275, b: 0.011764707, a: 1}

@@ -20,4 +20,4 @@ MonoBehaviour:
   spawnPosition: {x: 3, y: 16}
   nextBubblePosition: {x: 9, y: 12}
   bubblesAmountForMatch: 4
-  dropRate: 0.2
+  dropRate: 0.1

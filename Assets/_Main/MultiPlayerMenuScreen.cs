@@ -4,7 +4,7 @@ namespace EdwinGameDev.BubbleTeaMatch4
 {
     public class MultiPlayerMenuScreen : ScreenBehaviour
     {
-        public GameSessionController gameManager;
+        public GameSessionController sessionController;
         public Button backButton;
 
         private void Awake()
@@ -18,13 +18,13 @@ namespace EdwinGameDev.BubbleTeaMatch4
         // Update is called once per frame
         public void Update()
         {
-            gameManager?.GameLoop();
+            sessionController?.GameLoop();
         }
 
         private void EventsAssignment()
         {
-            gameManager.OnGameOver = GameOver;
-            gameManager.OnWin = Win;
+            sessionController.OnGameOver = GameOver;
+            sessionController.OnWin = Win;
             backButton.onClick.AddListener(ScreenManager.LoadPreviousScreen);
         }
 
@@ -43,7 +43,7 @@ namespace EdwinGameDev.BubbleTeaMatch4
             gameObject.SetActive(true);
 
             // Initialize Single Player
-            gameManager.StartMultiplayer();
+            sessionController.StartMultiplayer();
         }
 
         public override void OnDeactivate()

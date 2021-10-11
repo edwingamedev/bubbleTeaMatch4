@@ -14,8 +14,6 @@ namespace EdwinGameDev.BubbleTeaMatch4
 
         public void OnEnter()
         {
-            Debug.Log("GAME OVER");
-
             OnGameOver?.Invoke();
         }
 

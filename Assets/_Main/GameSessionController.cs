@@ -68,7 +68,7 @@ namespace EdwinGameDev.BubbleTeaMatch4
 
                 MatchScenario matchScenario = GenerateScenario(playerLayer);
 
-                GameSession session = new GameSession(gameSettings, matchScenario, Vector2Int.zero, new KeyboardInputProcessor(), bubblePool[0], evilBubblePool[0]);
+                GameSession session = new GameSession(gameSettings, matchScenario, Vector2Int.zero, new TouchInputProcessor(), bubblePool[0], evilBubblePool[0]);
 
                 sessions.Add(session);
             }
@@ -88,7 +88,7 @@ namespace EdwinGameDev.BubbleTeaMatch4
 
                 MatchScenario matchScenario = GenerateScenario(playerLayer);
 
-                GameSession session = new GameSession(gameSettings, matchScenario, Vector2Int.zero, new KeyboardInputProcessor(), bubblePool[0], evilBubblePool[0]);
+                GameSession session = new GameSession(gameSettings, matchScenario, Vector2Int.zero, new TouchInputProcessor(), bubblePool[0], evilBubblePool[0]);
 
                 sessions.Add(session);
             }
@@ -107,7 +107,7 @@ namespace EdwinGameDev.BubbleTeaMatch4
             {
                 MatchScenario matchScenario = GenerateScenario(playerLayer);
 
-                GameSession session = new GameSession(gameSettings, matchScenario, Vector2Int.zero, new KeyboardInputProcessor(), bubblePool[0], evilBubblePool[0]);
+                GameSession session = new GameSession(gameSettings, matchScenario, Vector2Int.zero, new TouchInputProcessor(), bubblePool[0], evilBubblePool[0]);
 
                 sessions.Add(session);
             }

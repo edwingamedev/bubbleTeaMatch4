@@ -13,11 +13,7 @@ namespace EdwinGameDev.BubbleTeaMatch4
 
         private BubbleSet bubbleSet;
 
-        private float inputDelay = .1f;
-        private float nextInput;
-
         private Action OnMoveDown;
-        private Vector2Int moveVector = Vector2Int.zero;
 
         public BubbleInputController(Grid grid, IInputProcessor inputProcessor, Action OnMoveDown)
         {
@@ -25,6 +21,12 @@ namespace EdwinGameDev.BubbleTeaMatch4
             this.OnMoveDown = OnMoveDown;
 
             this.inputProcessor = inputProcessor;
+
+
+            inputProcessor.OnMove = (n) => ValidateAndMove(n);
+            inputProcessor.OnTurnClockwise = TurnClockwise;
+            inputProcessor.OnTurnCounterClockwise = TurnCounterClockwise;
+
             movementValidator = new GridMovementValidator(grid);
             orientationController = new BubbleOrientationController();
         }
@@ -36,59 +38,7 @@ namespace EdwinGameDev.BubbleTeaMatch4
 
         public void CheckInputs()
         {
-            if (Time.time > nextInput)
-            {
-                nextInput = Time.time + inputDelay;
-
-                if (inputProcessor.Left())
-                {
-                    moveVector += Vector2Int.left;
-                }
-
-                if (inputProcessor.Right())
-                {
-                    moveVector += Vector2Int.right;
-                }
-
-                if (inputProcessor.Down())
-                {
-                    moveVector += Vector2Int.down;
-                }
-
-                if (moveVector != Vector2Int.zero)
-                {
-                    // Validate Movement
-                    ValidateVerticalMovement(moveVector);
-                    ValidateHorizontalMovement(moveVector);
-                }
-
-                // Reset Movement
-                moveVector = Vector2Int.zero;
-            }
-
-            if (inputProcessor.TurnClockwise())
-            {
-                TurnClockwise(bubbleSet.Main.MovementController.GetPosition().x,
-                              bubbleSet.Main.MovementController.GetPosition().y,
-                              bubbleSet.Sub.MovementController.Orientation);
-            }
-
-            if (inputProcessor.TurnCounterClockwise())
-            {
-                TurnCounterClockwise(bubbleSet.Main.MovementController.GetPosition().x,
-                                    bubbleSet.Main.MovementController.GetPosition().y,
-                                    bubbleSet.Sub.MovementController.Orientation);
-            }
-        }
-
-        private bool ValidateVerticalMovement(Vector2Int moveDirection)
-        {
-            return ValidateAndMove(new Vector2Int(0, moveDirection.y));
-        }
-
-        private bool ValidateHorizontalMovement(Vector2Int moveDirection)
-        {
-            return ValidateAndMove(new Vector2Int(moveDirection.x, 0));
+            inputProcessor.CheckInputs();
         }
 
         private bool ValidateAndMove(Vector2Int moveDirection)
@@ -126,8 +76,12 @@ namespace EdwinGameDev.BubbleTeaMatch4
             bubbleSet.Sub?.MovementController.MoveDirection(moveDirection);
         }
 
-        private void TurnClockwise(int x, int y, Orientation subPos)
+        private void TurnClockwise()
         {
+            var x = bubbleSet.Main.MovementController.GetPosition().x;
+            var y = bubbleSet.Main.MovementController.GetPosition().y;
+            var subPos = bubbleSet.Sub.MovementController.Orientation;
+
             if (bubbleSet.Sub == null)
                 return;
 
@@ -166,8 +120,12 @@ namespace EdwinGameDev.BubbleTeaMatch4
             }
         }
 
-        private void TurnCounterClockwise(int x, int y, Orientation subPos)
+        private void TurnCounterClockwise()
         {
+            var x = bubbleSet.Main.MovementController.GetPosition().x;
+            var y = bubbleSet.Main.MovementController.GetPosition().y;
+            var subPos = bubbleSet.Sub.MovementController.Orientation;
+
             switch (subPos)
             {
                 case Orientation.Bottom:

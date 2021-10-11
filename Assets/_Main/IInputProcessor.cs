@@ -1,15 +1,13 @@
-﻿namespace EdwinGameDev.BubbleTeaMatch4
+﻿using System;
+using UnityEngine;
+
+namespace EdwinGameDev.BubbleTeaMatch4
 {
     public interface IInputProcessor
     {
-        bool Left();
-
-        bool Right();
-
-        bool Down();
-
-        bool TurnClockwise();
-
-        bool TurnCounterClockwise();
+        Action OnTurnClockwise { get; set; }
+        Action OnTurnCounterClockwise { get; set; }
+        Action<Vector2Int> OnMove { get; set; }
+        void CheckInputs();
     }
 }

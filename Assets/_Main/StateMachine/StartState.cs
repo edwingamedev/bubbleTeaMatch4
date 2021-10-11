@@ -14,7 +14,7 @@ namespace EdwinGameDev.BubbleTeaMatch4
 
         public void OnEnter()
         {
-            Debug.Log("START GAME");
+            
         }
 
         public void OnExit()

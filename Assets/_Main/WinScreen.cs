@@ -18,8 +18,6 @@ namespace EdwinGameDev.BubbleTeaMatch4
 
         public override void OnActivate()
         {
-            Debug.Log("GameOver");
-
             gameObject.SetActive(true);
         }
 
