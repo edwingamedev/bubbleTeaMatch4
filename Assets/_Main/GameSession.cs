@@ -18,6 +18,8 @@ namespace EdwinGameDev.BubbleTeaMatch4
         public Action OnGameOver;
         public Action OnCombo;
 
+        public bool enabled;
+
         // GAME STATE MACHINE        
         private IStateMachineProvider stateMachineProvider;
         private StateMachine gameStateMachine;
@@ -100,6 +102,7 @@ namespace EdwinGameDev.BubbleTeaMatch4
             if (gameBoard != null)
             {
                 gameBoard.GameStarted = false;
+                enabled = true;
                 gameBoard.bubbleSpawner.Reset();
                 gameBoard.gridBehaviour.ResetGrid();
             }

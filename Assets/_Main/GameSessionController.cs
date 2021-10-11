@@ -42,7 +42,8 @@ namespace EdwinGameDev.BubbleTeaMatch4
         {
             foreach (var session in sessions)
             {
-                session.Update();
+                if (session.enabled)
+                    session.Update();
             }
         }
 
@@ -65,17 +66,27 @@ namespace EdwinGameDev.BubbleTeaMatch4
             // First Player
             if (sessions.Count <= 0)
             {
-
                 MatchScenario matchScenario = GenerateScenario(playerLayer);
 
-                GameSession session = new GameSession(gameSettings, matchScenario, Vector2Int.zero, new TouchInputProcessor(), bubblePool[0], evilBubblePool[0]);
+                GameSession session = new GameSession(gameSettings, matchScenario, Vector2Int.zero, new KeyboardInputProcessor(), bubblePool[0], evilBubblePool[0]);
 
                 sessions.Add(session);
             }
 
+            DisableSessions();
+            sessions[0].enabled = true;
+
             sessions[0].OnCombo = sessions[0].EnemyAttack;
-            sessions[0].OnGameOver = OnGameOver;            
+            sessions[0].OnGameOver = OnGameOver;
             sessions[0].InitializeSinglePlayer();
+        }
+
+        private void DisableSessions()
+        {
+            foreach (var session in sessions)
+            {
+                session.enabled = false;
+            }
         }
 
         public void StartSingleplayer()
@@ -93,6 +104,8 @@ namespace EdwinGameDev.BubbleTeaMatch4
                 sessions.Add(session);
             }
 
+            DisableSessions();
+            sessions[0].enabled = true;
             sessions[0].OnCombo = null;
             sessions[0].OnGameOver = OnGameOver;
             sessions[0].InitializeSinglePlayer();
@@ -121,9 +134,13 @@ namespace EdwinGameDev.BubbleTeaMatch4
                 sessions.Add(session);
             }
 
+            DisableSessions();
+
+            sessions[0].enabled = true;
             sessions[0].OnGameOver = OnGameOver;
             sessions[0].OnCombo = sessions[1].EnemyAttack;
 
+            sessions[1].enabled = true;
             sessions[1].OnCombo = sessions[0].EnemyAttack;
             sessions[1].OnGameOver = OnWin;
 
