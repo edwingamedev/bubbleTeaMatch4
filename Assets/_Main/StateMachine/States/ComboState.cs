@@ -1,6 +1,6 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using UnityEngine;
 
 namespace EdwinGameDev.BubbleTeaMatch4
@@ -8,7 +8,7 @@ namespace EdwinGameDev.BubbleTeaMatch4
     public class ComboState : IState
     {
         private SessionVariables sessionVariables;
-        private int popDelay = 500;
+        private readonly float popDelay = 0.5f;
         private List<Vector2Int> matchesIndex;
         private Action OnCombo;
 
@@ -23,15 +23,15 @@ namespace EdwinGameDev.BubbleTeaMatch4
         {
             sessionVariables.ComboStarted = true;
 
-            _ = Combo();
+            CoroutineRunner.Instance.Run(Combo());
         }
 
-        private async Task Combo()
+        private IEnumerator Combo()
         {
             if (ValidateMatches())
             {
-                await PopMatches(popDelay);
-                               
+                yield return PopMatches(popDelay);
+
                 OnCombo?.Invoke();
 
                 sessionVariables.ComboStarted = false;
@@ -72,6 +72,7 @@ namespace EdwinGameDev.BubbleTeaMatch4
                         }
                     }
                 }
+
                 if (emptyRow)
                     break;
             }
@@ -82,7 +83,7 @@ namespace EdwinGameDev.BubbleTeaMatch4
 
         private void VerifyEvilBubble(int x, int y)
         {
-            if (sessionVariables.gridBehaviour.Grid.InBounds(x,y) && 
+            if (sessionVariables.gridBehaviour.Grid.InBounds(x, y) &&
                 sessionVariables.gridBehaviour.Grid.IsOccupied(x, y))
             {
                 Bubble newBubble = sessionVariables.gridBehaviour.Grid.GetBubble(x, y);
@@ -94,15 +95,17 @@ namespace EdwinGameDev.BubbleTeaMatch4
                     {
                         matchesIndex.Add(pos);
                         newBubble.GraphicsController.PopAnimation();
-                    }                    
+                    }
                 }
             }
         }
 
-        private async Task PopMatches(int taskDelay)
+        private IEnumerator PopMatches(float taskDelay)
         {
             if (taskDelay != 0)
-                await Task.Delay(taskDelay);
+            {
+                yield return new WaitForSeconds(taskDelay);
+            }
 
             foreach (var cellIndex in matchesIndex)
             {
@@ -111,10 +114,12 @@ namespace EdwinGameDev.BubbleTeaMatch4
             }
         }
 
-        private async Task PopAndFill(int taskDelay)
+        private IEnumerator PopAndFill(float taskDelay)
         {
             if (taskDelay != 0)
-                await Task.Delay(taskDelay);
+            {
+                yield return new WaitForSeconds(taskDelay);
+            }
 
             for (int y = 0; y < sessionVariables.gameSettings.GridSize.y; y++)
             {
@@ -136,13 +141,18 @@ namespace EdwinGameDev.BubbleTeaMatch4
                         }
                     }
                 }
+
                 if (emptyRow)
                     break;
             }
         }
 
-        public void OnExit() { }
+        public void OnExit()
+        {
+        }
 
-        public void Tick() { }
+        public void Tick()
+        {
+        }
     }
 }

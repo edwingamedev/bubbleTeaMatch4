@@ -1,4 +1,4 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections;
 using UnityEngine;
 
 namespace EdwinGameDev.BubbleTeaMatch4
@@ -6,7 +6,7 @@ namespace EdwinGameDev.BubbleTeaMatch4
     public class ArrangeState : IState
     {
         private SessionVariables sessionVariables;
-        private readonly int arrangeDelay = 5;
+        private readonly float arrangeDelay = 0.005f;
 
         public ArrangeState(SessionVariables sessionVariables)
         {
@@ -17,10 +17,10 @@ namespace EdwinGameDev.BubbleTeaMatch4
         {
             sessionVariables.BubbleRearranged = false;
 
-            ArrangeBubbles();
+            CoroutineRunner.Instance.Run(ArrangeBubbles());
         }
 
-        private async void ArrangeBubbles()
+        private IEnumerator ArrangeBubbles()
         {
             for (int y = 1; y < sessionVariables.gameSettings.GridSize.y; y++)
             {
@@ -42,12 +42,13 @@ namespace EdwinGameDev.BubbleTeaMatch4
                     }
                 }
 
-                await Task.Delay(arrangeDelay);
+                Debug.Log(arrangeDelay);
+                yield return new WaitForSeconds(arrangeDelay);
             }
 
             sessionVariables.BubbleRearranged = true;
         }
-
+       
         public void OnExit() { }
 
         public void Tick() { }

@@ -63,7 +63,7 @@ TextureImporter:
       213: 4732757728350645767
     second: Bubble-Atlas_19
   externalObjects: {}
-  serializedVersion: 11
+  serializedVersion: 13
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -80,10 +80,12 @@ TextureImporter:
     externalNormalMap: 0
     heightScale: 0.25
     normalMapFilter: 0
+    flipGreenChannel: 0
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
   vTOnly: 0
+  ignoreMipmapLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -122,6 +124,8 @@ TextureImporter:
   textureFormatSet: 0
   ignorePngGamma: 0
   applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 1
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
@@ -133,6 +137,7 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
@@ -145,6 +150,7 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
@@ -157,6 +163,7 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
@@ -592,9 +599,29 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-  spritePackingTag: 
+    nameFileIdTable:
+      Bubble-Atlas_0: 8950495384752552875
+      Bubble-Atlas_1: -5465562894803168647
+      Bubble-Atlas_10: 412586670132871153
+      Bubble-Atlas_11: 7940642430765703637
+      Bubble-Atlas_12: 4606440331134439656
+      Bubble-Atlas_13: 8843013381702343124
+      Bubble-Atlas_14: -259139723819193867
+      Bubble-Atlas_15: 5782277161948852795
+      Bubble-Atlas_16: -3721334381873175346
+      Bubble-Atlas_17: -4589286310435444888
+      Bubble-Atlas_18: -6853414765867460178
+      Bubble-Atlas_19: 4732757728350645767
+      Bubble-Atlas_2: 5049514169224428460
+      Bubble-Atlas_3: 1508964917457083938
+      Bubble-Atlas_4: 6904347842818226636
+      Bubble-Atlas_5: -3997559260042310886
+      Bubble-Atlas_6: -1507396202348833598
+      Bubble-Atlas_7: 5837121690336817397
+      Bubble-Atlas_8: 7941187218561479872
+      Bubble-Atlas_9: 2744761229409807459
+  mipmapLimitGroupName: 
   pSDRemoveMatte: 0
-  pSDShowRemoveMatteOption: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 

@@ -26,7 +26,7 @@ namespace EdwinGameDev.BubbleTeaMatch4
         private const int xDistanceBetweenPlayers = 50;
 
         // Input
-        private IInputProcessor playerInput = new TouchInputProcessor();
+        private IInputProcessor playerInput = new KeyboardInputProcessor();
 
         // Callbacks
         public Action OnGameOver;

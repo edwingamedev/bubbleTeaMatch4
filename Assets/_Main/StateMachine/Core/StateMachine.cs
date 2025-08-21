@@ -34,7 +34,9 @@ namespace EdwinGameDev.BubbleTeaMatch4
             transitions.TryGetValue(CurrentState.GetType(), out currentTransitions);
 
             if (currentTransitions == null)
+            {
                 currentTransitions = emptyTransitions;
+            }
 
             //UnityEngine.Debug.Log(CurrentState.GetType());
             CurrentState.OnEnter();
