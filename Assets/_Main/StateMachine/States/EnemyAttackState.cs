@@ -25,12 +25,10 @@
 
         public void OnExit()
         {
-            
         }
 
         public void Tick()
         {
-
         }
     }
 }

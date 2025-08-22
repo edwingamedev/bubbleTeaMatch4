@@ -26,20 +26,26 @@ namespace EdwinGameDev.BubbleTeaMatch4
             {
                 for (int x = 0; x < sessionVariables.gameSettings.GridSize.x; x++)
                 {
-                    if (sessionVariables.gridBehaviour.Grid.IsOccupied(x, y))
+                    if (!sessionVariables.gridBehaviour.Grid.IsOccupied(x, y))
                     {
-                        if (!sessionVariables.gridBehaviour.Grid.IsOccupied(x, y - 1))
-                        {
-                            Bubble bubble = sessionVariables.gridBehaviour.Grid.GetBubble(x, y);
-                            bubble.MovementController.MoveDirection(Vector2Int.down);
-
-                            sessionVariables.gridBehaviour.Grid.UnnassignBubble(x, y);
-                            sessionVariables.gridBehaviour.Grid.AssignBubble(bubble, x, y - 1);
-
-                            y = 1;
-                            x = -1;
-                        }
+                        continue;
                     }
+
+                    if (sessionVariables.gridBehaviour.Grid.IsOccupied(x, y - 1))
+                    {
+                        continue;
+                    }
+
+                    Bubble bubble = sessionVariables.gridBehaviour.Grid.GetBubble(x, y);
+                    bubble.ConnectionController.Reset();
+                    bubble.UpdateGraphics();
+                    bubble.MovementController.MoveDirection(Vector2Int.down);
+
+                    sessionVariables.gridBehaviour.Grid.UnnassignBubble(x, y);
+                    sessionVariables.gridBehaviour.Grid.AssignBubble(bubble, x, y - 1);
+
+                    y = 1;
+                    x = -1;
                 }
 
                 Debug.Log(arrangeDelay);

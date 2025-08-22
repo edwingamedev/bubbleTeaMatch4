@@ -127,23 +127,29 @@ namespace EdwinGameDev.BubbleTeaMatch4
 
                 for (int x = 0; x < sessionVariables.gameSettings.GridSize.x; x++)
                 {
-                    if (sessionVariables.gridBehaviour.Grid.IsOccupied(x, y))
+                    if (!sessionVariables.gridBehaviour.Grid.IsOccupied(x, y))
                     {
-                        emptyRow = false;
-
-                        if (sessionVariables.gridBehaviour.Grid.GetBubble(x, y).ConnectionController.Matched())
-                        {
-                            sessionVariables.gridBehaviour.Grid.GetBubble(x, y).DisableObject();
-                            sessionVariables.gridBehaviour.Grid.UnnassignBubble(x, y);
-
-                            // ADD POINTS
-                            //scoreController.AddPoints(10);
-                        }
+                        continue;
                     }
+
+                    emptyRow = false;
+
+                    if (!sessionVariables.gridBehaviour.Grid.GetBubble(x, y).ConnectionController.Matched())
+                    {
+                        continue;
+                    }
+
+                    sessionVariables.gridBehaviour.Grid.GetBubble(x, y).DisableObject();
+                    sessionVariables.gridBehaviour.Grid.UnnassignBubble(x, y);
+
+                    // ADD POINTS
+                    //scoreController.AddPoints(10);
                 }
 
                 if (emptyRow)
+                {
                     break;
+                }
             }
         }
 

@@ -18,7 +18,9 @@ namespace EdwinGameDev.BubbleTeaMatch4
             var transition = GetTransition();
 
             if (transition != null)
+            {
                 SetState(transition.To);
+            }
 
             CurrentState?.Tick();
         }
@@ -26,28 +28,27 @@ namespace EdwinGameDev.BubbleTeaMatch4
         public void SetState(IState state)
         {
             if (state == CurrentState)
+            {
                 return;
+            }
 
             CurrentState?.OnExit();
             CurrentState = state;
 
             transitions.TryGetValue(CurrentState.GetType(), out currentTransitions);
 
-            if (currentTransitions == null)
-            {
-                currentTransitions = emptyTransitions;
-            }
+            currentTransitions ??= emptyTransitions;
 
-            //UnityEngine.Debug.Log(CurrentState.GetType());
+            UnityEngine.Debug.Log(CurrentState.GetType());
             CurrentState.OnEnter();
         }
 
         public void AddTransition(IState from, IState to, Func<bool> condition)
         {
-            if (this.transitions.TryGetValue(from.GetType(), out var _transitions) == false)
+            if (transitions.TryGetValue(from.GetType(), out var _transitions) == false)
             {
                 _transitions = new List<Transition>();
-                this.transitions[from.GetType()] = _transitions;
+                transitions[from.GetType()] = _transitions;
             }
 
             _transitions.Add(new Transition(to, condition));
@@ -63,13 +64,17 @@ namespace EdwinGameDev.BubbleTeaMatch4
             foreach (var transition in anyTransitions)
             {
                 if (transition.Condition())
+                {
                     return transition;
+                }
             }
 
             foreach (var transition in currentTransitions)
             {
                 if (transition.Condition())
+                {
                     return transition;
+                }
             }
 
             return null;
