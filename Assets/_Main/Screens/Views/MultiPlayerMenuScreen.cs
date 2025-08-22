@@ -41,8 +41,7 @@ namespace EdwinGameDev.BubbleTeaMatch4
         public override void OnActivate()
         {
             gameObject.SetActive(true);
-
-            // Initialize Single Player
+            
             sessionController.StartMultiplayer();
         }
 

@@ -1,7 +1,5 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 namespace EdwinGameDev.BubbleTeaMatch4
@@ -49,7 +47,9 @@ namespace EdwinGameDev.BubbleTeaMatch4
             foreach (var session in sessions)
             {
                 if (session.enabled)
+                {
                     session.Update();
+                }
             }
         }
 
@@ -159,14 +159,18 @@ namespace EdwinGameDev.BubbleTeaMatch4
         private void SetLayerRecursively(GameObject obj, int layerIndex)
         {
             if (null == obj)
+            {
                 return;
+            }
 
             obj.layer = layerIndex;
 
             foreach (Transform child in obj.transform)
             {
                 if (null == child)
+                {
                     continue;
+                }
 
                 SetLayerRecursively(child.gameObject, layerIndex);
             }
