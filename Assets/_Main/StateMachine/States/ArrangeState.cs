@@ -22,6 +22,7 @@ namespace EdwinGameDev.BubbleTeaMatch4
 
         private IEnumerator ArrangeBubbles()
         {
+            bool isEnemyAttack = false;
             for (int y = 1; y < sessionVariables.gameSettings.GridSize.y; y++)
             {
                 for (int x = 0; x < sessionVariables.gameSettings.GridSize.x; x++)
@@ -37,6 +38,12 @@ namespace EdwinGameDev.BubbleTeaMatch4
                     }
 
                     Bubble bubble = sessionVariables.gridBehaviour.Grid.GetBubble(x, y);
+
+                    if (bubble.bubbleGroup == -1)
+                    {
+                        isEnemyAttack = true;
+                    }
+
                     bubble.ConnectionController.Reset();
                     bubble.UpdateGraphics();
                     bubble.MovementController.MoveDirection(Vector2Int.down);
@@ -48,15 +55,18 @@ namespace EdwinGameDev.BubbleTeaMatch4
                     x = -1;
                 }
 
-                Debug.Log(arrangeDelay);
-                yield return new WaitForSeconds(arrangeDelay);
+                yield return new WaitForSeconds(isEnemyAttack ? 0 : arrangeDelay);
             }
 
             sessionVariables.BubbleRearranged = true;
         }
-       
-        public void OnExit() { }
 
-        public void Tick() { }
+        public void OnExit()
+        {
+        }
+
+        public void Tick()
+        {
+        }
     }
 }

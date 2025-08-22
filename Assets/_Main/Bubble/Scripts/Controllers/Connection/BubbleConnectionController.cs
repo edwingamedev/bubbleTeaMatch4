@@ -23,7 +23,7 @@ namespace EdwinGameDev.BubbleTeaMatch4
 
         public void SetConnectionList(List<Bubble> newConnections)
         {
-            this.connectionList = newConnections;
+            connectionList = newConnections;
         }
 
         public void Disconnect()
