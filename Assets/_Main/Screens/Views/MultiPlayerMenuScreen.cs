@@ -14,8 +14,6 @@ namespace EdwinGameDev.BubbleTeaMatch4
             EventsAssignment();
         }
 
-
-        // Update is called once per frame
         public void Update()
         {
             sessionController?.GameLoop();
@@ -28,12 +26,12 @@ namespace EdwinGameDev.BubbleTeaMatch4
             backButton.onClick.AddListener(ScreenManager.LoadPreviousScreen);
         }
 
-        public void Win()
+        private void Win()
         {
             ScreenManager.LoadScreen(typeof(WinScreen));
         }
 
-        public void GameOver()
+        private void GameOver()
         {
             ScreenManager.LoadScreen(typeof(GameOverScreen));
         }

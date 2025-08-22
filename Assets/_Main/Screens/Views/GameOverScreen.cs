@@ -1,5 +1,4 @@
-﻿using UnityEngine;
-using UnityEngine.UI;
+﻿using UnityEngine.UI;
 
 namespace EdwinGameDev.BubbleTeaMatch4
 {
@@ -18,8 +17,6 @@ namespace EdwinGameDev.BubbleTeaMatch4
 
         public override void OnActivate()
         {
-            Debug.Log("GameOver");
-
             gameObject.SetActive(true);
         }
 

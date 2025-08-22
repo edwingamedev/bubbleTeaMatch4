@@ -1,5 +1,4 @@
-﻿using UnityEngine;
-using UnityEngine.UI;
+﻿using UnityEngine.UI;
 
 namespace EdwinGameDev.BubbleTeaMatch4
 {
@@ -15,8 +14,6 @@ namespace EdwinGameDev.BubbleTeaMatch4
             EventsAssignment();
         }
 
-
-        // Update is called once per frame
         public void Update()
         {
             sessionController?.GameLoop();
@@ -28,7 +25,7 @@ namespace EdwinGameDev.BubbleTeaMatch4
             backButton.onClick.AddListener(ScreenManager.LoadPreviousScreen);
         }
 
-        public void GameOver()
+        private void GameOver()
         {
             ScreenManager.LoadScreen(typeof(GameOverScreen));
         }
@@ -36,8 +33,7 @@ namespace EdwinGameDev.BubbleTeaMatch4
         public override void OnActivate()
         {
             gameObject.SetActive(true);
-
-            // Initialize Single Player
+            
             sessionController.StartSingleplayer();
         }
 
