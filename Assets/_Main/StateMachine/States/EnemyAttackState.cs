@@ -1,4 +1,6 @@
-﻿namespace EdwinGameDev.BubbleTeaMatch4
+﻿using System;
+
+namespace EdwinGameDev.BubbleTeaMatch4
 {
     public class EnemyAttackState : IState
     {
@@ -18,7 +20,7 @@
         {
             while (sessionVariables.spawnEvilbubble.Count > 0)
             {
-                var spawn = sessionVariables.spawnEvilbubble.Dequeue();
+                Action spawn = sessionVariables.spawnEvilbubble.Dequeue();
                 spawn?.Invoke();
             }
         }

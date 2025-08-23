@@ -20,6 +20,11 @@ namespace EdwinGameDev.BubbleTeaMatch4
             CoroutineRunner.Instance.Run(ArrangeBubbles());
         }
 
+        private IEnumerator BetterArrangeBubbles()
+        {
+            yield return new WaitForSeconds(0);
+        }
+
         private IEnumerator ArrangeBubbles()
         {
             bool isEnemyAttack = false;

@@ -14,9 +14,9 @@ namespace EdwinGameDev.BubbleTeaMatch4
         private MatchScenario matchScenario;
         private Vector2Int boardOffset;
 
-        public Action OnStart;
-        public Action OnGameOver;
-        public Action OnCombo;
+        public event Action OnStart;
+        public event Action OnGameOver;
+        public event Action OnCombo;
 
         public bool enabled;
 
@@ -24,27 +24,6 @@ namespace EdwinGameDev.BubbleTeaMatch4
         private IStateMachineProvider stateMachineProvider;
         private StateMachine gameStateMachine;
         private int evilSpawnPos = 0;
-
-        public void EnemyAttack()
-        {
-            sessionVariables.spawnEvilbubble.Enqueue(SpawnEvilBubble);
-        }
-
-        private void SpawnEvilBubble()
-        {
-            //Spawn new bubble set
-            var x = evilSpawnPos % sessionVariables.gridBehaviour.Grid.Size.x;
-            var y = sessionVariables.gridBehaviour.Grid.Size.y - 1;
-
-            do
-            {
-                var evilBubble = sessionVariables.bubbleSpawner.SpawnEvilBubble(new Vector2Int(x, y));
-                sessionVariables.gridBehaviour.Grid.AssignBubble(evilBubble, x, y);
-
-                x = ++evilSpawnPos % sessionVariables.gridBehaviour.Grid.Size.x;
-            } while (sessionVariables.gridBehaviour.Grid.IsOccupied(x, y));
-
-        }
 
         public GameSession(GameSettings gameSettings, MatchScenario matchScenario, Vector2Int boardOffset, IInputProcessor inputProcessor, Pooling bubblePooling, Pooling evilPooling)
         {
@@ -65,7 +44,7 @@ namespace EdwinGameDev.BubbleTeaMatch4
             gameStateMachine?.Execute();
         }
 
-        public void InitializeSinglePlayer()
+        public void InitializeGame()
         {
             if (sessionVariables != null)
             {
@@ -97,6 +76,27 @@ namespace EdwinGameDev.BubbleTeaMatch4
             sessionVariables.GameStarted = true;
         }
 
+        public void EnemyAttack()
+        {
+            sessionVariables.spawnEvilbubble.Enqueue(SpawnEvilBubble);
+        }
+
+        private void SpawnEvilBubble()
+        {
+            //Spawn new bubble set
+            var x = evilSpawnPos % sessionVariables.gridBehaviour.Grid.Size.x;
+            var y = sessionVariables.gridBehaviour.Grid.Size.y - 1;
+
+            do
+            {
+                var evilBubble = sessionVariables.bubbleSpawner.SpawnEvilBubble(new Vector2Int(x, y));
+                sessionVariables.gridBehaviour.Grid.AssignBubble(evilBubble, x, y);
+
+                x = ++evilSpawnPos % sessionVariables.gridBehaviour.Grid.Size.x;
+            } while (sessionVariables.gridBehaviour.Grid.IsOccupied(x, y));
+
+        }
+        
         private void ResetGame()
         {
             if (sessionVariables != null)

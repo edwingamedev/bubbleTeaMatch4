@@ -14,19 +14,23 @@ namespace EdwinGameDev.BubbleTeaMatch4
 
         public static void AssignScreen(ScreenBehaviour screenBehaviour)
         {
-            if (!screenBehaviours.Contains(screenBehaviour))
+            if (screenBehaviours.Contains(screenBehaviour))
             {
-                screenBehaviours.Add(screenBehaviour);
-                screenBehaviour.OnDeactivate();
+                return;
             }
+
+            screenBehaviours.Add(screenBehaviour);
+            screenBehaviour.OnDeactivate();
         }
 
         public static void UnassignScreen(ScreenBehaviour screenBehaviour)
         {
-            if (screenBehaviours.Contains(screenBehaviour))
+            if (!screenBehaviours.Contains(screenBehaviour))
             {
-                screenBehaviours.Remove(screenBehaviour);
+                return;
             }
+
+            screenBehaviours.Remove(screenBehaviour);
         }
 
         public static void ReloadPreviousScreen()
@@ -47,7 +51,6 @@ namespace EdwinGameDev.BubbleTeaMatch4
 
             var screen = GetScreenByType(previousType);
 
-
             if (screen)
             {
                 Load(screen);
@@ -58,21 +61,23 @@ namespace EdwinGameDev.BubbleTeaMatch4
         {
             var screen = GetScreenByType(screenType);
 
-            if (screen)
+            if (!screen)
             {
-                // Add loaded screen to stack                
-               if (currentScreen != null &&
-                    currentScreen.GetType() != screenType &&
-                    currentScreen.GetType() != typeof(GameOverScreen) &&
-                    currentScreen.GetType() != typeof(WinScreen)
-                    )
-                {
-                    loadedScreens.Push(currentScreen.GetType());
-                }
-
-
-                Load(screen);
+                return;
             }
+
+            // Add loaded screen to stack                
+            if (currentScreen != null &&
+                currentScreen.GetType() != screenType &&
+                currentScreen.GetType() != typeof(GameOverScreen) &&
+                currentScreen.GetType() != typeof(WinScreen)
+               )
+            {
+                loadedScreens.Push(currentScreen.GetType());
+            }
+
+
+            Load(screen);
         }
 
         private static void Load(ScreenBehaviour screen)

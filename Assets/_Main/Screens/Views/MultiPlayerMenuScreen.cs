@@ -21,8 +21,8 @@ namespace EdwinGameDev.BubbleTeaMatch4
 
         private void EventsAssignment()
         {
-            sessionController.OnGameOver = GameOver;
-            sessionController.OnWin = Win;
+            sessionController.OnGameOver += GameOver;
+            sessionController.OnWin += Win;
             backButton.onClick.AddListener(ScreenManager.LoadPreviousScreen);
         }
 
@@ -45,6 +45,8 @@ namespace EdwinGameDev.BubbleTeaMatch4
 
         public override void OnDeactivate()
         {
+            sessionController.OnGameOver -= GameOver;
+            sessionController.OnWin -= Win;
             gameObject.SetActive(false);
         }
     }

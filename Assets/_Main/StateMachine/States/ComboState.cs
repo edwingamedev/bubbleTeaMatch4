@@ -52,29 +52,35 @@ namespace EdwinGameDev.BubbleTeaMatch4
                 bool emptyRow = true;
                 for (int x = 0; x < sessionVariables.gameSettings.GridSize.x; x++)
                 {
-                    if (sessionVariables.gridBehaviour.Grid.IsOccupied(x, y))
+                    if (!sessionVariables.gridBehaviour.Grid.IsOccupied(x, y))
                     {
-                        emptyRow = false;
-
-                        var bubble = sessionVariables.gridBehaviour.Grid.GetBubble(x, y);
-
-                        if (bubble.ConnectionController.Matched())
-                        {
-                            matchesIndex.Add(new Vector2Int(x, y));
-                            sessionVariables.HasMatches = true;
-
-                            bubble.GraphicsController.PopAnimation();
-
-                            VerifyEvilBubble(x + 1, y);
-                            VerifyEvilBubble(x - 1, y);
-                            VerifyEvilBubble(x, y + 1);
-                            VerifyEvilBubble(x, y - 1);
-                        }
+                        continue;
                     }
+
+                    emptyRow = false;
+
+                    var bubble = sessionVariables.gridBehaviour.Grid.GetBubble(x, y);
+
+                    if (!bubble.ConnectionController.Matched())
+                    {
+                        continue;
+                    }
+
+                    matchesIndex.Add(new Vector2Int(x, y));
+                    sessionVariables.HasMatches = true;
+
+                    bubble.GraphicsController.PopAnimation();
+
+                    VerifyEvilBubble(x + 1, y);
+                    VerifyEvilBubble(x - 1, y);
+                    VerifyEvilBubble(x, y + 1);
+                    VerifyEvilBubble(x, y - 1);
                 }
 
                 if (emptyRow)
+                {
                     break;
+                }
             }
 
             //UpdateImage();
@@ -83,21 +89,27 @@ namespace EdwinGameDev.BubbleTeaMatch4
 
         private void VerifyEvilBubble(int x, int y)
         {
-            if (sessionVariables.gridBehaviour.Grid.InBounds(x, y) &&
-                sessionVariables.gridBehaviour.Grid.IsOccupied(x, y))
+            if (!sessionVariables.gridBehaviour.Grid.InBounds(x, y) ||
+                !sessionVariables.gridBehaviour.Grid.IsOccupied(x, y))
             {
-                Bubble newBubble = sessionVariables.gridBehaviour.Grid.GetBubble(x, y);
-                if (newBubble.bubbleGroup == -1)
-                {
-                    var pos = new Vector2Int(x, y);
-
-                    if (!matchesIndex.Contains(pos))
-                    {
-                        matchesIndex.Add(pos);
-                        newBubble.GraphicsController.PopAnimation();
-                    }
-                }
+                return;
             }
+
+            Bubble newBubble = sessionVariables.gridBehaviour.Grid.GetBubble(x, y);
+            if (newBubble.bubbleGroup != -1)
+            {
+                return;
+            }
+
+            var pos = new Vector2Int(x, y);
+
+            if (matchesIndex.Contains(pos))
+            {
+                return;
+            }
+
+            matchesIndex.Add(pos);
+            newBubble.GraphicsController.PopAnimation();
         }
 
         private IEnumerator PopMatches(float taskDelay)

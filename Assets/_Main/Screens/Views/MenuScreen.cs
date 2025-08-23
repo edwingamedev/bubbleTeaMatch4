@@ -3,10 +3,11 @@
 namespace EdwinGameDev.BubbleTeaMatch4
 {
     public class MenuScreen : ScreenBehaviour
-    {        
+    {
         public Button singleplayerButton;
         public Button multiplayerButton;
         public Button selfattackButton;
+        public Button devModeButton;
 
         private void Awake()
         {
@@ -15,7 +16,18 @@ namespace EdwinGameDev.BubbleTeaMatch4
 
             singleplayerButton.onClick.AddListener(StartSinglePlayer);
             multiplayerButton.onClick.AddListener(StartMultiplayer);
-            selfattackButton.onClick.AddListener(StartSelfAttackMode); 
+            selfattackButton.onClick.AddListener(StartSelfAttackMode);
+            SetupDevMode();
+        }
+
+        private void SetupDevMode()
+        {
+#if !UNITY_EDITOR
+            devModeButton.gameObject.SetActive(false);
+#else
+            devModeButton.gameObject.SetActive(true);
+            devModeButton.onClick.AddListener(StartDevMode);
+#endif
         }
 
         public override void OnActivate()
@@ -41,6 +53,11 @@ namespace EdwinGameDev.BubbleTeaMatch4
         private void StartSelfAttackMode()
         {
             ScreenManager.LoadScreen(typeof(SelfAttackScreen));
+        }
+
+        private void StartDevMode()
+        {
+            ScreenManager.LoadScreen(typeof(DevModeScreen));
         }
     }
 }
