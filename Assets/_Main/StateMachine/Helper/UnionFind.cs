@@ -5,32 +5,32 @@ namespace EdwinGameDev.BubbleTeaMatch4
     /// <summary>
     /// Disjoint Set Union (DSU) algorithm
     /// </summary>
-    public class BubbleUnionFind
+    public class UnionFind<T>
     {
-        private readonly Dictionary<Bubble, Bubble> parent = new();
-        private readonly Dictionary<Bubble, int> rank = new();
+        private readonly Dictionary<T, T> parent = new();
+        private readonly Dictionary<T, int> rank = new();
 
         /// <summary>
         /// Find representative (with path compression).
         /// </summary>
-        public Bubble Find(Bubble bubble)
+        public T Find(T node)
         {
             // Lazy registration
-            Add(bubble);
+            Add(node);
 
-            if (!parent[bubble].Equals(bubble))
+            if (!parent[node].Equals(node))
             {
                 // Path compression
-                parent[bubble] = Find(parent[bubble]); 
+                parent[node] = Find(parent[node]); 
             }
 
-            return parent[bubble];
+            return parent[node];
         }
 
         /// <summary>
         /// Adds a bubble to the Union-Find structure if not already present.
         /// </summary>
-        private void Add(Bubble bubble)
+        private void Add(T bubble)
         {
             if (!parent.TryAdd(bubble, bubble))
             {
@@ -44,10 +44,10 @@ namespace EdwinGameDev.BubbleTeaMatch4
         /// <summary>
         /// Union two bubbles into the same set.
         /// </summary>
-        public void Union(Bubble a, Bubble b)
+        public void Union(T a, T b)
         {
-            Bubble rootA = Find(a);
-            Bubble rootB = Find(b);
+            T rootA = Find(a);
+            T rootB = Find(b);
 
             if (rootA.Equals(rootB))
             {
@@ -72,7 +72,7 @@ namespace EdwinGameDev.BubbleTeaMatch4
             rank[rootA]++;
         }
         
-        public bool Connected(Bubble a, Bubble b)
+        public bool Connected(T a, T b)
         {
             return Find(a).Equals(Find(b));
         }

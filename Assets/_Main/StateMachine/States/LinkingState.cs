@@ -54,7 +54,7 @@ namespace EdwinGameDev.BubbleTeaMatch4
         {
             Grid grid = sessionVariables.gridBehaviour.Grid;
             Vector2Int gridSize = grid.Size;
-            BubbleUnionFind unionFind = new();
+            UnionFind<Bubble> unionFind = new();
 
             // Union neighboring bubbles of the same group
             for (int y = 0; y < gridSize.y; y++)
@@ -111,7 +111,7 @@ namespace EdwinGameDev.BubbleTeaMatch4
             }
         }
 
-        private void HorizontalValidation(Bubble current, Grid grid, BubbleUnionFind unionFind, int x, int y)
+        private void HorizontalValidation(Bubble current, Grid grid, UnionFind<Bubble> unionFind, int x, int y)
         {
             // Check inbounds
             if (x + 1 >= grid.Size.x ||
@@ -130,7 +130,7 @@ namespace EdwinGameDev.BubbleTeaMatch4
             BubbleConnector.ConnectHorizontal(current, right);
         }
 
-        private void VerticalValidation(Bubble current, Grid grid, BubbleUnionFind unionFind, int x, int y)
+        private void VerticalValidation(Bubble current, Grid grid, UnionFind<Bubble> unionFind, int x, int y)
         {
             // Check inbounds
             if (y + 1 >= grid.Size.y ||
