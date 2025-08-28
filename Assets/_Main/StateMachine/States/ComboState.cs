@@ -110,7 +110,7 @@ namespace EdwinGameDev.BubbleTeaMatch4
             foreach (var cellIndex in matchesIndex)
             {
                 sessionVariables.gridBehaviour.Grid.GetBubble(cellIndex.x, cellIndex.y).DisableObject();
-                sessionVariables.gridBehaviour.Grid.UnnassignBubble(cellIndex.x, cellIndex.y);
+                sessionVariables.gridBehaviour.Grid.UnassignBubble(cellIndex.x, cellIndex.y);
             }
         }
 
@@ -140,7 +140,7 @@ namespace EdwinGameDev.BubbleTeaMatch4
                     }
 
                     sessionVariables.gridBehaviour.Grid.GetBubble(x, y).DisableObject();
-                    sessionVariables.gridBehaviour.Grid.UnnassignBubble(x, y);
+                    sessionVariables.gridBehaviour.Grid.UnassignBubble(x, y);
 
                     // ADD POINTS
                     //scoreController.AddPoints(10);
