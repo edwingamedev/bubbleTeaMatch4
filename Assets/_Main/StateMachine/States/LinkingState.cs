@@ -37,7 +37,7 @@ namespace EdwinGameDev.BubbleTeaMatch4
                     Bubble bubble = sessionVariables.gridBehaviour.Grid.GetBubble(x, y);
                     bubble.ConnectionController.Disconnect();
 
-                    var newConnection = new List<Bubble>();
+                    List<Bubble> newConnection = new List<Bubble>();
                     newConnection.Add(bubble);
 
                     bubble.ConnectionController.SetConnectionList(newConnection);

@@ -22,8 +22,8 @@ namespace EdwinGameDev.BubbleTeaMatch4
 
         private IEnumerator ArrangeBubbles()
         {
-            var gridSize = sessionVariables.gameSettings.GridSize;
-            var grid = sessionVariables.gridBehaviour.Grid;
+            Vector2Int gridSize = sessionVariables.gameSettings.GridSize;
+            Grid grid = sessionVariables.gridBehaviour.Grid;
 
             for (int x = 0; x < gridSize.x; x++)
             {
