@@ -6,7 +6,7 @@ namespace EdwinGameDev.BubbleTeaMatch4
     {
         private SessionVariables sessionVariables;
 
-        private float dropRate => sessionVariables.gameSettings.DropRate;
+        private float DropRate => sessionVariables.gameSettings.DropRate;
         private float nextDrop;
 
         public PlayingState(SessionVariables sessionVariables)
@@ -34,16 +34,18 @@ namespace EdwinGameDev.BubbleTeaMatch4
 
         private void BubbleDrop()
         {
-            if (Time.time > nextDrop)
+            if (!(Time.time > nextDrop))
             {
-                nextDrop = Time.time + dropRate;
+                return;
+            }
 
-                // Validate Bubble Drop
-                if (sessionVariables.gridBehaviour.ValidateBubbleMovement(sessionVariables.bubbleSpawner.CurrentSet))
-                {
-                    // Move down
-                    sessionVariables.inputController.ValidateAndMoveDown();
-                }
+            nextDrop = Time.time + DropRate;
+
+            // Validate Bubble Drop
+            if (sessionVariables.gridBehaviour.ValidateBubbleMovement(sessionVariables.bubbleSpawner.CurrentSet))
+            {
+                // Move down
+                sessionVariables.inputController.ValidateAndMoveDown();
             }
         }
     }
