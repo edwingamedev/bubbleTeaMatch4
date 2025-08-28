@@ -28,7 +28,7 @@ namespace EdwinGameDev.BubbleTeaMatch4
         {
             if (ValidateMatches())
             {
-                yield return PopMatches(popDelay);
+                yield return PopMatches();
                 OnCombo?.Invoke();
             }
 
@@ -110,12 +110,9 @@ namespace EdwinGameDev.BubbleTeaMatch4
             AddMatch(new Vector2Int(x, y), bubble);
         }
 
-        private IEnumerator PopMatches(float taskDelay)
+        private IEnumerator PopMatches()
         {
-            if (taskDelay > 0)
-            {
-                yield return new WaitForSeconds(taskDelay);
-            }
+            yield return new WaitForSeconds(popDelay);
 
             Grid grid = sessionVariables.gridBehaviour.Grid;
 
