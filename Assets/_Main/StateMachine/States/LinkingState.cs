@@ -52,15 +52,13 @@ namespace EdwinGameDev.BubbleTeaMatch4
 
         private void LinkBubbles()
         {
-            bool emptyRow;
-
             Grid grid = sessionVariables.gridBehaviour.Grid;
-            Vector2Int gridSize = sessionVariables.gameSettings.GridSize;
+            Vector2Int gridSize = grid.Size;
+            BubbleUnionFind unionFind = new();
 
+            // Union neighboring bubbles of the same group
             for (int y = 0; y < gridSize.y; y++)
             {
-                emptyRow = true;
-
                 for (int x = 0; x < gridSize.x; x++)
                 {
                     if (!grid.IsOccupied(x, y))
@@ -68,38 +66,18 @@ namespace EdwinGameDev.BubbleTeaMatch4
                         continue;
                     }
 
-                    emptyRow = false;
+                    Bubble current = grid.GetBubble(x, y);
 
-                    // Horizontal
-                    if (x + 1 >= grid.Size.x ||
-                        !grid.IsOccupied(x + 1, y) ||
-                        grid.GetBubble(x, y).bubbleGroup !=
-                        grid.GetBubble(x + 1, y).bubbleGroup)
-                    {
-                        continue;
-                    }
+                    // Horizontal neighbor
+                    HorizontalValidation(current, grid, unionFind, x, y);
 
-                    grid.GetBubble(x, y)
-                        .ConnectionController
-                        .Connect(grid.GetBubble(x, y)
-                            .ConnectionController.Connection == ConnectionOrientation.left
-                            ? ConnectionOrientation.left_right
-                            : ConnectionOrientation.right);
-
-                    grid.GetBubble(x + 1, y)
-                        .ConnectionController
-                        .Connect(ConnectionOrientation.left);
-
-                    UpdateBubbleConnectionList(
-                        grid.GetBubble(x, y),
-                        grid.GetBubble(x + 1, y));
-                }
-
-                if (emptyRow)
-                {
-                    break;
+                    // Vertical neighbor
+                    VerticalValidation(current, grid, unionFind, x, y);
                 }
             }
+
+            // Build connection lists for each group
+            Dictionary<Bubble, List<Bubble>> groups = new Dictionary<Bubble, List<Bubble>>();
 
             for (int y = 0; y < gridSize.y; y++)
             {
@@ -110,163 +88,66 @@ namespace EdwinGameDev.BubbleTeaMatch4
                         continue;
                     }
 
-                    // Vertical
-                    if (y + 1 >= grid.Size.y ||
-                        !grid.IsOccupied(x, y + 1) ||
-                        grid.GetBubble(x, y).bubbleGroup !=
-                        grid.GetBubble(x, y + 1).bubbleGroup)
+                    Bubble bubble = grid.GetBubble(x, y);
+                    Bubble root = unionFind.Find(bubble);
+
+                    if (!groups.ContainsKey(root))
                     {
-                        continue;
+                        groups[root] = new List<Bubble>();
                     }
 
-                    switch (grid.GetBubble(x, y + 1).ConnectionController.Connection)
-                    {
-                        case ConnectionOrientation.none:
-                            grid.GetBubble(x, y + 1)
-                                .ConnectionController
-                                .Connect(ConnectionOrientation.bottom);
-                            break;
-                        case ConnectionOrientation.top:
-                            grid.GetBubble(x, y + 1)
-                                .ConnectionController
-                                .Connect(ConnectionOrientation.top_bottom);
-                            break;
-                        case ConnectionOrientation.left:
-                            grid.GetBubble(x, y + 1)
-                                .ConnectionController
-                                .Connect(ConnectionOrientation.bottom_left);
-                            break;
-                        case ConnectionOrientation.right:
-                            grid.GetBubble(x, y + 1)
-                                .ConnectionController
-                                .Connect(ConnectionOrientation.bottom_right);
-                            break;
-                        case ConnectionOrientation.left_right:
-                            grid.GetBubble(x, y + 1)
-                                .ConnectionController
-                                .Connect(ConnectionOrientation.bottom_left_right);
-                            break;
-                        case ConnectionOrientation.top_left:
-                            grid.GetBubble(x, y + 1)
-                                .ConnectionController
-                                .Connect(ConnectionOrientation.top_bottom_left);
-                            break;
-                        case ConnectionOrientation.top_right:
-                            grid.GetBubble(x, y + 1)
-                                .ConnectionController
-                                .Connect(ConnectionOrientation.top_bottom_right);
-                            break;
-                        case ConnectionOrientation.top_left_right:
-                            grid.GetBubble(x, y + 1)
-                                .ConnectionController
-                                .Connect(ConnectionOrientation.full);
-                            break;
-                    }
-
-                    switch (grid.GetBubble(x, y).ConnectionController.Connection)
-                    {
-                        case ConnectionOrientation.none:
-                            grid.GetBubble(x, y).ConnectionController
-                                .Connect(ConnectionOrientation.top);
-                            break;
-                        case ConnectionOrientation.bottom:
-                            grid.GetBubble(x, y)
-                                .ConnectionController
-                                .Connect(ConnectionOrientation.top_bottom);
-                            break;
-                        case ConnectionOrientation.left:
-                            grid.GetBubble(x, y)
-                                .ConnectionController
-                                .Connect(ConnectionOrientation.top_left);
-                            break;
-                        case ConnectionOrientation.right:
-                            grid.GetBubble(x, y)
-                                .ConnectionController
-                                .Connect(ConnectionOrientation.top_right);
-                            break;
-                        case ConnectionOrientation.left_right:
-                            grid.GetBubble(x, y)
-                                .ConnectionController
-                                .Connect(ConnectionOrientation.top_left_right);
-                            break;
-                        case ConnectionOrientation.bottom_left:
-                            grid.GetBubble(x, y)
-                                .ConnectionController
-                                .Connect(ConnectionOrientation.top_bottom_left);
-                            break;
-                        case ConnectionOrientation.bottom_right:
-                            grid.GetBubble(x, y)
-                                .ConnectionController
-                                .Connect(ConnectionOrientation.top_bottom_right);
-                            break;
-                        case ConnectionOrientation.bottom_left_right:
-                            grid.GetBubble(x, y)
-                                .ConnectionController
-                                .Connect(ConnectionOrientation.full);
-                            break;
-                    }
-
-                    UpdateBubbleConnectionList(
-                        grid.GetBubble(x, y),
-                        grid.GetBubble(x, y + 1)
-                    );
+                    groups[root].Add(bubble);
                 }
             }
 
-            UpdateImage();
-        }
-
-        private void UpdateBubbleConnectionList(Bubble bubbleA, Bubble bubbleB)
-        {
-            List<Bubble> bubbleAList = bubbleA.ConnectionController.GetConnectionList();
-            if (!bubbleAList.Contains(bubbleB))
+            // Update each bubble’s ConnectionController with its group
+            foreach (List<Bubble> group in groups.Values)
             {
-                bubbleAList.Add(bubbleB);
-            }
-
-            List<Bubble> bubbleBList = bubbleB.ConnectionController.GetConnectionList();
-            if (!bubbleBList.Contains(bubbleA))
-            {
-                bubbleBList.Add(bubbleA);
-            }
-
-            List<Bubble> bubbleCList = bubbleAList.Union(bubbleBList).ToList();
-
-            for (int i = 0; i < bubbleAList.Count; i++)
-            {
-                bubbleAList[i].ConnectionController.SetConnectionList(bubbleCList);
-            }
-
-            for (int i = 0; i < bubbleBList.Count; i++)
-            {
-                bubbleBList[i].ConnectionController.SetConnectionList(bubbleCList);
+                foreach (Bubble bubble in group)
+                {
+                    bubble.ConnectionController.SetConnectionList(group);
+                    bubble.UpdateGraphics();
+                }
             }
         }
 
-        private void UpdateImage()
+        private void HorizontalValidation(Bubble current, Grid grid, BubbleUnionFind unionFind, int x, int y)
         {
-            bool emptyRow;
-            for (int y = 0; y < sessionVariables.gameSettings.GridSize.y; y++)
+            // Check inbounds
+            if (x + 1 >= grid.Size.x ||
+                !grid.IsOccupied(x + 1, y))
             {
-                emptyRow = true;
-
-                for (int x = 0; x < sessionVariables.gameSettings.GridSize.x; x++)
-                {
-                    if (!sessionVariables.gridBehaviour.Grid.IsOccupied(x, y))
-                    {
-                        continue;
-                    }
-
-                    emptyRow = false;
-
-                    sessionVariables.gridBehaviour.Grid.GetBubble(x, y).UpdateGraphics();
-                }
-
-                if (emptyRow)
-                {
-                    break;
-                }
+                return;
             }
+
+            Bubble right = grid.GetBubble(x + 1, y);
+            if (current.bubbleGroup != right.bubbleGroup)
+            {
+                return;
+            }
+
+            unionFind.Union(current, right);
+            BubbleConnector.ConnectHorizontal(current, right);
+        }
+
+        private void VerticalValidation(Bubble current, Grid grid, BubbleUnionFind unionFind, int x, int y)
+        {
+            // Check inbounds
+            if (y + 1 >= grid.Size.y ||
+                !grid.IsOccupied(x, y + 1))
+            {
+                return;
+            }
+
+            Bubble below = grid.GetBubble(x, y + 1);
+
+            if (current.bubbleGroup != below.bubbleGroup)
+            {
+                return;
+            }
+
+            unionFind.Union(current, below);
+            BubbleConnector.ConnectVertical(current, below);
         }
 
         public void OnExit()
