@@ -11,37 +11,6 @@ namespace EdwinGameDev.BubbleTeaMatch4
         private readonly Dictionary<T, int> rank = new();
 
         /// <summary>
-        /// Find representative (with path compression).
-        /// </summary>
-        public T Find(T node)
-        {
-            // Lazy registration
-            Add(node);
-
-            if (!parent[node].Equals(node))
-            {
-                // Path compression
-                parent[node] = Find(parent[node]); 
-            }
-
-            return parent[node];
-        }
-
-        /// <summary>
-        /// Adds a bubble to the Union-Find structure if not already present.
-        /// </summary>
-        private void Add(T bubble)
-        {
-            if (!parent.TryAdd(bubble, bubble))
-            {
-                return;
-            }
-
-            // self parent, rank = 0 for new set
-            rank[bubble] = 0; 
-        }
-        
-        /// <summary>
         /// Union two bubbles into the same set.
         /// </summary>
         public void Union(T a, T b)
@@ -70,6 +39,37 @@ namespace EdwinGameDev.BubbleTeaMatch4
 
             parent[rootB] = rootA;
             rank[rootA]++;
+        }
+        
+        /// <summary>
+        /// Find representative (with path compression).
+        /// </summary>
+        public T Find(T node)
+        {
+            // Lazy registration
+            Add(node);
+
+            if (!parent[node].Equals(node))
+            {
+                // Path compression
+                parent[node] = Find(parent[node]); 
+            }
+
+            return parent[node];
+        }
+
+        /// <summary>
+        /// Adds a bubble to the Union-Find structure if not already present.
+        /// </summary>
+        private void Add(T node)
+        {
+            if (!parent.TryAdd(node, node))
+            {
+                return;
+            }
+
+            // self parent, rank = 0 for new set
+            rank[node] = 0; 
         }
         
         public bool Connected(T a, T b)
