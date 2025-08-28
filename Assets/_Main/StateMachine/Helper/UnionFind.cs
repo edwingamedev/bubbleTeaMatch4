@@ -11,7 +11,7 @@ namespace EdwinGameDev.BubbleTeaMatch4
         private readonly Dictionary<T, int> rank = new();
 
         /// <summary>
-        /// Union two bubbles into the same set.
+        /// Union two nodes into the same set.
         /// </summary>
         public void Union(T a, T b)
         {
@@ -49,6 +49,7 @@ namespace EdwinGameDev.BubbleTeaMatch4
             // Lazy registration
             Add(node);
 
+            // parent is not itself
             if (!parent[node].Equals(node))
             {
                 // Path compression
@@ -59,17 +60,17 @@ namespace EdwinGameDev.BubbleTeaMatch4
         }
 
         /// <summary>
-        /// Adds a bubble to the Union-Find structure if not already present.
+        /// Adds a node to the Union-Find structure if not already present.
         /// </summary>
         private void Add(T node)
         {
-            if (!parent.TryAdd(node, node))
+            if (parent.ContainsKey(node))
             {
                 return;
             }
 
-            // self parent, rank = 0 for new set
-            rank[node] = 0; 
+            parent[node] = node;  // self parent
+            rank[node] = 0;       // rank = 0 for new set
         }
         
         public bool Connected(T a, T b)
