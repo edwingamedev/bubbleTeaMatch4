@@ -22,40 +22,39 @@ namespace EdwinGameDev.BubbleTeaMatch4
 
         private IEnumerator ArrangeBubbles()
         {
-            bool isEnemyAttack = false;
-            for (int y = 1; y < sessionVariables.gameSettings.GridSize.y; y++)
+            var gridSize = sessionVariables.gameSettings.GridSize;
+            var grid = sessionVariables.gridBehaviour.Grid;
+
+            for (int x = 0; x < gridSize.x; x++)
             {
-                for (int x = 0; x < sessionVariables.gameSettings.GridSize.x; x++)
+                int targetY = 0;
+
+                for (int y = 0; y < gridSize.y; y++)
                 {
-                    if (!sessionVariables.gridBehaviour.Grid.IsOccupied(x, y))
+                    if (!grid.IsOccupied(x, y))
                     {
                         continue;
                     }
 
-                    if (sessionVariables.gridBehaviour.Grid.IsOccupied(x, y - 1))
+                    // Only move if necessary
+                    if (y != targetY)
                     {
-                        continue;
+                        Bubble bubble = grid.GetBubble(x, y);
+                        grid.UnassignBubble(x, y);
+                        grid.AssignBubble(bubble, x, targetY);
+                        bubble.ConnectionController.Reset();
+                        bubble.UpdateGraphics();
+
+                        int desiredY = y - targetY;
+                        for (int i = 0; i < desiredY; i++)
+                        {
+                            bubble.MovementController.MoveDirection(Vector2Int.down);
+                            yield return new WaitForSeconds(arrangeDelay);
+                        }
                     }
 
-                    Bubble bubble = sessionVariables.gridBehaviour.Grid.GetBubble(x, y);
-
-                    if (bubble.bubbleGroup == -1)
-                    {
-                        isEnemyAttack = true;
-                    }
-
-                    bubble.ConnectionController.Reset();
-                    bubble.UpdateGraphics();
-                    bubble.MovementController.MoveDirection(Vector2Int.down);
-
-                    sessionVariables.gridBehaviour.Grid.UnnassignBubble(x, y);
-                    sessionVariables.gridBehaviour.Grid.AssignBubble(bubble, x, y - 1);
-
-                    y = 1;
-                    x = -1;
+                    targetY++; // next bubble stacks above
                 }
-
-                yield return new WaitForSeconds(isEnemyAttack ? 0 : arrangeDelay);
             }
 
             sessionVariables.BubbleRearranged = true;

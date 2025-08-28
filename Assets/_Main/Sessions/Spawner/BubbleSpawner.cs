@@ -6,7 +6,6 @@ namespace EdwinGameDev.BubbleTeaMatch4
     public class BubbleSpawner
     {
         public BubbleSet CurrentSet { get; private set; }
-
         private BubbleSet nextSet;
 
         private IBubbleBuilder bubbleBuilder;

@@ -9,7 +9,7 @@ namespace EdwinGameDev.BubbleTeaMatch4
         private IGridBuilder gridBuilder;
 
         private GameSettings gameSettings;
-
+        
         public void ResetGrid()
         {
             Grid.ResetGrid();
