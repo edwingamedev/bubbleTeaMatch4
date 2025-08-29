@@ -84,7 +84,7 @@ namespace EdwinGameDev.BubbleTeaMatch4
 
             sessions[0].OnCombo = sessions[0].EnemyAttack;
             sessions[0].OnGameOver = OnGameOver;
-            sessions[0].InitializeSinglePlayer();
+            sessions[0].Initialize();
         }
 
         private void DisableSessions()
@@ -114,7 +114,7 @@ namespace EdwinGameDev.BubbleTeaMatch4
             sessions[0].enabled = true;
             sessions[0].OnCombo = null;
             sessions[0].OnGameOver = OnGameOver;
-            sessions[0].InitializeSinglePlayer();
+            sessions[0].Initialize();
         }
 
         public void StartMultiplayer()
@@ -152,7 +152,7 @@ namespace EdwinGameDev.BubbleTeaMatch4
 
             for (int i = 0; i < sessions.Count; i++)
             {
-                sessions[i].InitializeSinglePlayer();
+                sessions[i].Initialize();
             }
         }
 

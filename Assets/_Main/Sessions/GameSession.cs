@@ -65,7 +65,7 @@ namespace EdwinGameDev.BubbleTeaMatch4
             gameStateMachine?.Execute();
         }
 
-        public void InitializeSinglePlayer()
+        public void Initialize()
         {
             if (sessionVariables != null)
             {
