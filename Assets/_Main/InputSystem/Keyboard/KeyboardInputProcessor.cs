@@ -9,7 +9,6 @@ namespace EdwinGameDev.BubbleTeaMatch4
         public Action OnTurnCounterClockwise { get; set; }
         public Action<Vector2Int> OnMove { get; set; }
 
-
         private float inputDelay = .1f;
         private float nextInput;
         private Vector2Int moveVector;
@@ -22,13 +21,19 @@ namespace EdwinGameDev.BubbleTeaMatch4
                 nextInput = Time.time + inputDelay;
 
                 if (Left())
+                {
                     moveVector += Vector2Int.left;
+                }
 
                 if (Right())
+                {
                     moveVector += Vector2Int.right;
+                }
 
                 if (Down())
+                {
                     moveVector += Vector2Int.down;
+                }
 
                 // Move
                 if (moveVector != Vector2Int.zero)
