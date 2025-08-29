@@ -50,6 +50,7 @@ namespace EdwinGameDev.BubbleTeaMatch4
             }
         }
 
+        // Todo: iterate only on bubbles and its neighbours that moved on ArrangeState.  
         private void LinkBubbles()
         {
             Grid grid = sessionVariables.gridBehaviour.Grid;

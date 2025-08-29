@@ -35,6 +35,7 @@ namespace EdwinGameDev.BubbleTeaMatch4
             sessionVariables.ComboStarted = false;
         }
 
+        // Todo: mark bubbles above popped as dirty so we can iterate over then on ArrangeState 
         private bool ValidateMatches()
         {
             matchesIndexSet.Clear();

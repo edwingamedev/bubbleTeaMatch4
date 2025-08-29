@@ -20,6 +20,8 @@ namespace EdwinGameDev.BubbleTeaMatch4
             CoroutineRunner.Instance.Run(ArrangeBubbles());
         }
 
+        
+        /// Todo: Only arrange bubbles that can be moved. Aka after placing them or after combos. 
         private IEnumerator ArrangeBubbles()
         {
             Vector2Int gridSize = sessionVariables.gameSettings.GridSize;
